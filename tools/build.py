@@ -132,6 +132,43 @@ def compile_single(typst: str, out: Path, variant: str, lang: str, png: bool = F
     run(cmd)
 
 
+def page_report(typst: str, out: Path, variant: str, lang: str, manifest: dict) -> None:
+    """Print how many columns each entry takes in one packet."""
+    expr = (
+        "(entries: query(<snowi-pos>).map(it => it.value), geo: query(<snowi-pages>).first().value)"
+    )
+    cmd = [typst, "eval", "--root", str(ROOT), "--font-path", str(ROOT / "fonts")]
+    cmd += manifest_input(out) + ["--input", f"variant={variant}", "--input", f"lang={lang}"]
+    cmd += [expr, "--in", str(ROOT / "typst" / "single.typ")]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        sys.exit(f"typst eval failed:\n{result.stderr}")
+    data = json.loads(result.stdout)
+    geo = data["geo"]
+    cols = geo["columns"]
+    col_w = (geo["width"] - 2 * geo["margin-x"] - (cols - 1) * geo["gutter"]) / cols
+    col_h = geo["height"] - geo["top"] - geo["bottom"]
+
+    def position(entry: dict) -> float:
+        col = min(cols - 1, int((entry["x"] - geo["margin-x"]) / (col_w + geo["gutter"]) + 0.5))
+        return (entry["page"] - 1) * cols + col + (entry["y"] - geo["top"]) / col_h
+
+    starts = [(e["id"], position(e)) for e in data["entries"]]
+    ends = [p for _, p in starts[1:]] + [geo["pages"] * cols]
+    titles = {e["id"]: e["title"] for s in manifest["sections"] for e in s["entries"]}
+    per_section: dict[str, float] = {}
+    for (entry_id, start), end in zip(starts, ends, strict=True):
+        size = end - start
+        per_section[entry_id.split("/")[0]] = per_section.get(entry_id.split("/")[0], 0) + size
+        print(
+            f"{size:5.2f} col  p{int(start // cols) + 1:<3} {entry_id:28} {titles.get(entry_id, '')}"
+        )
+    print("-- per section (columns):")
+    for section, size in per_section.items():
+        print(f"{size:6.2f}  {section}")
+    print(f"total: {geo['pages']} pages, {geo['pages'] * cols} columns")
+
+
 def run(cmd: list[str]) -> None:
     result = subprocess.run(cmd, capture_output=True, text=True)
     noise = ("bundle export is experimental", "hint: its behaviour", "hint: do not rely")
@@ -154,18 +191,25 @@ def main() -> None:
     parser.add_argument(
         "--png", metavar="VARIANT-LANG", help="render PNG pages of one packet, e.g. full-cpp"
     )
+    parser.add_argument(
+        "--report", metavar="VARIANT-LANG", help="columns used per entry, e.g. icpc-py"
+    )
     args = parser.parse_args()
     out = args.out.resolve()
     if not out.is_relative_to(ROOT):
         sys.exit("--out must be inside the repository (Typst reads files under --root)")
     only = set(args.only.split(",")) if args.only else None
     try:
-        write_manifest(out, args.allow_missing, only)
+        manifest = write_manifest(out, args.allow_missing, only)
     except ContentError as err:
         sys.exit(f"content error: {err}")
     if args.manifest_only:
         return
     typst = find_typst()
+    if args.report:
+        variant, lang = args.report.split("-")
+        page_report(typst, out, variant, lang, manifest)
+        return
     if args.png:
         variant, lang = args.png.split("-")
         compile_single(typst, out, variant, lang, png=True)

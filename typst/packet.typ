@@ -6,6 +6,8 @@
 #let text-size = 7.5pt
 #let muted = luma(90)
 #let keep-together = 45 // lines
+#let margin = (x: 0.35in, top: 0.42in, bottom: 0.28in)
+#let gutter = 0.16in
 
 /// Plain text with `code` spans and $typst math$ spans.
 #let rich(source) = {
@@ -37,7 +39,15 @@
   raw(source, lang: raw-lang(language), block: true),
 )
 
+// Records where an entry starts (for tools/build.py --report). The
+// placed context takes no space; it sits at the current flow position.
+#let mark-position(entry) = place(context {
+  let pos = here().position()
+  [#metadata((id: entry.id, page: pos.page, x: pos.x.pt(), y: pos.y.pt())) <snowi-pos>]
+})
+
 #let item(entry, language, variant, by-id) = {
+  mark-position(entry)
   let snippet = entry.code.at(language)
   let fields = snippet.fields
   let is-full = variant == "full"
@@ -71,6 +81,7 @@
 }
 
 #let note(entry) = {
+  mark-position(entry)
   block(sticky: true, spacing: 0.4em, below: 0.3em)[
     #heading(level: 2, entry.title)
     #label(entry.id)
@@ -99,7 +110,7 @@
     paper: layout-config.paper,
     flipped: true,
     columns: layout-config.columns,
-    margin: (x: 0.35in, top: 0.42in, bottom: 0.28in),
+    margin: margin,
     header-ascent: 35%,
     header: context block(
       width: 100%,
@@ -116,7 +127,7 @@
       },
     ),
   )
-  set columns(gutter: 0.16in)
+  set columns(gutter: gutter)
   set text(font: serif, size: text-size, lang: "en", hyphenate: true)
   set par(justify: true, leading: 0.38em, spacing: 0.5em, first-line-indent: 0pt)
   set list(indent: 0.4em, body-indent: 0.35em, spacing: 0.35em)
@@ -157,7 +168,7 @@
   // Size the code font so `line-limit` characters fill one column.
   context {
     let probe = measure(text(font: mono, size: 10pt, weight: 500, "0" * layout-config.line-limit))
-    let column = (page.width - 0.7in - (layout-config.columns - 1) * 0.16in) / layout-config.columns
+    let column = (page.width - 2 * margin.x - (layout-config.columns - 1) * gutter) / layout-config.columns
     let code-size = 10pt * (column / probe.width) * 0.995
     show raw: set text(size: code-size)
     show raw.where(block: false): set text(size: text-size * 0.98)
@@ -184,6 +195,18 @@
       }
     }
   }
+
+  // Page geometry for tools/build.py --report.
+  place(context [#metadata((
+    pages: counter(page).final().first(),
+    columns: layout-config.columns,
+    width: page.width.pt(),
+    height: page.height.pt(),
+    margin-x: margin.x.pt(),
+    top: margin.top.pt(),
+    bottom: margin.bottom.pt(),
+    gutter: gutter.pt(),
+  )) <snowi-pages>])
 
   if variant == "icpc" {
     let limit = config.icpc.page-limit
