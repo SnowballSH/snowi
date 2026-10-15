@@ -186,14 +186,14 @@
     block(below: 0.6em)[
       #text(size: 13pt, weight: "bold", title) \
       #text(fill: muted)[Generated from source. Each item shows its file and the
-      first 6 hex digits of its typing hash (see Contest setup). Section and
-      item page numbers follow.]
+      first 6 hex digits of its typing hash (see Contest setup).]
     ]
     let sections = manifest
       .sections
       .map(section => (section.title, section.entries.filter(e => selected(e, variant, language))))
       .filter(((title, entries)) => entries.len() > 0)
-    compact-toc(sections, variant, language)
+    // The ICPC packet spends no page space on a contents list.
+    if variant == "full" { compact-toc(sections, variant, language) }
 
     for (section-title, entries) in sections {
       heading(level: 1, section-title)

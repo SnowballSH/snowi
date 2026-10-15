@@ -6,22 +6,17 @@ second and (unsigned) first kind, $x^(underline(k)) = x (x - 1) dots
 (x - k + 1)$ and $x^(overline(k)) = x (x + 1) dots (x + k - 1)$.
 
 === Binomials
-- $binom(n, k) = binom(n, n - k) = binom(n - 1, k - 1) + binom(n - 1, k)$,
-  $k binom(n, k) = n binom(n - 1, k - 1)$, \
-  $binom(n, m) binom(m, k) = binom(n, k) binom(n - k, m - k)$.
+- $binom(n, m) binom(m, k) = binom(n, k) binom(n - k, m - k)$ (pick
+  the inner set first).
 - Vandermonde: $sum_i binom(m, i) binom(n, k - i) = binom(m + n, k)$;
   squares: $sum_k binom(n, k)^2 = binom(2n, n)$.
 - Hockey stick: $sum_(i = r)^n binom(i, r) = binom(n + 1, r + 1)$,
   $sum_(i = 0)^k binom(n + i, i) = binom(n + k + 1, k)$.
-- $sum_k binom(n, k) = 2^n$, $sum_k (-1)^k binom(n, k) = [n = 0]$,
-  $sum_k k binom(n, k) = n 2^(n - 1)$, \
-  $(1 - x)^(-n) = sum_k binom(n + k - 1, k) x^k$.
-- Stars and bars for $k >= 1$ ($n = k = 0$ has one solution):
-  $x_1 + dots + x_k = n$ has $binom(n + k - 1, k - 1)$ solutions
-  with all $x_i >= 0$ and $binom(n - 1, k - 1)$ with all
-  $x_i >= 1$. With $x_i <= c$: \
-  $sum_j (-1)^j binom(k, j) binom(n - j (c + 1) + k - 1, k - 1)$.
-  Grid paths $(0, 0) -> (a, b)$: $binom(a + b, a)$.
+- $(1 - x)^(-n) = sum_k binom(n + k - 1, k) x^k$.
+- Bounded stars and bars: $x_1 + dots + x_k = n$ with
+  $0 <= x_i <= c$ has
+  $sum_j (-1)^j binom(k, j) binom(n - j (c + 1) + k - 1, k - 1)$
+  solutions.
 
 === Paths and Catalan numbers
 #fact[Reflection][$plus.minus 1$ walks of $n$ steps from $a$ to $b$:

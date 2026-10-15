@@ -1,10 +1,9 @@
 #import "/typst/notes.typ": *
 
 === Expectation
-#fact[Linearity][$E[X + Y] = E[X] + E[Y]$ always, independent or
-  not. Write a count as a sum of indicators: $E[\#"events"] =
-  sum_t P(t "happens")$. Products need independence:
-  $E[X Y] = E[X] E[Y]$; $E[1\/X] != 1\/E[X]$, $E[max] != max E$.]
+#fact[Indicators][Linearity needs no independence: write a count as
+  a sum of indicators, $E[\#"events"] = sum_t P(t "happens")$. But
+  $E[1\/X] != 1\/E[X]$ and $E[max] != max E$.]
 #fact[Contribution][Sum of $f$ over all $N$ objects $= N dot E[f]$ for
   a uniform object, and back. Count per element ("$P$(cell $c$ is
   empty)"), per pair ("$P(u, v$ end up inverted$)$"), or per unit of
@@ -15,43 +14,22 @@
   independent variables: \
   $P(max <= k) = product_i P(Y_i <= k)$,
   $P(min >= k) = product_i P(Y_i >= k)$.]
-#fact[Variance][$"Var" X = E[X^2] - E[X]^2$ and $"Var"(a X + b) =
-  a^2 "Var" X$; it adds over independent (even pairwise
-  uncorrelated) terms. For a sum of indicators $X = sum_t I_t$:
-  $E[X^2] = E[X] + sum_(s != t) P(s "and" t)$.]
-#fact[Conditioning][$E[X] = sum_i P(B_i) E[X | B_i]$ for events
-  $B_i$ that partition the space. Bayes:
-  $P(A | B) = P(B | A) P(A)\/P(B)$. Total variance: \
-  $"Var" X = E["Var"(X | Y)] + "Var"(E[X | Y])$.]
+#fact[Second moment][For indicators $X = sum_t I_t$:
+  $E[X^2] = E[X] + sum_(s != t) P(s "and" t)$; variance adds over
+  pairwise uncorrelated terms.]
 
 === Distributions
-#table(
-  columns: (auto, 1fr, auto, auto),
-  [law], [$P(X = k)$, density], [mean], [variance],
-  [Bernoulli $p$], [$P(1) = p$], [$p$], [$p (1 - p)$],
-  [Binomial $n, p$], [$binom(n, k) p^k (1 - p)^(n - k)$], [$n p$],
-  [$n p (1 - p)$],
-  [Geometric $p$], [$(1 - p)^(k - 1) p$, $k >= 1$], [$1\/p$],
-  [$(1 - p)\/p^2$],
-  [Poisson $lambda$], [$e^(-lambda) lambda^k\/k!$], [$lambda$],
-  [$lambda$],
-  [Hypergeom.], [$binom(K, k) binom(N - K, n - k)\/binom(N, n)$],
-  [$n K\/N$], [$n K/N (N - K)/N (N - n)/(N - 1)$],
-  [Uniform $a..b$], [$1\/m$, $m = b - a + 1$], [$(a + b)\/2$],
-  [$(m^2 - 1)\/12$],
-  [Uniform $[a, b]$], [$1\/(b - a)$], [$(a + b)\/2$],
-  [$(b - a)^2\/12$],
-  [Exponential $lambda$], [$lambda e^(-lambda x)$], [$1\/lambda$],
-  [$1\/lambda^2$],
-  [Normal $mu, sigma$], [$e^(-(x - mu)^2\/(2 sigma^2)) \/
-  sqrt(2 pi sigma^2)$], [$mu$], [$sigma^2$],
-)
-Hypergeometric: $k$ marked among $n$ drawn without replacement from
-$N$ with $K$ marked. Geometric and exponential are memoryless. The minimum of
-independent exponentials is exponential with rate $sum lambda_i$,
-and $P("the" i"-th is first") = lambda_i \/ sum lambda_i$.
-Binomial with small $p$ is about Poisson $n p$. Normal: 68, 95,
-99.7% within 1, 2, 3 $sigma$.
+- Geometric (tries until the first success, probability $p$): mean
+  $1\/p$, variance $(1 - p)\/p^2$; memoryless.
+- Hypergeometric ($n$ drawn without replacement from $N$, $K$
+  marked): mean $n K\/N$, variance
+  $n K/N (N - K)/N (N - n)/(N - 1)$.
+- Poisson $lambda$: $P(k) = e^(-lambda) lambda^k\/k!$, mean = variance
+  $= lambda$; binomial with small $p$ is about Poisson $n p$.
+- Exponential races: the minimum of independent exponentials has
+  rate $sum lambda_i$, and the $i$-th finishes first with
+  probability $lambda_i\/sum lambda_i$.
+- Uniform integer on $m$ values: variance $(m^2 - 1)\/12$.
 
 === Markov chains
 - Expected cost to absorption, backwards: $E_s = c_s + sum_t

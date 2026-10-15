@@ -81,6 +81,7 @@ _period_ if `s[i] == s[i + p]` for all $i < n - p$.
   Mismatch counts for all alignments: one 0/1 convolution per
   letter.]
 
+#full[
 === Cues
 - "Prefix equals suffix", the same piece at both ends: borders,
   failure tree.
@@ -92,7 +93,6 @@ _period_ if `s[i] == s[i + p]` for all $i < n - p$.
 - Many "equal substrings?" queries: hashing; their order: LCP by
   hashing or a suffix array.
 
-#full[
 === More tools
 - Fine-Wilf, weak form ($p < q$, $p + q <= n$): $q - p$ is a period
   (step forward by $q$ and back by $p$, or back by $p$ and forward
