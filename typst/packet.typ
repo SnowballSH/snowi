@@ -46,16 +46,16 @@
   [#metadata((id: entry.id, page: pos.page, x: pos.x.pt(), y: pos.y.pt())) <snowi-pos>]
 })
 
+// Label of an entry's heading, unique across the four bundled packets.
+#let entry-label(entry, variant, language) = label("snowi:" + variant + ":" + language + ":" + entry.id)
+
 #let item(entry, language, variant, by-id) = {
   mark-position(entry)
   let snippet = entry.code.at(language)
   let fields = snippet.fields
   let is-full = variant == "full"
   let ext = snippet.file.split(".").last()
-  block(sticky: true, spacing: 0.4em, below: 0.3em)[
-    #heading(level: 2, entry.title)
-    #label(entry.id + ":" + language)
-  ]
+  block(sticky: true, spacing: 0.4em, below: 0.3em)[#heading(level: 2, entry.title)#entry-label(entry, variant, language)]
   let info = ()
   info.push(rich(fields.Description))
   if "Precondition" in fields { info.push(label-run("Requires", rich(fields.Precondition))) }
@@ -80,13 +80,20 @@
   block(breakable: snippet.lines > keep-together, raw(snippet.code, lang: raw-lang(language), block: true))
 }
 
-#let note(entry) = {
+#let note(entry, language, variant) = {
   mark-position(entry)
-  block(sticky: true, spacing: 0.4em, below: 0.3em)[
-    #heading(level: 2, entry.title)
-    #label(entry.id)
-  ]
+  block(sticky: true, spacing: 0.4em, below: 0.3em)[#heading(level: 2, entry.title)#entry-label(entry, variant, language)]
   include entry.path
+}
+
+/// One run-in paragraph per section: "Section 3: Item 3, Item 4, ...".
+#let compact-toc(sections, variant, language) = context {
+  set par(justify: false, leading: 0.4em, spacing: 0.45em)
+  let page-of(entry) = counter(page).at(entry-label(entry, variant, language)).first()
+  for (title, entries) in sections {
+    let items = entries.map(e => link(entry-label(e, variant, language))[#e.title~#text(fill: muted, str(page-of(e)))])
+    par[*#title*~#text(weight: "bold", str(page-of(entries.first())))#h(0.4em)#items.join([, ])]
+  }
 }
 
 #let selected(entry, variant, language) = {
@@ -135,6 +142,9 @@
   set table(inset: (x: 2pt, y: 1.5pt), stroke: 0.4pt + luma(140))
   set math.equation(numbering: none)
   show math.equation: set text(size: text-size)
+  // Tall inline math (roots, fractions) grows its own line instead of
+  // touching the line above.
+  show math.equation.where(block: false): set text(top-edge: "bounds", bottom-edge: "bounds")
   set raw(theme: "theme.tmTheme")
   show raw: set text(font: mono, weight: 500)
   show raw.where(block: true): set par(leading: 0.28em, justify: false)
@@ -176,22 +186,19 @@
     block(below: 0.6em)[
       #text(size: 13pt, weight: "bold", title) \
       #text(fill: muted)[Generated from source. Each item shows its file and the
-      first 6 hex digits of its typing hash (see Contest setup).]
+      first 6 hex digits of its typing hash (see Contest setup). Section and
+      item page numbers follow.]
     ]
-    {
-      show outline.entry.where(level: 1): set text(weight: "bold")
-      show outline.entry.where(level: 1): set block(above: 0.5em)
-      set outline.entry(fill: repeat([.], gap: 0.15em))
-      outline(title: none, depth: 2, indent: 0.8em)
-    }
+    let sections = manifest
+      .sections
+      .map(section => (section.title, section.entries.filter(e => selected(e, variant, language))))
+      .filter(((title, entries)) => entries.len() > 0)
+    compact-toc(sections, variant, language)
 
-    for section in manifest.sections {
-      let entries = section.entries.filter(e => selected(e, variant, language))
-      if entries.len() > 0 {
-        heading(level: 1, section.title)
-        for entry in entries {
-          if entry.kind == "note" { note(entry) } else { item(entry, language, variant, by-id) }
-        }
+    for (section-title, entries) in sections {
+      heading(level: 1, section-title)
+      for entry in entries {
+        if entry.kind == "note" { note(entry, language, variant) } else { item(entry, language, variant, by-id) }
       }
     }
   }
