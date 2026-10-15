@@ -104,15 +104,16 @@ and area $S = |u times v|\/2$:
 
 === Counting regions
 Euler's formula (_Graph theory facts_) counts regions: every
-crossing is a vertex, every piece of a curve between crossings an
-edge, and $k$ lines share one more vertex at infinity. With simple
-crossings only (no tangency, no three curves through a point) and
-a connected drawing, $I$ crossing points give
+crossing and every end of a segment or arc is a vertex, every
+piece of a curve between them an edge, and $k$ lines share one
+more vertex at infinity. With closed curves and full lines only,
+simple crossings only (no tangency, no three curves through a
+point) and a connected drawing, $I$ crossing points give
 $I + k + 2 - [k > 0]$ regions: $n$ lines in general position make
 $1 + n + binom(n, 2)$, $n$ pairwise crossing circles $n^2 - n + 2$.
-A segment meets a convex curve at most twice: a line or a circle
-crosses a circle or a triangle at most twice, a circle and a
-triangle or two triangles cross at most 6 times.
+A line crosses a circle or a convex polygon at most twice, so two
+circles cross at most twice and a convex $p$-gon crosses a circle
+or a convex polygon at most $2p$ times (6 for a triangle).
 
 === Rotating calipers
 On a convex polygon in counter-clockwise order, when the answer

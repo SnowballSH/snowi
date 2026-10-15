@@ -17,9 +17,10 @@ vertex cover, minimum edge cover.
   size: in a spanning tree keep the edge above $v$ iff the subtree
   of $v$ holds an odd number of vertices of $T$. Exactly the
   vertices of $T$ get odd degree. Likewise, bottom-up
-  multiplicities $0, dots, k - 1$ on the tree edges reach any
-  degrees mod $k$ at all vertices but the root, whose residue the
-  total forces.]
+  multiplicities $0 <= m_e < k$ on the tree edges reach any
+  degrees mod $k$ at all vertices but the root. The root's residue
+  is then forced: both colour classes of the 2-coloured tree have
+  degree sum $sum_e m_e$ (for $k = 2$: the total must be even).]
 
 === Matchings, covers and orders
 #fact[Gallai][$alpha + tau = n$ in every graph (the complement of
@@ -108,9 +109,6 @@ vertex cover, minimum edge cover.
   $Delta + 1$ edge colours (a multigraph up to
   $floor(3 Delta \/ 2)$); bipartite, even with parallel edges,
   exactly $Delta$.
-- Intervals fit on $k$ machines (no two overlapping on one) iff
-  every point is covered at most $k$ times; assign by left end to
-  any free machine.
 - Turán: without $K_(r + 1)$ at most $(1 - 1\/r) n^2\/2$ edges
   (balanced complete $r$-partite); triangle-free:
   $floor(n^2\/4)$.
@@ -167,8 +165,9 @@ vertex cover, minimum edge cover.
 - Shortest cycle, unweighted: BFS from every vertex; a non-tree
   edge $(u, v)$ closes a walk of length $d(u) + d(v) + 1$, $O(n m)$
   (the minimum over all roots is the girth). Weighted: for each
-  edge $(u, v, w)$, $w$ + shortest $u$-$v$ path without it. A
-  shortest cycle through a given edge or vertex has no chord.
+  edge $(u, v, w)$, $w$ + shortest $u$-$v$ path without it.
+  Unweighted, a shortest cycle through a given edge or vertex has
+  no chord.
 - Triangles in $O(m sqrt(m))$: orient each edge towards the
   endpoint of larger (degree, id), then intersect out-lists.
 - Cycle space: $m - n + c$ independent cycles. XOR (or sum mod 2)
@@ -241,13 +240,12 @@ vertex cover, minimum edge cover.
   prime). Edge colouring a bipartite graph with $Delta$ colours:
   recolour along alternating paths, or split a $Delta$-regular
   supergraph into perfect matchings.
-- Borůvka with a data structure: to skip a vertex's own
-  component, keep per node the best entry and the best one from
-  another component, or sort the vertices by component and query
-  prefix and suffix structures.
-- Dijkstra works for any costs $>= 0$ that add monotonically, such
-  as pairs (length, edges) compared lexicographically: the fewest
-  edges among shortest paths.
+- Event times: $T_v$ is the least of a start value and $f(T_u)$
+  over rules $u -> v$, each $f$ non-decreasing with $f(x) >= x$
+  (adding a cost $>= 0$, waiting for a departure). Dijkstra
+  computes them, always finalising the smallest tentative value
+  (Knuth). Pairs (length, edges) compared lexicographically give
+  the fewest edges among shortest paths.
 - MST, more: the second-best MST swaps one edge: add a non-tree
   edge, drop the largest edge on its tree path (binary lifting).
   An edge is in every MST iff it is strictly lighter than every
@@ -266,7 +264,8 @@ vertex cover, minimum edge cover.
 === Cues
 - Implicit dense graphs (XOR MST, Manhattan MST, "cheapest
   partner" queries): Borůvka, one data structure query per vertex
-  and round.
+  and round that skips its own component (Another colour in
+  _Designing a segment tree node_).
 - A walk that must pass every edge, or fix degrees or visit
   counts mod 2: Euler tours plus parity fixing on a spanning tree.
 - "Can return", closed walks of length mod $k$: strongly

@@ -33,7 +33,7 @@ _period_ if `s[i] == s[i + p]` for all $i < n - p$.
   $u v < v u$: sort by `a + b < b + a` to get the smallest
   concatenation.]
 
-=== Prefix function and Z
+=== Prefix function
 #fact[Failure tree][Nodes $0..n$; the parent of $L$ is
   `pi[L - 1]`. The ancestors of $L$ are the borders of `s[0, L)`,
   the occurrences of each prefix are subtree sums, and the longest
@@ -42,9 +42,6 @@ _period_ if `s[i] == s[i + p]` for all $i < n - p$.
   prefixes of `s` ending at the current position are the current
   state and its ancestors. Parents are smaller: loop over $L$
   instead of a DFS.]
-#fact[Z][`z` of `t + '#' + s` gives the LCP of `t` with every
-  suffix of `s`: matching, the longest prefix of `t` at each
-  position, and `s[i, n)` against `t` in $O(1)$.]
 
 === Palindromes
 #fact[Count][At most $n$ distinct palindromic substrings: each end
@@ -77,7 +74,8 @@ _period_ if `s[i] == s[i + p]` for all $i < n - p$.
   $O(n log n)$: for each $p$ and each $a = k p$ with $b = a + p < n$,
   take `s[a - lcs, b + lcp)` with `lcp` of the suffixes at $a, b$
   and `lcs` of the prefixes ending there; keep it if its length is
-  $>= 2p$ and $p$ is its smallest period. $O(log n)$ squares with
+  $>= 2p$ and $p$ is its smallest period, once per distinct window
+  (several $a$ find the same run). $O(log n)$ squares with
   a primitive root start at one position.]
 
 === Suffix array and LCP
@@ -141,15 +139,15 @@ _period_ if `s[i] == s[i + p]` for all $i < n - p$.
 - $k$-th smallest distinct substring, occurrences of every
   substring: suffix array with `lcp`, or the suffix automaton.
 - Palindromic suffixes $P, Q$ of one prefix with $|P| < |Q|$: the
-  letter just before $P$ is $Q[abs(P)]$. So for $P = "link"(Q)$ it
-  belongs to the eertree edge from $Q$.
+  letter just before $P$ is $Q[abs(P)]$. So the letter before
+  $"link"(Q)$ depends only on $Q$ and can be stored at $Q$ (quick
+  links).
 - Subsequences: greedy matching (each letter of `t` at its first
   possible place in `s`) is the leftmost embedding in every index.
   If `t` embeds in two ways, two of its embeddings differ in
   exactly one index.
-- Strings read along pointers (root paths in a tree, next-greater
-  links): store at each node the hash of the next $2^j$ letters and
-  jump while equal, an LCP in $O(log n)$.
+- Strings read along pointers (tree root paths, next-greater
+  links): Upward sequences in _Tree techniques_.
 - Deleting one letter: every letter of a run of equal letters
   gives the same string. Deleting from a run followed by a smaller
   letter beats deleting from any later run; from a run followed

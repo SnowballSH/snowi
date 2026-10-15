@@ -85,8 +85,10 @@ T op(T a, T b) {
 === Lazy tags
 A tag `f` needs three laws: it acts on a node summary in $O(1)$
 (`mapping`), two tags fold into one (`composition(new, old)`,
-new on the outside), and it distributes over `op`. Range add,
-assign and affine are in `ds/lazy-segtree`.
+new on the outside), and it distributes over `op`. Range add and
+assign are in `ds/lazy-segtree`; affine `(b, c)` maps
+`(sum, len)` to `(b * sum + c * len, len)` and composes as in Affine
+maps.
 #fact[Linear tags][If an update applies the same linear map to
   each element's vector $(x_1, dots, x_k, 1)$, the node stores the
   sum of each coordinate (the length for the 1), a tag is a
@@ -96,9 +98,6 @@ assign and affine are in `ds/lazy-segtree`.
   $d$ maps $x^2$ to $x^2 + 2 d x + d^2$) and historic sums: with
   $(A, C)$, "add $C$ into $A$" each step makes $sum A$ the total of
   $C$ over time. Store only the entries that can be non-zero.]
-#fact[Negate, flip][Negate on `(sum, mn, mx)` gives
-  `(-sum, -mx, -mn)`; flipping bits on `(ones, len)` gives
-  `(len - ones, len)`.]
 #fact[Sorted arrays][If the array stays non-decreasing and an
   update applies a non-decreasing map made of "unchanged",
   "constant" and "shift" pieces (chmax with `c` on a suffix,
@@ -136,6 +135,8 @@ assign and affine are in `ds/lazy-segtree`.
 - With many test cases, build each tree with that test's `n`.
 - Composed maps grow fast (affine, $2^k$ coefficients): reduce
   modulo a prime or saturate at a threshold.
+- A negate tag swaps the extremes: `(sum, mn, mx)` becomes
+  `(-sum, -mx, -mn)`.
 - Assign and add in one tag: keep `(assign or none, add)`; an
   assign wipes the earlier adds, and a later add only grows the
   add part.

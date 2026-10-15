@@ -98,9 +98,7 @@ for r in range(n + 1):
   share a problem, weighted by the gap. An adjacent pair is a 1
   followed by a 0 exactly for $t$ in $[a_(i + 1), a_i)$: one range
   add per pair on a segment tree over thresholds, two pairs per
-  point update. MST weight (integer weights $>= 0$, connected) is
-  $sum_(t >= 0) (c_t - 1)$, $c_t$ the components of the edges of
-  weight $<= t$.]
+  point update. MST weight by thresholds: _Graph theory facts_.]
 #fact[Nested thresholds][To minimise such a cost over free cells,
   solve each 0/1 problem; the optima add up to the true optimum if
   they can be chosen nested (decreasing in $t$). That holds when
@@ -161,7 +159,7 @@ for r in range(n + 1):
   `[block start, l)`, answer, and undo. $O((n + q) sqrt(n))$.
 - Blocks of $sqrt(q)$ operations: rebuild a static structure per
   block and handle the block's own updates by brute force
-  (`ds2/sqrt`, periodic rebuild).
+  (Periodic rebuild in _Sqrt decomposition and small tricks_).
 - Offline LCA, tree queries sorted by depth or by DFS order, and
   small-to-large merging are offline too: all queries of a vertex
   are answered when its subtree is complete.

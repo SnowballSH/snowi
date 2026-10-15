@@ -129,11 +129,7 @@ for x in a:
   weighted completion time. Sort by it, then run the DP or
   knapsack in that order. Cross-multiply instead of dividing and
   check that the order is transitive.
-- Tree knapsack: merging child tables of sizes $s_1$ and $s_2$
-  costs $s_1 s_2$, which sums to $O(n^2)$ (each pair of vertices
-  meets once, at its LCA). Cap tables at $K$ entries for $O(n K)$.
-  Size the merged table $min(s_1 + s_2, K + 1)$ and loop only over
-  existing entries.
+- Tree knapsack in $O(n^2)$, or $O(n K)$: _Tree techniques_.
 
 #full[
 === More patterns

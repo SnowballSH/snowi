@@ -38,18 +38,18 @@ time) are in _Offline techniques_.
   $2 m / D$ vertices have degree $> D$. Heavy vertices get
   precomputed answers or are updated eagerly, light ones are
   scanned: neighbour sums under point updates in
-  $O(sqrt(m))$ per operation; all triangles in $O(m sqrt(m))$ by
-  orienting each edge from lower to higher (degree, id) and
-  intersecting out-lists. The same split works for values by
+  $O(sqrt(m))$ per operation; all triangles in $O(m sqrt(m))$
+  (_Graph theory facts_). The same split works for values by
   frequency: at most $n / D$ values occur more than $D$ times.]
 #fact[Small and large parameters][Queries with a step, modulus or
   length $d$: for $d <= sqrt(n)$ precompute a table per $d$
   ($O(n sqrt(n))$ in total), for larger $d$ walk the
   $n / d <= sqrt(n)$ positions directly. Updates along a
-  progression `s, s + d, s + 2d, ...` with small $d$: add at `s`
-  in a difference array for $d$ and propagate once,
-  `D[i] += D[i - d]` (times $q$ if the weights grow by a factor
-  $q$ per step), $O(n)$ per small $d$.]
+  progression `s, s + d, ..., s + (c - 1)d` with small $d$: in a
+  difference array for $d$ add $x$ at `s` and $-x$ at `s + c d`,
+  then propagate once, `D[i] += D[i - d]`, $O(n)$ per small $d$.
+  If the weights grow by a factor $q$ per step, propagate with
+  `D[i] += q * D[i - d]` and put $-x q^c$ at `s + c d`.]
 #fact[Split the bits][Keys of $2 b$ bits where an update and a
   query must meet on all keys, and the cost splits into a high
   and a low half (XOR distance $(y xor x)$, subset or superset
@@ -120,15 +120,9 @@ for i, x in enumerate(a):
   if i >= k - 1:
     mins.append(a[dq[0]])",
 )
-#fact[Range maximum inside a DP][To get, for every `j`, the
-  minimum over `i < j` of `b[i] + max(S[i + 1..j])`, keep a
-  stack of groups of `i` that share the range maximum `m`, each
-  with its least `b` and the least $m + b$ over itself and the
-  groups below. When `j` arrives, push the group `{j - 1}` with
-  $m = S_j$ and merge into it every group with $m <= S_j$; the
-  top's stored minimum is the answer for `j`. Amortized $O(1)$.
-  Any stack whose entries carry an aggregate of the indices they
-  absorbed works this way.]
+#fact[Aggregates on the stack][An entry may carry an aggregate of
+  the indices it absorbed, such as the least DP value under a
+  shared range maximum: Block maximum in _DP techniques_.]
 #fact[Queue of any monoid][For gcd, matrix products or other
   folds without a deque trick, use two stacks. Push onto the back
   stack, which keeps the fold of all its elements. Pop from the
@@ -154,7 +148,8 @@ for i, x in enumerate(a):
   larger. An element only moves into a container at least twice
   its old one, so it moves $O(log n)$ times: $O(n log n)$ moves,
   times the cost of one insert. Swapping two `std` containers is
-  $O(1)$; in Python swap the references.]
+  $O(1)$; in Python swap the references. Statistics of every
+  subtree: Small to large in _Tree techniques_.]
 #lang-code(
   cpp: "if (sz(a) < sz(b)) swap(a, b); // map<int, int> counts
 for (auto [x, c] : b) a[x] += c; // sets: a.insert(all(b))",
@@ -168,12 +163,6 @@ for x, c in b.items():  # sets: a |= b
   Enumerating only the shorter of the two sides for every `s` costs
   $O(n log n)$ in total (small to large on the Cartesian tree):
   one counting query per enumerated end.]
-#fact[Subtree data][DSU on tree: keep the container of the heavy
-  (largest) child and add the light subtrees into it, element by
-  element: $O(n log n)$ insertions. Iteratively, process vertices
-  in reverse BFS order and keep one container id per vertex.
-  Typical: distinct colours, the most frequent colour, or the
-  count of each depth, for every subtree.]
 
 === Union-find tricks
 #fact[Skip pointers][Paint (or delete) all unpainted cells of
@@ -193,7 +182,7 @@ for x, c in b.items():  # sets: a |= b
 #fact[Word parallelism][A bitset operation on $N$ bits costs
   $N / 64$ word steps. One shift-or of $10^6$ bits takes about
   0.05 ms in C++ (`bitset`) and 0.2 ms in PyPy (a big int).
-  Typical uses: subset sums (`dp/techniques`), reachability
+  Typical uses: subset sums (_DP techniques_), reachability
   in a DAG ($O(n m / 64)$: OR the successors' sets in reverse
   topological order), common neighbours and triangles
   ($O(n^3 / 64)$ with row ANDs), Gaussian elimination mod 2,

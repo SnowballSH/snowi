@@ -29,7 +29,10 @@
   $"lca"(u, r)$, $"lca"(v, r)$ (two of them coincide), so queries
   under any root need no rerooting. For distinct $u, v, r$ it is the
   one vertex $w$ that puts them in three different parts: $w$
-  itself and the components of $T - w$.]
+  itself and the components of $T - w$. With $A(x, y)$ the XOR of
+  the labels on the path, both ends included,
+  $A(u, v) plus.o A(v, r) plus.o A(r, u)$ is the median's label:
+  every other vertex of the three paths lies on exactly two.]
 #fact[Path intersection][Paths $a - b$ and $c - d$: let $p, q$ be
   the two deepest of $"lca"(a, c)$, $"lca"(a, d)$, $"lca"(b, c)$,
   $"lca"(b, d)$. The paths meet iff $"dep"(p) >=
@@ -74,18 +77,21 @@ for i in range(n - 1, -1, -1):  # children before parents
   adds every other child $c$ entry by entry in $O(h_c + 1)$. Each
   chain is added once, so these costs sum to at most $n$: $O(n)$ in
   total.]
-#fact[Tree knapsack][Merging child tables of sizes $s_1$ and $s_2$
-  in $s_1 s_2$ steps costs $O(n^2)$ in total: each pair of
-  vertices meets once, at its LCA. Tables capped at $K$:
-  $O(n K)$.]
+#fact[Tree knapsack][Merging the tables of two parts with $s_1$
+  and $s_2$ vertices in $s_1 s_2$ steps costs $O(n^2)$ in total:
+  each pair of vertices meets once, at its LCA. Tables capped at
+  $K$: $O(n K)$. Size each merged table $min(s_1 + s_2, K) + 1$
+  and loop only over existing entries, never up to $n$ or $K$.]
 
 === Shape and covers
 #fact[Diameter][For a diameter $a - b$ (BFS twice; weights
-  $>= 0$), the eccentricity of $v$ is $max(d(a, v), d(b, v))$. The
-  center (the middle one or two vertices) lies on every diameter;
-  the radius is $ceil(D \/ 2)$. Joining two trees by an edge between
-  their centers gives the smallest diameter,
-  $max(D_1, D_2, ceil(D_1 \/ 2) + ceil(D_2 \/ 2) + 1)$.]
+  $>= 0$), the eccentricity of $v$ is $max(d(a, v), d(b, v))$, and
+  every diameter holds a center (a vertex of least eccentricity,
+  the radius $r$). Joining two trees by an edge of length $w$
+  between their centers gives the smallest diameter,
+  $max(D_1, D_2, r_1 + w + r_2)$. Unweighted: the centers are the
+  middle one or two vertices of every diameter and
+  $r = ceil(D \/ 2)$.]
 #fact[Centroid][One or two (adjacent); walk from any vertex into a
   part larger than $n \/ 2$. With weights $w >= 0$ on the vertices,
   a vertex whose removal leaves parts of weight at most $W \/ 2$
@@ -110,6 +116,10 @@ for i in range(n - 1, -1, -1):  # children before parents
   distance to an uncovered vertex and the smallest to a centre in
   the subtree; place a centre when the first reaches $k$ and the
   second cannot cover it, and one at the root if anything is left.]
+#fact[Cube][List the vertices in DFS order, each on entry if its
+  depth is even and on exit if it is odd: cyclically consecutive
+  ones are at distance at most 3. So the cube of a connected graph
+  has a Hamiltonian cycle (Sekanina; use a spanning tree).]
 #icpc[#fact[Isomorphism][Rooted: ids of sorted child-id lists
   (AHU). Unrooted: root at the one or two centers.]]
 #fact[Joining components][Adding $k - 1$ edges to join components
