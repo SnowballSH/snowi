@@ -1,32 +1,40 @@
 #import "/typst/notes.typ": *
 
-Root the tree anywhere and work in BFS or DFS order, never by
-recursion: the depth reaches $n$. Then ask what one vertex, edge or
-path contributes.
-
 === Orders and paths
-#fact[Euler tour][In DFS preorder `tin`, the subtree of $v$ is
-  `[tin[v], tin[v] + size[v])`: subtree updates and sums become
-  range operations, and $u$ is an ancestor of $v$ iff
-  `tin[u] <= tin[v] < tin[u] + size[u]`. Among the vertices of one
-  depth sorted by `tin`, the descendants of $v$ form a range.]
-#fact[Root prefixes][With $S(v)$ the sum on the root path of $v$,
-  the path $u - v$ sums to $S(u) + S(v) - 2 S(w) + a_w$ for
-  $w = "lca"(u, v)$ (`tree/lca`). Changing $a_v$ changes $S$ on
-  the subtree of $v$ (range add, point query); adding $x$ on the
-  root path of $v$ is a point add at `tin[v]`, read by subtree
-  sums. Updates and queries both on paths: `tree/hld`.]
+#fact[Euler tour][With preorder `tin`, adding $x$ on the root path
+  of $v$ is a point add at `tin[v]`, read by subtree sums; changing
+  $a_v$ changes every root-path sum in the subtree of $v$ (range
+  add, point query). Among the vertices of one depth sorted by
+  `tin`, the descendants of $v$ form a range.]
 #fact[Light edges][An edge to a child other than the largest one
   at least halves the subtree size, so a root path has at most
   $log_2 n$ light edges: `tree/hld` cuts any path into $O(log n)$
   ranges, and small-to-large moves each vertex $O(log n)$ times.]
-#fact[Binary lifting][The $2^k$-th ancestors give the $k$-th
-  ancestor, the LCA, and the highest ancestor where a property
-  monotone along the root path still holds (jump while it holds,
-  largest $k$ first). Jump pointers over levels: store the
+#fact[Binary lifting][Besides ancestors, it finds the highest
+  ancestor where a property monotone along the root path still
+  holds (jump while it holds, largest $k$ first). Jump pointers over levels: store the
   ancestor $B$ levels up (downwards: the `tin` range $B$ levels
   below) and split a shift $t = t_1 B + t_0$ into $t_1$ big jumps
   and $t_0$ small ones.]
+#fact[Upward sequences][To compare the values read upwards from
+  $u$ and from $v$ (root paths, `nxt` chains), store $h_k (v)$, the
+  polynomial hash of the $2^k$ values from $v$ up (while the chain
+  has that many): $h_k (v) = h_(k - 1)(v) dot B^(2^(k - 1)) +
+  h_(k - 1)("up"_(k - 1)(v))$. Jumping both while the hashes agree,
+  largest $k$ first, gives the common prefix in $O(log n)$; the
+  next values decide.]
+#fact[Median][Exactly one vertex lies on all three paths between
+  $u$, $v$ and $r$: the LCA of $u$ and $v$ with the tree rooted at
+  $r$. With a fixed root it is the deepest of $"lca"(u, v)$,
+  $"lca"(u, r)$, $"lca"(v, r)$ (two of them coincide), so queries
+  under any root need no rerooting. For distinct $u, v, r$ it is the
+  one vertex $w$ that puts them in three different parts: $w$
+  itself and the components of $T - w$.]
+#fact[Path intersection][Paths $a - b$ and $c - d$: let $p, q$ be
+  the two deepest of $"lca"(a, c)$, $"lca"(a, d)$, $"lca"(b, c)$,
+  $"lca"(b, d)$. The paths meet iff $"dep"(p) >=
+  max("dep"("lca"(a, b)), "dep"("lca"(c, d)))$, and then they share
+  exactly the path $p - q$.]
 
 === Subtrees and roots
 #fact[Small to large][Keep the counts of the heavy child's subtree
@@ -59,42 +67,78 @@ for i in range(n - 1, -1, -1):  # children before parents
     for j in range(i, i + h.size[v]):
       remove(at[j])",
 )
-#fact[Rerooting][The answer for every root is a DP on directed
-  edges, each side of each edge once; prefix and suffix merges
-  avoid inverses (`tree/rerooting`).]
+#fact[Long paths][For DP arrays indexed by the depth below $v$
+  (length $h_v + 1$, $h_v$ the height): $v$ inherits the array of
+  its tallest child by an index shift (one buffer per long chain,
+  $v$ one slot before that child; lazy tags for global adds), then
+  adds every other child $c$ entry by entry in $O(h_c + 1)$. Each
+  chain is added once, so these costs sum to at most $n$: $O(n)$ in
+  total.]
 #fact[Tree knapsack][Merging child tables of sizes $s_1$ and $s_2$
   in $s_1 s_2$ steps costs $O(n^2)$ in total: each pair of
   vertices meets once, at its LCA. Tables capped at $K$:
   $O(n K)$.]
 
-=== Shape
-#fact[Diameter][The farthest vertex $a$ from any vertex ends a
-  diameter, and the farthest $b$ from $a$ ends it (BFS twice; DFS
-  with weights $>= 0$). Eccentricity $= max(d(a, v), d(b, v))$.
-  The center (middle one or two vertices of $a - b$) lies on every
-  diameter; the radius is $ceil(D \/ 2)$. Joining two trees by an
-  edge between their centers gives the smallest diameter,
+=== Shape and covers
+#fact[Diameter][For a diameter $a - b$ (BFS twice; weights
+  $>= 0$), the eccentricity of $v$ is $max(d(a, v), d(b, v))$. The
+  center (the middle one or two vertices) lies on every diameter;
+  the radius is $ceil(D \/ 2)$. Joining two trees by an edge between
+  their centers gives the smallest diameter,
   $max(D_1, D_2, ceil(D_1 \/ 2) + ceil(D_2 \/ 2) + 1)$.]
-#fact[Centroid][Removing it leaves parts of at most $n \/ 2$
-  vertices; there are one or two (adjacent). Walk from any vertex
-  into a part larger than $n \/ 2$. It minimises the sum of
-  distances. Removing centroids recursively takes at most
-  $log_2 n + 1$ levels, and each path meets the first centroid
-  removed on it (`tree/centroid`).]
-#fact[Isomorphism][Rooted: ids of sorted child-id lists (AHU).
-  Unrooted: root at the one or two centers (`tree/tree-hash`).]
-#fact[Counting][Cayley: $n^(n - 2)$ labelled trees, $(n - 2)! \/
-  product_i (d_i - 1)!$ with degrees $d_i$. Joining components of
-  sizes $s_1, dots, s_k$ into a tree with $k - 1$ new edges:
-  $n^(k - 2) product_i s_i$ ways. Prüfer codes: _Counting formulas_.]
+#fact[Centroid][One or two (adjacent); walk from any vertex into a
+  part larger than $n \/ 2$. With weights $w >= 0$ on the vertices,
+  a vertex whose removal leaves parts of weight at most $W \/ 2$
+  minimises $sum_x w_x d(x, v)$ (unit weights: the sum of
+  distances).]
+#fact[Binary-tree split][At most two children per vertex and
+  $W >= 2$ marked vertices, none an ancestor of another (say leaves,
+  or one depth): some subtree holds between $W \/ 3$ and $2 W \/ 3$.
+  Walk into the heavier child down to the first $v$ holding at most
+  $W \/ 2$; take $v$ if it holds at least $W \/ 3$, else its parent.
+  Questions "is it in the subtree of $x$?" then find a marked
+  vertex in $ceil(log_(3\/2) W)$ steps.]
+#fact[Hitting subtrees][Fewest vertices meeting every set of a
+  family of connected vertex sets: go through the sets by
+  decreasing depth of their top (shallowest) vertex and pick the
+  top of each set not hit yet. The count equals the largest number
+  of pairwise disjoint sets in the family.]
+#fact[Distance-$k$ cover][Fewest centres with every vertex within
+  distance $k$ of one: take the deepest uncovered vertex, put a
+  centre at its $k$-th ancestor (the root if shallower), cover all
+  within $k$ of it, repeat. In $O(n)$ bottom-up: keep the largest
+  distance to an uncovered vertex and the smallest to a centre in
+  the subtree; place a centre when the first reaches $k$ and the
+  second cannot cover it, and one at the root if anything is left.]
+#icpc[#fact[Isomorphism][Rooted: ids of sorted child-id lists
+  (AHU). Unrooted: root at the one or two centers.]]
+#fact[Joining components][Adding $k - 1$ edges to join components
+  of sizes $s_1, dots, s_k$ ($n$ vertices) into one tree:
+  $n^(k - 2) product_i s_i$ ways. Cayley, degrees, Prüfer codes:
+  _Counting formulas_.]
 
 === Many queries
-#fact[Virtual tree][Queries on key sets with $sum k$ bounded: the
-  keys and the LCAs of keys adjacent in `tin` order ($<= 2k - 1$
-  vertices) keep every branching; run the DP there with
-  compressed edge lengths (`tree/virtual-tree`). Keys sorted by
-  `tin` with $v_(k + 1) = v_1$: the smallest subtree containing
-  them has $1/2 sum_i d(v_i, v_(i + 1))$ edges.]
+#fact[Key sets][#icpc[For keys $v_1, dots, v_k$ sorted by `tin`,
+  the smallest subtree containing them has
+  $1/2 sum_i d(v_i, v_(i + 1))$ edges ($v_(k + 1) = v_1$), and the
+  union of their root paths has
+  $sum_i "dep"(v_i) - sum_(i < k) "dep"("lca"(v_i, v_(i + 1)))$
+  edges (or weight, with weighted depths).]#full[The smallest
+  subtree containing keys and the union of their root paths are
+  sums over keys adjacent in `tin` order (`tree/virtual-tree`),
+  also with weighted depths.]
+  An ordered set by `tin` keeps either under insertions and
+  deletions in $O(log n)$; with small to large over another tree,
+  for each of its subtrees.]
+#fact[Centroid queries][$min_x ("val"_x + d(v, x))$ over a changing
+  set: each centroid $c$ keeps a multiset $M_c$ of
+  $"val"_x + d(x, c)$ over its piece, and the answer is the minimum
+  of $d(v, c) + min M_c$ over the centroid ancestors $c$ of $v$.
+  Exact: every term is at least the truth, and the first centroid
+  removed on the path to the best $x$ attains it. Only $x$ with
+  `tin` in a range (one branch of $v$, or the rest): a segment tree
+  per centroid over its piece sorted by `tin`, $O(log^2 n)$ per
+  query or update.]
 #fact[Kruskal reconstruction tree][For "only edges of weight
   $<= x$": add edges by increasing weight; the union of roots $a$
   and $b$ creates a node $z$, parent of both, with $"val"(z) = w$.
@@ -141,26 +185,38 @@ for w, u, v in sorted(es):
   parent; walking the chain step by step is quadratic on trees.]
 
 === Changing trees
-#fact[Link-cut][Edges inserted and deleted online, with path
-  folds, connectivity or a moving root: `tree/link-cut`. All
-  changes known in advance and only connectivity or
-  per-component questions: `offline/dynamic-connectivity` (a
-  rollback DSU knows no paths).]
 #fact[Edge, not vertices][When a subtree is cut and relinked
   elsewhere and all its vertices change alike (depth shift,
   subtree add), store the change once on the new edge or the
   subtree's root, and let root-path folds pick it up.]
+#fact[Growing trees][Leaves attached over time to parents named in
+  the input: build the final tree once (Euler tour, LCA, HLD) and
+  give vertices not created yet neutral values.]
 
 #full[
+=== More facts
+#fact[Leaf pairings][Pair up an even number of leaves and route
+  each pair along its path. The possible edge loads $b_e$ are
+  exactly those with $b_e = 1$ on leaf edges, $b_e$ of the parity
+  of the number of leaves on one side of $e$, and at every vertex
+  the largest incident load at most the sum of the others.]
+#fact[Disjoint pieces][Two vertex-disjoint connected pieces are
+  joined by a path with $j$ inner vertices and $j + 1$ edges. So
+  the pairs that deleting $e$ separates, summed over the edges $e$,
+  minus the pairs avoiding $v$ that deleting $v$ separates, summed
+  over the vertices $v$, count every disjoint pair once (pairs of
+  vertex sets whose spanning subtrees are disjoint).]
+
 === Cues
-- "For every subtree, a statistic of its colours": small to
-  large. "For every vertex as the root": rerooting. "Count paths
-  with a property", "nearest marked vertex": centroids.
-  "$q$ queries of $k_i$ vertices, $sum k_i <= 2 dot 10^5$":
-  virtual tree.
 - A resource that only grows (rating, water level, time) and
   edges usable above a threshold: the reachable set is always a
   Kruskal reconstruction tree node; the process walks up it.
+- "LCA when rooted at $r$", "the vertex where three paths meet":
+  the median. "Kill every path or connected set with the fewest
+  vertices": hitting subtrees. "Every vertex within distance $k$
+  of a chosen one": distance-$k$ cover.
+- Depth-indexed DP ("pairs at distance $k$", "vertices $d$ levels
+  below"): long paths, not small to large.
 - "Each vertex becomes the XOR of itself and its children, $t$
   times": $(I + C)^t$ over $"GF"(2)$; the descendant $d$ levels
   below contributes iff $binom(t, d)$ is odd, iff $d$ is a submask
@@ -174,7 +230,11 @@ for w, u, v in sorted(es):
   $O(1)$ LCA (`tree/lca-rmq`).
 
 === Pitfalls
+- The depth reaches $n$: work in BFS or DFS order, never by
+  recursion.
 - Sums of distances reach $n^2 \/ 2$: use 64-bit.
+- All children but one: prefix and suffix folds, never division
+  (a factor can be $0$ mod $p$).
 - Small to large: empty the whole subtree of a light child, not
   just the vertex; reset global maxima when the counts empty.
 - Centroids: recompute subtree sizes inside the current piece;
@@ -184,13 +244,4 @@ for w, u, v in sorted(es):
   per-query arrays only on the virtual vertices.
 - Kruskal reconstruction tree: same-component edges and
   self-loops create no node; a disconnected graph gives a forest.
-
-=== Prüfer codes
-Encode: repeatedly remove the smallest leaf and write down its
-neighbour, $n - 2$ times. Decode: count $deg(v) = 1 +$ occurrences
-of $v$; for each code entry $x$, join $x$ to the smallest $v$ with
-$deg(v) = 1$, then decrease both degrees; the last two vertices
-with degree 1 form the final edge. A min-heap gives
-$O(n log n)$; walking a pointer over the smallest leaf gives
-$O(n)$.
 ]
