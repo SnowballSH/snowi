@@ -55,19 +55,25 @@ vertices, all $n^2$ pairs): keep it, cut its cost with step 4.
 === Step 4: rewrites
 - Complement: "at least one" is all minus none; "some has $P$" is
   "not all fail $P$" ("a 0 in $[l, r]$" is "not all ones").
-- Contribution: how often each element or pair counts (linearity).
+- Contribution: how often each element or pair counts (linearity);
+  a DP can carry (count, sum) pairs per state.
 - Think in runs and intervals: maximal equal blocks, gaps, cuts.
+  A reachable or feasible set that is an interval is two numbers.
+- Split: rules that separate by coordinate or by bit are solved
+  one coordinate or bit at a time (counts multiply, costs add).
 - Permutations: cycles; fewest swaps to sort is $n - "cycles"$.
 - Parities and invariants: what never changes under the moves?
 - Sort and sweep by value, time or coordinate, with events.
 - Binary search the answer: "least maximum" becomes yes or no.
 - Fix one dimension (the maximum, the first element), solve the rest.
 - Offline: reorder queries; reverse time (deletions become inserts).
+- Backwards: run the process from the end, where choices are forced.
 - Small-to-large: merge the smaller set into the larger.
 - Pattern: print brute force answers for small inputs, guess, prove.
 - Put the update on the edge: store differences (between neighbours,
   child minus parent), so a range update touches two places and a
-  suffix or subtree update one.
+  suffix or subtree update one. Adding a linear function on a
+  range: second differences, prefix-summed twice.
 - Reduce to a graph: states as vertices, moves as edges.
 - Polynomial in a parameter: sample $d + 1$ values, `poly/lagrange`.
 
