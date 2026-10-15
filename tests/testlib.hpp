@@ -31,31 +31,29 @@ inline int iters(int n) {
   return max(1, (int)(n * (s ? atof(s) : 1.0)));
 }
 
-#define CHECK(cond)                                              \
-  do {                                                           \
-    if (!(cond)) {                                               \
-      fprintf(stderr, "%s:%d: CHECK failed: %s\n", __FILE__,     \
-              __LINE__, #cond);                                  \
-      exit(1);                                                   \
-    }                                                            \
+#define CHECK(cond)                                                            \
+  do {                                                                         \
+    if (!(cond)) {                                                             \
+      fprintf(stderr, "%s:%d: CHECK failed: %s\n", __FILE__, __LINE__, #cond); \
+      exit(1);                                                                 \
+    }                                                                          \
   } while (0)
 
-#define CHECK_EQ(got, want)                                      \
-  do {                                                           \
-    auto&& got_ = (got);                                         \
-    auto&& want_ = (want);                                       \
-    if (!(got_ == want_)) {                                      \
-      cerr << __FILE__ << ":" << __LINE__ << ": CHECK_EQ failed: " \
-           << #got << " != " << #want << "\n";                   \
-      if constexpr (requires { cerr << got_ << want_; })         \
-        cerr << "  got " << got_ << "\n  want " << want_ << "\n"; \
-      exit(1);                                                   \
-    }                                                            \
+#define CHECK_EQ(got, want)                                                    \
+  do {                                                                         \
+    auto&& got_ = (got);                                                       \
+    auto&& want_ = (want);                                                     \
+    if (!(got_ == want_)) {                                                    \
+      cerr << __FILE__ << ":" << __LINE__ << ": CHECK_EQ failed: " << #got     \
+           << " != " << #want << "\n";                                         \
+      if constexpr (requires { cerr << got_ << want_; })                       \
+        cerr << "  got " << got_ << "\n  want " << want_ << "\n";              \
+      exit(1);                                                                 \
+    }                                                                          \
   } while (0)
 
 // Wall-clock seconds since the first call; for speed sanity checks.
 inline double elapsed() {
   static auto start = chrono::steady_clock::now();
-  return chrono::duration<double>(chrono::steady_clock::now() - start)
-      .count();
+  return chrono::duration<double>(chrono::steady_clock::now() - start).count();
 }
