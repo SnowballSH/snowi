@@ -196,6 +196,11 @@ for x in a:
   values. Bisect $lambda$ ranges, stop when both ends report the
   same count, and fill $F$ linearly between consecutive vertices:
   $O(sqrt(S) log S)$ solver calls.
+- Weighted squared distances: for $u_j <= x$,
+  $min_j m_j (x - u_j)^2 = (min_j sqrt(m_j) (x - u_j))^2$, a
+  minimum of lines of slope $sqrt(m_j)$ (`ds/li-chao`, adding line
+  $j$ once $x$ passes $u_j$); mirror for $u_j >= x$. Recompute
+  the winner's value exactly.
 - Huge counts of a few kinds of items: an optimum is mostly copies
   of one or two patterns, adjacent on the upper convex hull of
   value against composition. Fix all but a margin of a few copies

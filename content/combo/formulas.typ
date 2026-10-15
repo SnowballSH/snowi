@@ -106,6 +106,10 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
   single tableaux, fixed points = number of odd-length columns.]
 #fact[Tree orders][Orders of the vertices of a rooted forest with
   every vertex before its descendants: $n! \/ product_v "size"(v)$.]
+#fact[Square roots][$q = p^2$ for some permutation $p$ iff for
+  every even $L$ the number of $L$-cycles of $q$ is even (squaring
+  keeps an odd cycle and splits an even one in two halves). So the
+  reversal $i -> n + 1 - i$ is a square iff $n mod 4 in {0, 1}$.]
 
 === Inclusion-exclusion and inversion
 #fact[PIE][Objects in no bad event: $sum_(S) (-1)^(|S|) g(S)$ where
@@ -140,10 +144,15 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
   Degrees $d_i$: $(n - 2)! \/ product_i (d_i - 1)!$. Forests with $k$
   trees whose roots are $k$ given vertices: $k n^(n - k - 1)$.
   $K_(n, m)$ has $n^(m - 1) m^(n - 1)$ spanning trees. Spanning
-  trees of any graph (matrix-tree): Graph theory facts.]
+  trees of any graph (Kirchhoff's matrix-tree theorem): Graph
+  theory facts.]
 #fact[Prüfer][Remove the smallest leaf $n - 2$ times, writing its
   neighbour: a bijection between labelled trees and $[n]^(n - 2)$;
-  vertex $v$ appears $deg(v) - 1$ times.]
+  vertex $v$ appears $deg(v) - 1$ times. Decode: set
+  $deg(v) = 1 +$ (occurrences of $v$); for each entry $x$ in order
+  join $x$ to the smallest $v$ with $deg(v) = 1$ and lower both
+  degrees; the last two vertices of degree 1 form the last edge
+  (a min-heap: $O(n log n)$).]
 #fact[LGV][Vertex-disjoint path systems $a_i -> b_(sigma(i))$ in a
   DAG: $det(M)$ with $M_(i j)$ = number of paths $a_i -> b_j$ counts
   them with sign $"sgn"(sigma)$. If only $sigma = "id"$ can be
@@ -203,6 +212,11 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
   preorder and binary inorder is forest postorder; in the forest's
   bracket string the $k$-th "(" belongs to the $k$-th vertex in
   preorder and the $k$-th ")" to the $k$-th in postorder.
+- Tamari lattice: full binary trees with $ell$ leaves under right
+  rotations $((A B) C) -> (A (B C))$. For the gap $g$ between
+  leaves $g$ and $g + 1$ let $r_g$ be the last leaf below their
+  LCA. A rotation raises exactly one $r_g$, and $T'$ is reachable
+  from $T$ iff $r_g (T) <= r_g (T')$ for every $g$.
 - Monotone paths that must stay on one side of a monotone
   staircase: divide and conquer over columns. A rectangle the
   staircase does not cut passes the counts on its left and bottom
@@ -220,6 +234,13 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
   translation: $1/n^2 sum_(d | n) J_2 (d) k^(m\/d)$.
 - $k$-ary trees with $n$ internal nodes:
   $1/((k - 1) n + 1) binom(k n, n)$.
+- $sum_(m >= r) binom(m, r) x^m = x^r \/ (1 - x)^(r + 1)$, so
+  $sum_m binom(m, r) \/ 2^(m + 1) = 1$ for every $r$. With Newton
+  series (Generating functions), a polynomial $g$ has
+  $sum_(r >= 0) (Delta^r g)(0) = sum_(m >= 0) g(m) \/ 2^(m + 1)$,
+  where $(Delta^r g)(0) = sum_m (-1)^(r - m) binom(r, m) g(m)$: if
+  $g(m)$ counts objects on $m$ given slots, it counts those that
+  use all $r$ slots. E.g. $sum_k k! S(n, k) = sum_m m^n \/ 2^(m + 1)$.
 - Kummer corollaries: $binom(2n, n)$ is even for $n >= 1$;
   $binom(n, k)$ is odd for all $k$ iff $n = 2^j - 1$.
 - Lucas for prime powers needs Granville's generalization; for a

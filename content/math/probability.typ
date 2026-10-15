@@ -18,7 +18,11 @@
   $E[X^2] = E[X] + sum_(s != t) P(s "and" t)$; variance adds over
   pairwise uncorrelated terms. Total variance:
   $op("Var") X = E[op("Var")(X | Y)] + op("Var")(E[X | Y])$, so a
-  mixture varies at least as much as its least varying part.]
+  mixture varies at least as much as its least varying part.
+  Mixing averages the parts' points $(E[X], E[X^2])$ and the
+  variance $E[X^2] - E[X]^2$ is concave in them: the largest one
+  mixes two parts adjacent on the upper hull of these points (a
+  parabola in the weight).]
 
 === Random subsets and orders
 - Removing uniformly random elements one at a time: the $k$
@@ -57,6 +61,9 @@
 - Stationary: $pi P = pi$, $sum pi = 1$ (replace one equation);
   unique for an irreducible chain; expected return time to $s$ is
   $1\/pi_s$. Random walk on an undirected graph: $pi_v = deg v\/(2m)$.
+  If the columns of $P$ also sum to 1 (doubly stochastic: every
+  state entered by $d$ arcs and left along one of its $d$ arcs
+  uniformly), a uniform distribution stays uniform.
 - Tree walk from $v$ to its parent: $2 |"subtree"(v)| - 1$ steps on
   average.
 
@@ -83,7 +90,9 @@
 - Random permutation: fixed points 1, cycles and records $H_n$,
   inversions $n(n - 1)\/4$; the cycle of a given element has a
   uniform length in $1..n$; two given elements share a cycle with
-  probability $1\/2$.
+  probability $1\/2$. Its longest increasing subsequence has length
+  about $2 sqrt(n) - 1.77 n^(1\/6)$ (greedy monotone piles: about
+  $2 sqrt(n)$).
 - Waiting for a pattern $s$ over an alphabet of size $A$:
   $sum A^k$ over the $k$ with `s[0, k) == s[n - k, n)`, $k = n$
   included (HH: 6 flips, HT: 4).
@@ -116,10 +125,14 @@
   over state sets $C in.rev s$, where $T_C$ counts the
   steps until the target or the first step out of $C$: the least
   expected time to the target from $s$ if you may restart at $s$
-  at any moment (Gittins; Dumitriu, Tetali, Winkler). For a walk
-  on a tree towards its root the index never decreases away from
-  the root, so the best $C$ are the connected sets $g <= G$: grow
-  them greedily from the root.]
+  at any moment (Gittins; Dumitriu, Tetali, Winkler). For a simple
+  random walk on a tree with the target at the root the index never
+  decreases away from the root, so the best $C$ are the connected
+  sets $g <= G$. Grow them from the root: the next vertex is the
+  frontier vertex $s$ (parent $p$ in $C$) with the least
+  $(deg s + E(p)) \/ a(p)$, which is $g(s)$; $a(p)$ and $E(p)$ are
+  the success probability and the expected steps from $p$ of the
+  walk stopped when it leaves $C$ ($O(n)$ per step).]
 ]
 
 === Modulo a prime
@@ -166,6 +179,14 @@ $2^(-60)$.
   coordinates of variance $n ell^2 \/ 2$ (CLT). A centred 2D
   Gaussian with coordinate variance $sigma^2$ lies within distance
   $R$ of its centre with probability $1 - e^(-R^2 \/ (2 sigma^2))$.
+  With $ell^2 = dif t$ (Brownian motion, coordinate variance
+  $t\/2$ at time $t$) the expected time within $R$ of the start
+  up to $T$ is $integral_0^T (1 - e^(-R^2\/t)) dif t =
+  T (1 - e^(-R^2\/T)) + R^2 E_1 (R^2\/T)$, and the time spent per
+  unit area at distance $r$ is $E_1 (r^2\/T)\/pi$ (a radial density
+  for Green's theorem, Geometry facts), with
+  $E_1 (x) = integral_x^infinity e^(-u)\/u dif u$#cpp[
+  (`-expint(-x)`)].
 - Biased ruin duration ($p != 1\/2$, $q = 1 - p$):
   $i\/(q - p) - N\/(q - p) dot (1 - (q\/p)^i)\/(1 - (q\/p)^N)$.
 - Absorbing chain with transient part $Q$ and $R$ to absorbing

@@ -12,6 +12,11 @@
 - Positive integers with sum $n$ take fewer than $sqrt(2n)$
   distinct values ($k$ distinct ones sum to at least
   $k (k + 1)\/2$): group equal values, then loop over pairs.
+- A sorted multiset contains a non-degenerate triangle iff three
+  consecutive entries do ($a_i + a_(i + 1) > a_(i + 2)$). So
+  triangle-free values in $[1, V]$ grow like Fibonacci: at most
+  $L$ of them with $F_L <= V$ ($F_1 = F_2 = 1$), i.e. 27 for
+  $V = 2 dot 10^5$, 44 for $10^9$, 87 for $10^18$.
 - Stirling: $ln n! = n ln n - n + 1/2 ln(2 pi n) + O(1\/n)$;
   $binom(2n, n) approx 4^n\/sqrt(pi n)$.
 

@@ -126,11 +126,8 @@ matroids) by random lifting in Matroids.
   $n <= 16$ is a DP over groups of such sums.]
 
 === Counting with determinants
-#fact[Matrix-tree][Undirected multigraph: the number of spanning
-  trees is any cofactor of the Laplacian $L = D - A$ (delete row
-  and column $v$, take the determinant mod $p$ with
-  `linalg/gauss-mod`). Self-loops never count. Arborescences of
-  a digraph: Graph theory facts.]
+- Spanning trees and arborescences are cofactors of a Laplacian
+  (matrix-tree theorem, Graph theory facts).
 - LGV lemma (Counting formulas), example: pairs of monotone grid
   paths $(0, 0) -> (n, m)$ that meet only at the ends are disjoint
   paths from $(0, 1), (1, 0)$ to $(n - 1, m), (n, m - 1)$. With

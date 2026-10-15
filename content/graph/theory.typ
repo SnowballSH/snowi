@@ -70,11 +70,16 @@ vertex cover, minimum edge cover.
   vertex $->$ sink with capacity $k$).
 
 === Counting
-#fact[Matrix-tree, directed][Arborescences out of root $r$: $det$
-  of the matrix with in-degrees on the diagonal and
-  $L_(u v) = -c(u, v)$ ($c$ = number of edges $u -> v$), row and
-  column $r$ deleted; into $r$: out-degrees instead. Undirected:
-  Kirchhoff (_Counting formulas_).]
+#fact[Matrix-tree][Kirchhoff: an undirected multigraph has
+  $det L'$ spanning trees, where $L = D - A$ is the Laplacian
+  ($L_(v v) = deg(v)$, $L_(u v) = -c(u, v)$ for $c(u, v)$ edges
+  between $u$ and $v$; self-loops dropped) and $L'$ is $L$ without
+  the row and the column of any one vertex. With edge weights it
+  sums the product of the weights over the trees. Directed,
+  arborescences out of root $r$: in-degrees on the diagonal,
+  $L_(u v) = -c(u, v)$ for $c(u, v)$ edges $u -> v$ (loops
+  dropped), row and column $r$ deleted; into $r$: out-degrees
+  instead. Take $det$ mod $p$ with `linalg/gauss-mod`.]
 #fact[BEST][Eulerian digraph: the Euler circuits (up to rotation)
   number $t_w product_v ("out"(v) - 1)!$, with $t_w$ the spanning
   trees directed into any fixed $w$. Starting at $s$: times
@@ -204,6 +209,16 @@ vertex cover, minimum edge cover.
   its two edges by one edge. Heaviest simple cycle: series adds
   the weights; merging parallel $a$, $b$ records the 2-cycle
   $a + b$ and keeps $max(a, b)$; a self-loop is a cycle too.
+- Vertex elimination (delete $v$, join its remaining neighbours
+  pairwise): after eliminating a set $D$, in any order, two
+  remaining vertices are adjacent iff some path joins them with
+  all inner vertices in $D$ (fill path lemma). In a tree: iff
+  every inner vertex of their path is in $D$.
+- Inversion graph of a permutation ($i < j$ adjacent iff
+  $p_i > p_j$): cliques are decreasing and independent sets
+  increasing subsequences. It is bipartite iff no decreasing
+  subsequence has length 3, and then the LIS is $n - nu$ (Kőnig);
+  if it is a tree, it is a caterpillar.
 - Grid cut vertices (4-adjacency): walk around the 8 neighbours of
   a free cell $v$; cells outside the grid are blocked, and so is a
   free diagonal cell between two blocked ones. $v$ is a cut vertex

@@ -222,7 +222,10 @@ while l <= n:
   $[dots, a_n - 1, 1]$. So sequences $(a_1, dots, a_n)$ of
   positive integers, $n >= 0$, match one-to-one the rationals
   $y\/x = [a_n; dots, a_1, 1] >= 1$ (empty: $1\/1$), i.e. the
-  coprime pairs $x <= y$.]
+  coprime pairs $x <= y$. Here $(x, y) = (f_n, f_(n + 1))$ for
+  $f_0 = f_1 = 1$, $f_(i + 1) = a_i f_i + f_(i - 1)$; then
+  $sum_i a_i f_i = f_n + f_(n + 1) - 2$ (telescoping), and
+  $x + y$ does not change when the sequence is reversed.]
 #fact[Carmichael][$lambda(m)$, the least `e` with
   $a^e equiv 1$ for all `a` coprime to `m`: $lambda(p^k) = phi(p^k)$
   for odd `p`, $lambda(2) = 1$, $lambda(4) = 2$,
