@@ -73,7 +73,7 @@ hash#cpp[ (`ds2/hash-map`)]#py[: store `x ^ R` for one random
 === Polynomial identity testing
 #fact[Schwartz-Zippel][A nonzero polynomial of total degree $d$
   is 0 at a point with coordinates uniform in $S$ with probability
-  at most $d \/ |S|$. Evaluate modulo a prime near $10^9$ or
+  at most $d\/abs(S)$. Evaluate modulo a prime near $10^9$ or
   $2^61 - 1$, never modulo 2 or $2^64$.]
 - Freivalds: to check $A B = C$, compare $A (B x)$ with $C x$ for
   a random vector $x$ mod $p$, in $O(n^2)$. A wrong $C$ passes

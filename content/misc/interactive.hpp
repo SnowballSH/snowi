@@ -11,7 +11,7 @@
  *   Every line must be flushed (`endl` does it); debug output goes
  *   to `cerr` only.
  * Time: Each query is a round trip through the judge, measured at
- *   about 8 $mu$s of CPU and 15 to 25 $mu$s of wall time: $10^5$
+ *   about 8 µs of CPU and 15 to 25 µs of wall time: $10^5$
  *   queries are fine.
  * Usage:
  *   ll r = ask(u, k); // prints "? u k", reads one reply

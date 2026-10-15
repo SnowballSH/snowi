@@ -16,10 +16,10 @@ Tweak: (min, +) for the shortest walk with exactly `e` edges:
   start each `acc` row at `INF` instead of 0, replace `if x:` by
   `if x != INF:` (0 is a real weight here), update
   `acc[j] = min(acc[j], x + brow[j])`, and start `mat_pow` from 0
-  on the diagonal and `INF` elsewhere. Entries $>= "INF" \/ 2$
+  on the diagonal and `INF` elsewhere. Entries $>= "INF"\/2$
   then mean no walk, as long as every walk weighs less than
   $"INF" \/ 4$ in absolute value. (max, +): `-INF` for `INF` and
-  `max`; entries $<= -"INF" \/ 2$ mean no walk. Use a large int
+  `max`; entries $<= -"INF"\/2$ mean no walk. Use a large int
   such as `1 << 62` for `INF`, not `float("inf")`.
 Uses: numtheory/modpow
 Example:

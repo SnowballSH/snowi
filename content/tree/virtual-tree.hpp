@@ -8,8 +8,8 @@
  *   into `vs[i]` stands for a path of
  *   `depth[vs[i]] - depth[vs[par[i]]]` tree edges. Only the LCAs of
  *   keys adjacent in preorder need to be added.
- * Precondition: `tree` is a tree/lca `LCA` (or a tree/lca-rmq
- *   `RmqLCA`) of the tree. Keys may repeat; no keys gives empty
+ * Precondition: `tree` is a tree/lca `LCA` (an `RmqLCA` from tree/lca-rmq,
+ *   full packet, also works) of the tree. Keys may repeat; no keys gives empty
  *   lists.
  * Time: $O(k (log k + log n))$ for `k` keys; $O(k log k)$ with
  *   `RmqLCA`.

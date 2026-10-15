@@ -26,7 +26,7 @@
  *   without S$ is a vertex cover, so the minimum vertex cover is
  *   $n$ minus the maximum independent set. Check the structure
  *   before going exponential: in a bipartite graph the maximum
- *   independent set is $n$ minus the maximum matching (Konig,
+ *   independent set is $n$ minus the maximum matching (Kőnig,
  *   `flow/hopcroft-karp`); trees take a DP, interval graphs a
  *   greedy, partial orders Dilworth. Cues: "pairwise compatible" or
  *   "pairwise conflicting", "largest group where everyone knows

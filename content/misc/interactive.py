@@ -13,7 +13,7 @@ Precondition: Replies are integers separated by any whitespace.
   `input()`, never with `sys.stdin.buffer` (as the template does):
   that waits forever.
 Time: Each query is a round trip through the judge, measured at
-  about 20 $mu$s of CPU and 25 to 40 $mu$s of wall time: $10^5$
+  about 20 µs of CPU and 25 to 40 µs of wall time: $10^5$
   queries take 3 to 4 s of wall time.
 Usage:
   n = reply()  # the judge's input, too

@@ -5,7 +5,8 @@
 #let serif = "New Computer Modern"
 #let text-size = 7.5pt
 #let muted = luma(90)
-#let keep-together = 45 // lines
+#let keep-together = 20 // lines; longer snippets break between chunks
+#let chunk-max = 16 // a chunk longer than this may itself break
 #let margin = (x: 0.35in, top: 0.42in, bottom: 0.28in)
 #let gutter = 0.16in
 
@@ -17,7 +18,9 @@
   for m in source.matches(pattern) {
     pieces.push(source.slice(pos, m.start))
     if m.text.starts-with("`") {
-      pieces.push(raw(m.text.slice(1, -1)))
+      // Short commands and expressions never break across lines.
+      let code = raw(m.text.slice(1, -1))
+      pieces.push(if m.text.len() <= 52 { box(code) } else { code })
     } else {
       pieces.push(eval(m.text, mode: "markup"))
     }
@@ -49,13 +52,29 @@
 // Label of an entry's heading, unique across the four bundled packets.
 #let entry-label(entry, variant, language) = label("snowi:" + variant + ":" + language + ":" + entry.id)
 
-#let item(entry, language, variant, by-id) = {
+/// Code that may only break at blank lines, so a column never ends
+/// inside a function. `gap` is the height of one blank code line.
+#let chunked-code(code, language, gap) = {
+  let pieces = code.split("\n\n")
+  for (i, piece) in pieces.enumerate() {
+    let lines = piece.split("\n").len()
+    block(
+      breakable: lines > chunk-max,
+      above: if i == 0 { 0.35em } else { gap },
+      below: 0.35em,
+      sticky: i + 1 < pieces.len() and lines <= 3,
+      raw(piece, lang: raw-lang(language), block: true),
+    )
+  }
+}
+
+#let item(entry, language, variant, by-id, gap) = {
   mark-position(entry)
   let snippet = entry.code.at(language)
   let fields = snippet.fields
   let is-full = variant == "full"
   let ext = snippet.file.split(".").last()
-  block(sticky: true, spacing: 0.4em, below: 0.3em)[#heading(level: 2, entry.title)#entry-label(entry, variant, language)]
+  block(sticky: true, above: 0.9em, below: 0.3em)[#heading(level: 2, entry.title)#entry-label(entry, variant, language)]
   let info = ()
   info.push(rich(fields.Description))
   if "Precondition" in fields { info.push(label-run("Requires", rich(fields.Precondition))) }
@@ -71,18 +90,23 @@
   if is-full and "Example" in fields {
     block(sticky: true, usage-block(fields.Example, language))
   }
-  block(spacing: 0.35em, width: 100%)[
+  block(sticky: true, spacing: 0.35em, width: 100%)[
     #set text(size: 0.92em, fill: muted)
     #snippet.file #h(1fr) #raw(snippet.hash)
     #if is-full and "Source" in fields [ · #rich(fields.Source)]
   ]
-  // Short snippets stay in one column; long ones may break.
-  block(breakable: snippet.lines > keep-together, raw(snippet.code, lang: raw-lang(language), block: true))
+  // Short snippets stay in one column; long ones break only between
+  // blank-line-separated chunks.
+  if snippet.lines <= keep-together {
+    block(breakable: false, raw(snippet.code, lang: raw-lang(language), block: true))
+  } else {
+    chunked-code(snippet.code, language, gap)
+  }
 }
 
 #let note(entry, language, variant) = {
   mark-position(entry)
-  block(sticky: true, spacing: 0.4em, below: 0.3em)[#heading(level: 2, entry.title)#entry-label(entry, variant, language)]
+  block(sticky: true, above: 0.9em, below: 0.3em)[#heading(level: 2, entry.title)#entry-label(entry, variant, language)]
   include entry.path
 }
 
@@ -182,6 +206,13 @@
     let code-size = 10pt * (column / probe.width) * 0.995
     show raw: set text(size: code-size)
     show raw.where(block: false): set text(size: text-size * 0.98)
+    // Height of one blank code line: the gap between code chunks.
+    let code-height(source) = measure(block(width: 10cm, {
+      set text(font: mono, weight: 500, size: code-size)
+      set par(leading: 0.28em)
+      raw(source, block: true)
+    })).height
+    let gap = code-height("a\n\nb") - 2 * code-height("a")
 
     block(below: 0.6em)[
       #text(size: 13pt, weight: "bold", title) \
@@ -198,7 +229,7 @@
     for (section-title, entries) in sections {
       heading(level: 1, section-title)
       for entry in entries {
-        if entry.kind == "note" { note(entry, language, variant) } else { item(entry, language, variant, by-id) }
+        if entry.kind == "note" { note(entry, language, variant) } else { item(entry, language, variant, by-id, gap) }
       }
     }
   }

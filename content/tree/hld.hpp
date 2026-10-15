@@ -32,7 +32,7 @@
  *   go to whatever structure sits on the positions (Fenwick for
  *   sums, segment tree for max, lazy segment tree for path updates).
  *   Non-commutative `op`: with `w = lca(u, v)`, fold `path(u, w)`
- *   with `op` reversed, then `path(w, v, true)` as is (Example).
+ *   with `op` reversed, then `path(w, v, true)` as is.
  * Example:
  *   // Non-commutative: compose maps y -> b y + c along u -> v.
  *   struct M { ll b, c; };

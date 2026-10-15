@@ -17,7 +17,7 @@
  * Tweak: Change only `T`, `e` and `op` (default: range sum). Max:
  *   `e = LLONG_MIN`, `max(a, b)`; then `max_right(l, v < x)` is the
  *   first index `>= l` with `a[i] >= x`. Min: `e = LLONG_MAX`. A
- *   struct node works if `e` is a `constexpr` aggregate (Example).
+ *   struct node works if `e` is a `constexpr` aggregate.
  * Example:
  *   // Point set range composite: f(x) = (b x + c) % MOD,
  *   // op(f, g) = "f, then g" (non-commutative).

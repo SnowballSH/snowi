@@ -3,7 +3,7 @@ Title: Hopcroft-Karp matching
 Description: Maximum matching in a bipartite graph with `n` left
   and `m` right vertices. `ml[u]` is the right partner of left `u`
   and `mr[v]` the left partner of right `v` (-1 if free). `cover()`
-  then gives a minimum vertex cover (Konig): left and right
+  then gives a minimum vertex cover (Kőnig): left and right
   vertices touching every edge, as many as the matching.
 Precondition: Edges go from left `u` in `[0, n)` to right `v` in
   `[0, m)`; both sides are numbered from 0 separately.
@@ -31,19 +31,19 @@ Example:
   >>> 4 - pc.max_matching()
   2
 Notes: Matching facts (bipartite only): minimum vertex cover =
-  maximum matching (Konig); maximum independent set and minimum
+  maximum matching (Kőnig); maximum independent set and minimum
   edge cover (no isolated vertices) are both $n + m - k$. Hall: all
   left vertices can be matched iff every left set $X$ has
   $|N(X)| >= |X|$, and in general $k = n - max_X (|X| - |N(X)|)$.
   Cues: "pair up", "assign each to one", "maximum set with no two
   conflicting" when conflicts only join two classes (grid cells by
   color parity, even and odd numbers), "fewest rows and columns
-  covering all marks" (Konig). In a path cover, paths start at the
+  covering all marks" (Kőnig). In a path cover, paths start at the
   `v` with `mr[v] < 0` and continue `v -> ml[v]`. The cover is read
   off the last search: left vertices not reached by alternating
   paths from free left vertices, plus right vertices reached.
 Source: kactl hopcroftKarp (CC0), restructured.
-Status: stress-tested against bitmask DP and Konig certificates
+Status: stress-tested against bitmask DP and Kőnig certificates
 """
 
 

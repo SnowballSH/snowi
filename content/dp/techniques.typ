@@ -23,8 +23,8 @@ first.]
 #fact[Lines][$"dp"[i] = min_j ("dp"[j] + a_j b_i + c_j)$ plus terms
   in $i$ alone is a minimum of lines $a_j x + ("dp"[j] + c_j)$ at
   $x = b_i$; add line $j$ once $"dp"[j]$ is known. A deque if
-  slopes and queries are sorted, else `ds/li-chao` or
-  `ds/line-container`. No inequality needed.]
+  slopes and queries are sorted, else `ds/li-chao`#cpp[ or
+  `ds/line-container`]. No inequality needed.]
 #fact[Convolution][$c_k = min_(i + j = k) (a_i + b_j)$. Both convex:
   $c_0 = a_0 + b_0$, then the differences of $a$ and of $b$ merged
   in sorted order, $O(n + m)$, and $c$ is convex. Only $b$ convex:

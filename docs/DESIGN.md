@@ -33,7 +33,8 @@ ICPC packet. The full packet prints everything, plus the `Example`,
   about three quarters of the file size for these code-dense pages and
   adds nothing to a printed notebook.
 - The syntax theme (`typst/theme.tmTheme`) uses dark colors plus bold
-  keywords and italic comments, so it still reads on a grayscale printer.
+  keywords and grey comments (Inconsolata has no italic), so it still
+  reads on a grayscale printer.
 
 ## Typing hash
 

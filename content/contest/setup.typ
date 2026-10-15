@@ -44,16 +44,16 @@ done")]
     { echo seed $i; cat in; break; }
 done")]
 Interactive problems: connect a local judge with a named pipe,
-#cpp[`mkfifo io; ./judge < io | ./a > io`]#py[`mkfifo io; ./judge < io | pypy3 a.py > io`]
+#cpp[#box[`mkfifo io; ./judge < io | ./a > io`]]#py[#box[`mkfifo io; ./judge < io | pypy3 a.py > io`]]
 (`misc/interactive`).
 
 === Typing hash
 Each item shows the first 6 hex digits of its typing hash, which
 ignores whitespace and comments#py[ but keeps the indentation
 structure]: retyped code gets the same hash. Check a file with
-#cpp[`sh hash.sh < a.cpp`]#py[`python3 hash.py < a.py`], or in vim
+#cpp[#box[`sh hash.sh < a.cpp`]]#py[#box[`python3 hash.py < a.py`]], or in vim
 select the lines and type
-#cpp[`:w !sh hash.sh`]#py[`:w !python3 hash.py`].
+#cpp[#box[`:w !sh hash.sh`]]#py[#box[`:w !python3 hash.py`]].
 #cpp[#code("sh", "# hash.sh
 cpp -dD -P -fpreprocessed | tr -d '[:space:]' \\
   | md5sum | cut -c-6")]

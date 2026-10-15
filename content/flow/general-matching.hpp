@@ -29,7 +29,7 @@
  *   $"odd"(G - U)$ counts the components of odd size after
  *   deleting $U$; a perfect matching exists iff
  *   $"odd"(G - U) <= |U|$ for all $U$. The smallest edge cover
- *   (no isolated vertices) has $n - k$ edges, but Konig fails:
+ *   (no isolated vertices) has $n - k$ edges, but Kőnig fails:
  *   the largest independent set is NP-hard here. Cues: "pair up"
  *   when any two items may pair (not two classes), dominoes on a
  *   graph with odd cycles, the token game above. Each vertex

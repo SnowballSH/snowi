@@ -13,9 +13,9 @@
  * Tweak: (min, +) for the shortest walk with exactly `e` edges: set
  *   `ZERO = LLONG_MAX / 4` (no walk), `ONE = 0` and the update to
  *   `r.a[i][j] = min(r.a[i][j], x + o.a[k][j])`. An entry
- *   $>= "ZERO" \/ 2$ then means no walk, as long as every walk
+ *   $>= "ZERO"\/2$ then means no walk, as long as every walk
  *   weighs less than $"ZERO" \/ 4$ in absolute value. (max, +):
- *   `ZERO = LLONG_MIN / 4` and `max`; an entry $<= "ZERO" \/ 2$
+ *   `ZERO = LLONG_MIN / 4` and `max`; an entry $<= "ZERO"\/2$
  *   then means no walk.
  * Example:
  *   // Linear recurrence f_n = f_(n-1) + 2 f_(n-3) as a state
