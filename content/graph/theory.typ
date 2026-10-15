@@ -156,6 +156,14 @@ vertex cover, minimum edge cover.
   components of the edges of weight $<= v$.
 - Borůvka: every component takes its cheapest outgoing edge;
   $O(log n)$ rounds.
+- Shifted edge groups: edges $(u + k, v + k)$ for all $k < ell$ at
+  once. Keep one DSU per $j$ where $a tilde_j b$ means
+  $a + k tilde b + k$ for all $k < 2^j$. Cover $ell$ by two blocks
+  of length $2^j$; a union at level $j$ that merges pushes itself
+  down as two unions at level $j - 1$ (offsets $0$, $2^(j - 1)$),
+  one that finds the pair joined stops. Each level merges at most
+  $n - 1$ times: $O(n log n)$ unions. In Kruskal (groups by cost)
+  a level-0 merge is a tree edge.
 - Two groups maximizing the lightest edge inside a group: add
   edges by increasing weight to a parity DSU; the first one that
   closes an odd cycle is the answer, and the parity colouring at

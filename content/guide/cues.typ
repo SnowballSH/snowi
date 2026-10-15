@@ -286,6 +286,7 @@ decomposition and small tricks_ (bitsets).
   [shortest cycle, chordless cycle], [BFS from every vertex],
   [MST of an implicit dense graph], [Borůvka with a data structure],
   [MST with small integer weights], [$sum_v (c_v - 1)$ over thresholds],
+  [edges $(u + k, v + k)$ for all $k < ell$], [one DSU per power of two],
   [bridges, cut vertices, cactus], [`graph/bcc`, block-cut tree],
   [is a free grid cell a cut vertex?], [ring of its 8 neighbours],
   [series-parallel, no $K_4$ minor], [contract degree 2, merge parallels],
