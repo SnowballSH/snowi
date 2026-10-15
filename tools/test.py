@@ -190,13 +190,27 @@ def run_doc(job: Job, pypy: str) -> Result:
     return execute(job, [pypy, str(TESTS / "run_doctests.py"), job.item], env, start)
 
 
+MEMORY_LIMIT = "1536M"  # per test; a runaway (e.g. a mutation test) dies alone
+
+
+def memory_capped(cmd: list[str]) -> list[str]:
+    """Run cmd in a transient systemd scope with a hard memory cap, if available."""
+    if shutil.which("systemd-run") is None:
+        return cmd
+    scope = ["systemd-run", "--user", "--scope", "--quiet"]
+    return scope + ["-p", f"MemoryMax={MEMORY_LIMIT}", "-p", "MemorySwapMax=0", *cmd]
+
+
 def execute(job: Job, cmd: list[str], env: dict, start: float) -> Result:
+    cmd = memory_capped(cmd)
     try:
         proc = subprocess.run(
             cmd, capture_output=True, text=True, env=env, cwd=ROOT, timeout=TIMEOUT[job.kind]
         )
         output = (proc.stdout + proc.stderr).strip()
         ok = proc.returncode == 0
+        if proc.returncode in (-9, 137):
+            output += f"\nkilled: over the {MEMORY_LIMIT} memory limit (or SIGKILL)"
     except subprocess.TimeoutExpired:
         output, ok = f"timeout after {TIMEOUT[job.kind]}s", False
     return Result(job, ok, time.perf_counter() - start, output)
