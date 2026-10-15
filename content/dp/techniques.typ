@@ -1,14 +1,16 @@
 #import "/typst/notes.typ": *
 
-Write the transition, then match its shape below. Check a claimed
-property (monotone `opt`, convexity in $k$) by brute force first.
+#full[Write the transition, then match its shape below. Check a
+claimed property (monotone `opt`, convexity in $k$) by brute force
+first.]
 
 === Which speed-up applies
 #fact[Quadrangle inequality][$w(a, c) + w(b, d) <= w(a, d) + w(b, c)$
   for $a <= b <= c <= d$: crossing intervals cost at most nested
-  ones. Holds for $f(S_r - S_l)$ with $f$ convex and $S$
-  non-decreasing, and for sums over the pairs inside $[l, r)$ of
-  weights $>= 0$; it survives sums and adding $g(l) + h(r)$.
+  ones. Holds for $f(x_r - y_l)$ with $f$ convex and $x$, $y$
+  non-decreasing (so $f(S_r - S_l)$, or distances between two
+  sorted point sets), and for sums over the pairs inside `[l, r)`
+  of weights $>= 0$; it survives sums and adding $g(l) + h(r)$.
   Everywhere (any two rows and columns) it is a *Monge* matrix.]
 #fact[Monotone `opt`][With the inequality, the smallest optimal
   $j$ in $min_j "old"[j] + w(j, i)$ never decreases in $i$: one
@@ -23,17 +25,37 @@ property (monotone `opt`, convexity in $k$) by brute force first.
   $x = b_i$; add line $j$ once $"dp"[j]$ is known. A deque if
   slopes and queries are sorted, else `ds/li-chao` or
   `ds/line-container`. No inequality needed.]
+#fact[Convolution][$c_k = min_(i + j = k) (a_i + b_j)$. Both convex:
+  $c_0 = a_0 + b_0$, then the differences of $a$ and of $b$ merged
+  in sorted order, $O(n + m)$, and $c$ is convex. Only $b$ convex:
+  the smallest optimal $i$ never decreases in $k$ (`dp/dc-opt`,
+  SMAWK). Concave sequences under (max, +): the same.]
 #fact[Exactly $k$][The best value is convex (minimum) or concave
   (maximum) in $k$: drop $k$, charge $lambda$ per item, binary
-  search $lambda$ (`dp/wqs`). Convex: min-cost flow in the amount,
-  matroids, partitions with a quadrangle-inequality cost.]
+  search $lambda$ (`dp/wqs`). Convex: min-cost flow in the amount
+  ($k$ disjoint subarrays, $k$ buy-sell trades), matroids,
+  partitions with a quadrangle-inequality cost.]
+#fact[Unit steps][$min sum_i f_i (b_i)$ over integers $b_i >= 0$
+  with $sum_i b_i = m$ and every $f_i$ convex: take the $m$
+  cheapest unit steps $f_i (x + 1) - f_i (x)$ over all $i$ (each
+  $f_i$ yields them in increasing order). Huge $m$: binary search
+  the price of the last step. Many $m$: the optimum is
+  $max_lambda (lambda m - sum_i max_x (lambda x - f_i (x)))$, with
+  $lambda$ over the step prices only.]
+#fact[Ratios][The largest $sum a \/ sum b$ (all $b > 0$) over a
+  family of sets is $>= lambda$ iff $max sum (a - lambda b) >= 0$:
+  binary search $lambda$, or Dinkelbach: from any feasible ratio,
+  set $lambda$ to the ratio of a set maximising
+  $sum (a - lambda b)$ until it stops growing (a few rounds).]
 #fact[Convex in a value][A DP over one numeric state $x$ that stays
   convex piecewise linear in $x$ (costs $|x - a|$, prefix minima,
   windows): `dp/slope-trick`.]
-#fact[Window][$"dp"[i] = c_i + min_(i - L <= j < i) "dp"[j]$: keep a
-  deque of indices with increasing `dp`; pop the back while it is
-  not better than the new one, the front once out of range.
-  $O(n)$.]
+#fact[Block maximum][$"dp"[j] = min_(i < j) ("dp"[i] + max(a_i,
+  dots, a_(j - 1)))$ in $O(n)$: a stack of groups of $i$ that share
+  the current block maximum $M$, each with its least $"dp"[i]$ and
+  the least $M + "dp"[i]$ over itself and the groups below it. For
+  each $j$ push $i = j - 1$, merge into it the top groups whose
+  maximum is $<= a_(j - 1)$; the top then holds $"dp"[j]$.]
 
 === Knapsack
 #fact[Subset sums][Reachable sums up to $S$ in $O(n S / 64)$.#py[
@@ -57,9 +79,7 @@ for x in a:
   plus the remainder ($10 = 1 + 2 + 4 + 3$), as 0/1 items:
   $O(W sum log c_i)$. $O(n W)$: for each residue $r$ of $w$,
   $"new"[r + t w] = t v + max_(t - c <= s <= t) ("dp"[r + s w] - s v)$,
-  a sliding window maximum (Window, mirrored).
-- 0/1 items: loop capacity downwards; unbounded: upwards. Huge
-  weights, small values: `dp[v]` = least weight for value $v$.
+  a sliding window maximum (monotone deque).
 
 === Bitmasks and digits
 - All submasks `s` of all masks `m`, $3^n$ in total: start at
@@ -67,12 +87,10 @@ for x in a:
 - Sum over submasks in $O(n 2^n)$: for each bit `b`, for each
   mask `m` with bit `b`: `f[m] += f[m ^ 1 << b]`. Supersets,
   inverses, subset convolution: `poly/subset-transforms`.
-- Paths through all vertices: $"dp"["mask"][v]$, masks in
-  increasing order, $O(2^n n^2)$. Assigning $n <= 20$ items:
-  `dp[mask]`, the next item is `popcount(mask)`.
 - Broken profile (tilings of $n times m$, $m$ small): cells in
-  row-major order, the mask holds the next $m$ cells (covered or
-  not): $O(n m 2^m)$.
+  row-major order, the profile holds the state of the last $m$
+  cells (covered or not; base 3 when a cell needs three states):
+  $O(n m s^m)$ for $s$ states per cell.
 - Digit DP: count $x$ in $[0, N]$ whose digits drive an automaton
   (`nxt`, `Q` states) to `accept`; for $[L, R]$ take
   `count(R) - count(L - 1)`. Leading zeros are read as digits: add
@@ -128,23 +146,81 @@ for x in a:
   on whether a neighbour is larger.
 - Sorting first fixes the order of a DP: sort by deadline and
   knapsack over time ("take a job only before its deadline"), by
-  $w + s$ for stacking boxes of weight $w$ and strength $s$.
-- Rolling arrays: keep two layers (or one, with the right loop
-  direction). With `-INF` for unreachable states, never add to it
-  (`LLONG_MIN + x` overflows); use `LLONG_MIN / 4` or skip.
+  $w + s$ for stacking boxes of weight $w$ and strength $s$, by
+  increasing $v$ when only the largest triggered $v$ counts
+  ($f <- p v + (1 - p) f$).
 - Huge `n` with a fixed linear transition: matrix power
   (`linalg/matrix`), over (min, +) or (max, +) too. Linear
   recurrences: `poly/linear-rec`.
-- Probability and expectation DPs usually run backwards from the
-  final states; see the probability note.
 - Monotone `opt` for a single array ($"dp"$ depends on itself):
   keep a deque of (candidate $j$, first $i$ where $j$ is best);
   a new $j$ pops candidates from the back while it beats them at
   their first $i$, then binary searches where it starts to win.
   $O(n log n)$.
-
-=== Example: digit sums
-Count $x <= N$ with digit sum divisible by $D$: states $q$ = sum
-mod $D$, `nxt(q, d) = (q + d) % D`, `accept(q) = q == 0`. Count
-in $[L, R]$ as `count(R) - count(L - 1)` (handle $L = 0$).
+- Keeping only the best value per state is exact when every
+  transition is non-decreasing in that value. Counting optimal
+  plans as (best, count) pairs needs each transition strictly
+  increasing in the value (only best predecessors reach the best)
+  or independent of it (every plan ties: keep the total count
+  too).
+- Counting inputs that a deterministic check accepts (a greedy
+  with a few counters, a small DP): the check's state is the DP
+  state ("DP of DP"). Prove the greedy exact first.
+- Counting distinct results, not ways: build each result through
+  one canonical decomposition (the leftmost cut, the shortest last
+  block) and forbid or subtract the choices that rebuild a result
+  already counted.
+- A product $product_v c_v$ inside the sum counts the ways to mark
+  one item in every box ($c_v$ items in box $v$): count (object,
+  marking) pairs instead, with the number of boxes still waiting
+  for their mark in the state.
+- Lexicographically smallest optimum, or rebuilding without
+  parent pointers: run the DP backwards (best completion, or "can
+  finish", from each state), then walk forwards taking the
+  smallest transition that keeps the optimum.
+- Matrix chain order for dimensions $w_0, dots, w_n$ is the
+  cheapest triangulation of the polygon with vertex weights $w_i$,
+  a triangle costing the product of its weights. Hu-Shing: some
+  optimal triangulation joins the smallest weight to the second
+  and third smallest (by sides or diagonals).
+- Huffman in $O(n)$ after sorting: merged weights come out
+  non-decreasing, so keep two FIFO queues (sorted leaves, merged
+  nodes) and take the two smallest fronts. A group of $c$ equal
+  minimum weights $v$ merges at once into $floor(c\/2)$ nodes of
+  weight $2 v$, keeping the odd one.
+- L1 isotonic regression, $min sum |a_i - b_i|$ over
+  non-decreasing $b$ (`dp/slope-trick`), equals the largest
+  $sum (a_i - a_j)$ over sets of disjoint pairs $i < j$.
+- All $F(k)$ of a concave $F$ by the Aliens trick: non-negative
+  integer slopes with total at most $S$ take $O(sqrt(S))$ distinct
+  values. Bisect $lambda$ ranges, stop when both ends report the
+  same count, and fill $F$ linearly between consecutive vertices:
+  $O(sqrt(S) log S)$ solver calls.
+- Huge counts of a few kinds of items: an optimum is mostly copies
+  of one or two patterns, adjacent on the upper convex hull of
+  value against composition. Fix all but a margin of a few copies
+  greedily, solve the rest with an exact DP, and test the margin
+  against a brute force.
+- Min-plus power of a cost on weights $0..n$, $c$ items: some
+  $floor(c\/2)$ of $c$ weights with total $W$ sum to within $n$ of
+  $W floor(c\/2) \/ c$ (slide a window over them cyclically), so
+  $F_c$ comes from $F_(floor(c\/2))$ and $F_(ceil(c\/2))$ on
+  windows of width $O(n)$: $O(n^2 log c)$.
+- Meet in the middle on coordinates: to count pairs where an
+  earlier vector dominates a later one in every coordinate, when
+  each half of the coordinates takes few distinct patterns, keep
+  `cnt[h2][h1]`, the items whose second half is `h2` and whose
+  first half dominates `h1`. An item asks the sum of
+  `cnt[h2'][h1]` (its own `h1`) over the `h2'` that dominate its
+  second half, then adds 1 to `cnt[h2][h1']` (its own `h2`) for
+  every `h1'` that its first half dominates.
+- LIS of a concatenation $A B$: the maximum over $x$ of the number
+  of `tail` values of $A$ below $x$ plus the number of `head`
+  values of $B$ that are $>= x$ (`head[k]`: the largest first
+  value of an increasing subsequence of length $k + 1$). With
+  distinct values the pairs (longest increasing, longest
+  decreasing subsequence ending at $i$) are pairwise distinct, so
+  more than $r s$ values contain an increasing subsequence of
+  length $r + 1$ or a decreasing one of length $s + 1$
+  (Erdős-Szekeres).
 ]
