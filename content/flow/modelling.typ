@@ -1,8 +1,8 @@
 #import "/typst/notes.typ": *
 
-Statements rarely say "flow". Build a network, run `flow/dinic`,
-and read the answer from the flow value or from the minimum cut:
-the source side is what `s` still reaches in the residual graph.
+Build a network, run `flow/dinic`, and read the answer from the
+flow value or from the minimum cut: the source side is what `s`
+still reaches in the residual graph.
 
 === Max flow and min cut
 #fact[Max-flow min-cut][The maximum flow equals the minimum
@@ -15,9 +15,8 @@ the source side is what `s` still reaches in the residual graph.
   $sum_(v in X) b_v$ at most the capacity of the edges leaving
   $X$. When only a few $X$ can be tight (prefixes, subtrees, sides
   of a bridge, subsets of few types) check those directly.]
-#fact[Disjoint paths][The most edge-disjoint $s$-$t$ paths, and
-  the fewest edges whose removal separates $t$ from $s$, both
-  equal the max flow with unit capacities (Menger). For
+#fact[Disjoint paths][With unit capacities the max flow counts
+  edge-disjoint $s$-$t$ paths (Menger, _Graph theory facts_). For
   vertex-disjoint paths also split every vertex except $s$ and $t$
   with capacity 1 (or run from $s_"out"$ to $t_"in"$).]
 
@@ -33,6 +32,15 @@ the source side is what `s` still reaches in the residual graph.
   capacity-$k$ edge, through a group vertex if needed.
 - Huge counts of few kinds: one vertex per kind with summed
   capacities; binary search an answer $K$ outside the flow.
+- "$x$ can serve $y$" when $y$ is reachable from $x$ in a sparse
+  DAG (submasks, $<=$ on a line, ancestors): route through that
+  DAG with infinite capacities instead of all pairs. "Value
+  $p supset.eq b$": edges $v -> v$ minus one bit, $O(n log n)$.
+- Time line: vertices $0, dots, T$, edges $t -> t + 1$ with
+  capacity $k$ (free machines), and per job $[a, b]$ an edge
+  $a -> b + 1$ with capacity 1. A unit of flow is one machine's
+  sequence of disjoint jobs; with cost $-w$ per job and $k$ units,
+  the heaviest job set covering each point at most $k$ times.
 
 === Lower bounds
 Edge $u -> v$ must carry between $l$ and $c$: add it with capacity
@@ -60,21 +68,7 @@ it, then zero both capacities of `ts`. For the largest value add
   labels of one color class to turn "equal" into "differ".]
 
 === Bipartite matching (`flow/hopcroft-karp`)
-#fact[Konig][Maximum matching $nu$ = minimum vertex cover. The
-  rest of a cover is independent, so the maximum independent set
-  is $|V| - nu$; so is the minimum edge cover (no isolated
-  vertices).]
-#fact[Hall][The left side $L$ can be fully matched iff
-  $|N(X)| >= |X|$ for all $X subset.eq L$. In general
-  $nu = |L| - max_X (|X| - |N(X)|)$. A $k$-regular bipartite
-  multigraph has a perfect matching, so it splits into $k$ of
-  them.]
-#fact[Path cover][Vertex-disjoint paths covering a DAG: $n - nu$,
-  matching out-copies to in-copies along edges. If paths may
-  share vertices, match on the transitive closure.]
-#fact[Dilworth][In a partial order, the fewest chains covering
-  everything = the largest antichain = $n - nu$ on the strict
-  order relation (transitive closure).]
+- Kőnig, Hall, Dilworth and path covers: _Graph theory facts_.
 - Costs on pairs: `flow/hungarian` (dense, $n <= 500$) or
   `flow/min-cost-flow`.
 
@@ -85,14 +79,17 @@ it, then zero both capacities of `ts`. For the largest value add
   when the next path costs $>= 0$ (see the Tweak: test it right
   after the potential update).
 - Convex cost per unit: parallel unit edges with increasing cost.
-
-=== When it is not a flow
-- Plain implications between booleans with no costs, "not both",
-  "at least one of two": `graph/two-sat`.
-- $n$ up to $10^6$: use the cut condition to prove a criterion,
-  then check it greedily. Transport on a path or tree: each edge
-  carries the imbalance $b_e$ of the side it cuts off, so the cost
-  is $sum_e c_e |b_e|$.
+- Transport on a path or tree: each edge carries the imbalance
+  $b_e$ of the side it cuts off, so the cost is
+  $sum_e c_e |b_e|$.
+#fact[Transport duality][Tokens moved along edges without
+  capacities, a step along $u v$ costing $c(u v)$: the least cost
+  equals the largest
+  $sum_v x_v b_v$ over potentials with $|x_u - x_v| <= c(u v)$ on
+  every edge, $b_v$ = demand minus supply ($x_v - x_u <= c(u -> v)$
+  for one-way edges). Integer costs allow integer $x$; with unit
+  costs on a bipartite graph some optimal $x$ has
+  $|x_u - x_v| = 1$ on every edge.]
 
 #full[
 === Worked examples
@@ -139,7 +136,7 @@ hi = F + d.max_flow(s, t)
 lo = hi - d.max_flow(t, s)",
 )
 
-*Konig.* Left 1, 2, 3; right x, y; edges 1x, 1y, 2x, 3x. Hall
+*Kőnig.* Left 1, 2, 3; right x, y; edges 1x, 1y, 2x, 3x. Hall
 fails for $X = {2, 3}$ with $N(X) = {x}$, so $nu = 3 - 1 = 2$. A
 minimum cover is {1, x}: every edge touches 1 or x.
 
@@ -149,7 +146,22 @@ $infinity$ for $s$ and $t$), original edges with $infinity$; the
 answer is the max flow, the cut vertices are those with $v_"in"$
 on the source side and $v_"out"$ not.
 
+=== Two objectives
+The lower convex hull of all achievable points $(x(S), y(S))$,
+such as $(|S|, |N(S)|)$, needs only an oracle minimizing
+$B y - A x$ for $A, B >= 0$ (a closure min cut). For neighbouring
+hull points $P$, $Q$ ask with $A = Q_y - P_y$, $B = Q_x - P_x$: a
+point strictly below $P Q$ splits it, else $P Q$ is a hull edge.
+One call per hull vertex and edge; lattice points in an
+$n times n$ box give $O(n^(2\/3))$ hull vertices.
+
 === Recognition
+- Plain implications between booleans with no costs, "not both",
+  "at least one of two": `graph/two-sat`.
+- $n$ up to $10^6$: use the cut condition to prove a criterion,
+  then check it greedily.
+- Moving tokens on a grid with unit steps: the transport dual
+  turns it into a DP over potential profiles.
 - "Assign each A to a B, B has capacity", "schedule jobs into
   slots": bipartite flow, or Hungarian with costs.
 - "Fewest cells to block", "fewest roads to destroy": min cut,
