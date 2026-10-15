@@ -29,6 +29,9 @@ ICPC packet. The full packet prints everything, plus the `Example`,
   prints darker than the regular cut at small sizes.
 - The ICPC page limit is checked inside Typst (`counter(page).final()`),
   so an over-long packet fails the build instead of printing.
+- PDFs are built with `--no-pdf-tags`: the accessibility tag tree was
+  about three quarters of the file size for these code-dense pages and
+  adds nothing to a printed notebook.
 - The syntax theme (`typst/theme.tmTheme`) uses dark colors plus bold
   keywords and italic comments, so it still reads on a grayscale printer.
 

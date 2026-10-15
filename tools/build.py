@@ -88,7 +88,10 @@ def manifest_input(out: Path) -> list[str]:
 
 
 def typst_base(typst: str) -> list[str]:
-    return [typst, "compile", "--root", str(ROOT), "--font-path", str(ROOT / "fonts")]
+    # Tags (accessibility structure) are ~75% of the file size of these
+    # code-dense packets and add nothing to a printed notebook.
+    root = ["--root", str(ROOT), "--font-path", str(ROOT / "fonts")]
+    return [typst, "compile", *root, "--no-pdf-tags"]
 
 
 def compile_bundle(typst: str, out: Path) -> None:
