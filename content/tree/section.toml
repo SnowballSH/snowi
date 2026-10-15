@@ -25,6 +25,7 @@ icpc = true
 
 [[entry]]
 item = "link-cut"
+icpc = ["cpp"]
 
 [[entry]]
 item = "tree-hash"

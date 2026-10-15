@@ -22,18 +22,23 @@ icpc = true
 
 [[entry]]
 item = "discrete-log"
+icpc = true
 
 [[entry]]
 item = "mod-sqrt"
+icpc = true
 
 [[entry]]
 item = "primitive-root"
+icpc = ["cpp"]
 
 [[entry]]
 item = "floor-sum"
+icpc = ["cpp"]
 
 [[entry]]
 item = "prime-count"
+icpc = ["cpp"]
 
 [[entry]]
 note = "theorems"

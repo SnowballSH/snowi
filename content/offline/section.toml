@@ -6,9 +6,11 @@ icpc = true
 
 [[entry]]
 item = "cdq"
+icpc = ["cpp"]
 
 [[entry]]
 item = "dynamic-connectivity"
+icpc = true
 
 [[entry]]
 item = "parallel-binary-search"

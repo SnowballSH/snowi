@@ -15,12 +15,15 @@ icpc = true
 
 [[entry]]
 item = "binary-trie"
+icpc = ["cpp"]
 
 [[entry]]
 item = "persistent-segtree"
+icpc = true
 
 [[entry]]
 item = "segtree-beats"
+icpc = ["cpp"]
 
 [[entry]]
 item = "wavelet-matrix"

@@ -38,7 +38,7 @@ def find_typst() -> str:
 
 
 def entry_json(entry: Entry, allow_missing: bool) -> dict | None:
-    base = {"id": entry.id, "kind": entry.kind, "title": entry.title, "icpc": entry.icpc}
+    base = {"id": entry.id, "kind": entry.kind, "title": entry.title, "icpc": list(entry.icpc)}
     if entry.kind == "note":
         if entry.note_path is None:
             if allow_missing:

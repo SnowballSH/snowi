@@ -10,6 +10,7 @@ icpc = true
 
 [[entry]]
 item = "knuth"
+icpc = true
 
 [[entry]]
 item = "wqs"
@@ -17,6 +18,7 @@ icpc = true
 
 [[entry]]
 item = "slope-trick"
+icpc = true
 
 [[entry]]
 note = "techniques"

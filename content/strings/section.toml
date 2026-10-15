@@ -30,6 +30,7 @@ icpc = true
 
 [[entry]]
 item = "lyndon"
+icpc = true
 
 [[entry]]
 item = "eertree"

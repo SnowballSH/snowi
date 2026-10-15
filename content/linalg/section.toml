@@ -17,6 +17,7 @@ icpc = true
 
 [[entry]]
 item = "simplex"
+icpc = true
 
 [[entry]]
 note = "facts"

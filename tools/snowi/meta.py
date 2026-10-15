@@ -58,7 +58,7 @@ class Entry:
     section: str
     name: str
     kind: str  # "item" or "note"
-    icpc: bool
+    icpc: tuple[str, ...]  # languages whose ICPC packet prints it
     title: str
     langs: tuple[str, ...] = LANGS
     snippets: dict[str, Snippet] = field(default_factory=dict)
@@ -180,8 +180,17 @@ def load_sections(order: list[str]) -> list[Section]:
     return sections
 
 
+def _icpc_langs(value: object, toml_path: Path) -> tuple[str, ...]:
+    """icpc = true (all languages), false, or a list such as ["cpp"]."""
+    if isinstance(value, bool):
+        return LANGS if value else ()
+    if isinstance(value, list) and all(lang in LANGS for lang in value):
+        return tuple(value)
+    raise ContentError(f"{toml_path}: icpc must be true, false or a list of {LANGS}")
+
+
 def _load_entry(section: str, raw: dict, toml_path: Path) -> Entry:
-    icpc = bool(raw.get("icpc", False))
+    icpc = _icpc_langs(raw.get("icpc", False), toml_path)
     if "note" in raw:
         path = CONTENT / section / f"{raw['note']}.typ"
         if "title" not in raw:

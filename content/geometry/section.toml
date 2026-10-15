@@ -22,12 +22,15 @@ icpc = true
 
 [[entry]]
 item = "closest-pair"
+icpc = true
 
 [[entry]]
 item = "half-plane"
+icpc = true
 
 [[entry]]
 item = "minkowski"
+icpc = true
 
 [[entry]]
 note = "formulas"

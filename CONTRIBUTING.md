@@ -36,7 +36,9 @@ title = "Designing a monoid"
 icpc = false
 ```
 
-Entries print in this order. `icpc` defaults to false.
+Entries print in this order. `icpc` defaults to false; `icpc = ["cpp"]`
+puts an item in only the C++ ICPC packet (PyPy code is longer, so the two
+25-page packets fill at different rates).
 
 ## Header block
 

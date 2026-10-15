@@ -18,9 +18,11 @@ icpc = true
 
 [[entry]]
 item = "general-matching"
+icpc = true
 
 [[entry]]
 item = "global-min-cut"
+icpc = ["cpp"]
 
 [[entry]]
 item = "gomory-hu"

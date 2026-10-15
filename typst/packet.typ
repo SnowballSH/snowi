@@ -97,7 +97,7 @@
 }
 
 #let selected(entry, variant, language) = {
-  let in-variant = variant == "full" or entry.icpc
+  let in-variant = variant == "full" or language in entry.icpc
   let has-lang = entry.kind == "note" or language in entry.code
   in-variant and has-lang
 }
