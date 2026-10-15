@@ -56,15 +56,17 @@
  *   best local judge is adversarial: it keeps all candidates and
  *   replies so that the larger part survives. Count your queries
  *   and assert the limit.
- *   Group testing ("does X contain a marked item?"): halve X
- *   while the test stays positive, remove the item found, test
- *   again: $k$ marked items cost at most $k (ceil(log_2 n) + 1)
- *   + 1$ tests. An independence oracle ("is X + v
- *   independent?") answers "does v have a neighbour in X": grow
- *   a maximal independent set, find each rejected vertex's
- *   neighbours in it by halving, recurse on the rejected ones;
- *   at most $n + m (2 + ceil(log_2 n))$ queries. When every
- *   reply is a known function of the hidden object, keep all
+ *   Group testing ("does X contain a marked item?"): test one
+ *   half, keep it if positive and the other half if not, until
+ *   one item is left; remove it and test the rest again: $k$
+ *   marked items cost at most $k (ceil(log_2 n) + 1) + 1$
+ *   tests. An independence oracle ("is X + v independent?")
+ *   answers "does v have a neighbour in X": grow a maximal
+ *   independent set, find each rejected vertex's neighbours in
+ *   it by group testing (skip its first test, on the whole set:
+ *   it is known positive), recurse on the rejected ones; at
+ *   most $n + m (2 + ceil(log_2 n))$ queries. When every reply
+ *   is a known function of the hidden object, keep all
  *   consistent candidates and ask the query that splits them
  *   best; telling $k$ behaviours apart needs at most $k - 1$
  *   tests (add one only when it splits a group).

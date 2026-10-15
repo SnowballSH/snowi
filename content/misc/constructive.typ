@@ -112,11 +112,8 @@ small inputs, $n = 1, 2, 3$ included.
 - Double counting: if each of $N$ windows (or constraints) must
   contain a bad element and every element lies in at most $c$ of
   them, at least $ceil(N\/c)$ elements are bad.
-- Sorted lengths $a_1 <= dots <= a_k$ contain a non-degenerate
-  triangle iff $a_i + a_(i + 1) > a_(i + 2)$ for some $i$. Without
-  one they grow at least like Fibonacci numbers ($a_i >= F_i a_1$),
-  so at most 44 values in $[1, 10^9]$ (27 in $[1, 2 dot 10^5]$)
-  are triangle-free: any longer list has a triangle.
+- Triangle-free sorted lengths grow like Fibonacci numbers:
+  _Numbers, estimates and numerics_.
 - Pigeonhole halving: if a range of values holds fewer elements
   than it has values, it misses one, and so does one of its
   halves. One counting pass per halving finds a missing value
@@ -176,8 +173,9 @@ small inputs, $n = 1, 2, 3$ included.
   vanishes. Over $FF_q$, give $q + 1$ people pairwise
   non-proportional forms from one 2-dimensional space of forms,
   each nonzero on its owner's colour and zero on colours the owner
-  cannot see: on every configuration one of them vanishes, so
-  someone guesses right. If everyone sees all other hats and may
+  cannot see. One of them vanishes on every configuration
+  (Subspaces in _Linear algebra facts_), so someone guesses right.
+  If everyone sees all other hats and may
   first announce a bit: use $2^(n - 1)$ colours as $n$-bit codes
   of even parity; person $i$ announces bit $i$ of the XOR of the
   codes it sees. Then everyone knows the other bits of its own
@@ -324,9 +322,9 @@ vector<vector<bool>> tournament(vi s) {
   (_Graph theory facts_). A tree with degrees $d_i >= 1$ exists iff
   $sum_i d_i = 2 n - 2$ ($n >= 2$): join a vertex of remaining
   degree 1 to one of remaining degree at least 2, repeat, then join
-  the last two. A $k$-regular bipartite multigraph splits into $k$
-  perfect matchings: $k$ disjoint rounds, or an edge colouring with
-  $Delta$ colours (_Flow and cut modelling_).
+  the last two. A $k$-regular bipartite multigraph as $k$ rounds of
+  perfect matchings, or a bipartite edge colouring with $Delta$
+  colours: _Graph theory facts_.
 
 === Exchange arguments
 Take an optimal solution and the first place where it differs from
@@ -398,7 +396,8 @@ transitive, and cross-multiply instead of dividing.
   The best over all arcs as the start is optimal; with next
   pointers and binary lifting each start costs $O(log n)$.
 - A circle cut into at most $k$ arcs of sum at most $M$: run the
-  line greedy from position 0. Every feasible cutting has a cut in
-  each greedy segment but the last (from its first element to the
-  element that did not fit), so try only the starts in the
-  shortest one: $O(n)$ steps of the `nxt` pointers in total.
+  line greedy from position 0. A greedy segment other than the
+  last, with the element that did not fit, sums to more than $M$,
+  so every feasible cutting starts an arc at one of its elements
+  after the first. Try those of the shortest such segment as
+  starts: $O(n)$ steps of the `nxt` pointers in total.

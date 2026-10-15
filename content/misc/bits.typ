@@ -97,9 +97,8 @@ $k$-subsets: `itertools.combinations(range(n), k)`.]
 === More facts and cues
 - Gray code, recursively: $0$ followed by $G_(n - 1)$, then $1$
   followed by $G_(n - 1)$ reversed.
-- Over GF(2), $(I + C)^t = sum C^d$ over the submasks $d$ of $t$,
-  since $binom(t, d)$ is odd iff $d$ is a submask of $t$ (Lucas,
-  _Counting formulas_).
+- "XOR each vertex with its children", $t$ times, i.e.
+  $(I + C)^t$ over GF(2): _Tree techniques_.
 - For a fixed right end $r$, the ORs (or ANDs, or GCDs) of
   $a_l, dots, a_r$ over all $l$ take $O(log V)$ distinct values
   (at most $b + 1$ for values below $2^b$): keep the list of

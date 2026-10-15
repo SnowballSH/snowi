@@ -39,8 +39,8 @@
 #fact[Subtraction games][Take 1 to $k$: $g(n) = n mod thin (k + 1)$.
   More generally, if every amount $1, dots, M - 1$ is allowed and
   no multiple of $M$ is, then $g(n) = n mod M$. Amounts with at
-  most $m$ set bits: $M = 2^(m + 1) - 1$, as a positive multiple of
-  $2^s - 1$ has at least $s$ ones. For any finite set of allowed
+  most $m$ set bits: $M = 2^(m + 1) - 1$#full[ (Digit sums in
+  _Number theory facts_)]. For any finite set of allowed
   amounts, $g$ is eventually periodic: tabulate it and find the
   period.]
 #fact[Staircase Nim][Coins on steps $0, 1, dots$; a move shifts
@@ -71,9 +71,10 @@
   player wins (Chomp, Hex). It shows who wins, not how.
 - Fixed length: if every play has the same number of moves (the
   final state is forced, whatever the order), only that number
-  matters. Writing $|x - y|$ for numbers $x, y$ on the board
-  until nothing is new always ends with all multiples of the gcd
-  $g$ up to the maximum $M$: $M \/ g - n$ moves.
+  matters. Writing $abs(x - y)$ for two numbers on the board until
+  nothing is new (Differences in _Number theory facts_) takes
+  $M \/ g - n$ moves from $n$ distinct positive numbers with gcd
+  $g$ and maximum $M$.
 - Token on an undirected graph, visited vertices deleted: the
   mover wins iff the start vertex is in every maximum matching,
   i.e. $nu(G - s) < nu(G)$.

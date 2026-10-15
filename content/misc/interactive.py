@@ -64,18 +64,20 @@ Notes: Count first: $N$ hidden possibilities and $k$ possible
   Count your queries and assert the limit. `input()` and `reply()`
   share one buffer, but `sys.stdin.buffer.readline()` does not:
   after `input()` it waits for lines that `input()` already took.
-  Group testing ("does X contain a marked item?"): halve X while
-  the test stays positive, remove the item found, test again:
-  $k$ marked items cost at most $k (ceil(log_2 n) + 1) + 1$
-  tests. An independence oracle ("is X + v independent?")
-  answers "does v have a neighbour in X": grow a maximal
-  independent set, find each rejected vertex's neighbours in it
-  by halving, recurse on the rejected ones; at most $n + m (2 +
-  ceil(log_2 n))$ queries. When every reply is a known function
-  of the hidden object, keep all consistent candidates and ask
-  the query that splits them best; telling $k$ behaviours apart
-  needs at most $k - 1$ tests (add one only when it splits a
-  group).
+  Group testing ("does X contain a marked item?"): test one
+  half, keep it if positive and the other half if not, until one
+  item is left; remove it and test the rest again: $k$ marked
+  items cost at most $k (ceil(log_2 n) + 1) + 1$ tests. An
+  independence oracle ("is X + v independent?") answers "does v
+  have a neighbour in X": grow a maximal independent set, find
+  each rejected vertex's neighbours in it by group testing (skip
+  its first test, on the whole set: it is known positive),
+  recurse on the rejected ones; at most
+  $n + m (2 + ceil(log_2 n))$ queries. When every reply is a
+  known function of the hidden object, keep all consistent
+  candidates and ask the query that splits them best; telling
+  $k$ behaviours apart needs at most $k - 1$ tests (add one only
+  when it splits a group).
 Source: UCup interactive training packet.
 Status: run against a judge process through pipes
 """

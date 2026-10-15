@@ -64,8 +64,9 @@ greedy; with two such rules at once, use matroid intersection.
   the cheapest whenever it holds more jobs than the deadline.
 - Lower bounds "at least $c_j$ chosen among the first $p_j$" with
   $N$ chosen in all (caps on the unchosen prefixes: a matroid).
-  Heaviest choice: sweep, push each weight into a max-heap, and at
-  $p_j$ pop maxima until $c_j$ are chosen. The openings of a
+  Heaviest choice: sweep, push each weight into a max-heap, at
+  $p_j$ pop maxima until $c_j$ are chosen, and at the end until $N$
+  are. The openings of a
   bracket sequence of length $2n$ are exactly the $n$-sets with at
   least $i$ among the first $2i - 1$ positions.
 - Not matroids: matchings of a general graph as edge sets,

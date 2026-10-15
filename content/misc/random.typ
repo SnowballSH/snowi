@@ -102,8 +102,10 @@ hash#cpp[ (`ds2/hash-map`)]#py[: store `x ^ R` for one random
   order unless an earlier run covered it; run $u$ covers
   $s(u) in.rev u$. If $w in s(u)$ implies $s(w) subset.eq s(u)$
   and any two sets are nested or disjoint, an element lying in $t$
-  sets is visited by $H_t <= 1 + ln t$ runs in expectation (Kahn
-  closures from every start vertex in $O((n + m) log n)$).
+  sets is visited by $H_t <= 1 + ln t$ runs in expectation.
+  Example, a DAG: $s(u)$ is $u$ plus, repeatedly, each vertex with
+  all its in-neighbours (at least one) in $s(u)$; the largest
+  $s(u)$ in expected $O((n + m) log n)$.
 #full[
 - Colour coding: to find $k$ objects that must all differ (a path
   through $k$ distinct vertices), colour everything with $k$

@@ -41,8 +41,6 @@ techniques_, _DP techniques_.
   [ups and downs of a permutation], [insertion (component) DP],
   [bounds $p_i <= b_i$, "$max_i i a_i <= k$"], [sort the bounds: position bounds],
   [prefix maxima, records], [insert values from the largest],
-  [sum of a value over all choices], [DP with (count, sum) per state],
-  [no three lengths form a triangle], [sorted, they grow like Fibonacci],
   [LIS or nesting over all permutations], [RSK, hook length formula],
   [digit conditions on $[L, R]$], [digit DP, $f(R) - f(L - 1)$],
   [convolution mod $10^9 + 7$], [`poly/fft-mod`],
@@ -65,7 +63,7 @@ _Probability and expectation_.
 )
 
 === Number theory
-_Number theory facts_.
+_Number theory facts_, _Numbers, estimates and numerics_.
 #cues(
   [gcd, coprime, "lowest terms" in a sum], [Möbius over divisors],
   [$floor(n\/i)$, multiples up to $n$], [floor blocks; multiples: $n ln n$],
@@ -78,7 +76,6 @@ _Number theory facts_.
   [$a^x equiv b$ modulo $m$], [`numtheory/discrete-log`],
   [powers modulo $2^k$], [units $plus.minus 5^j$, orders powers of 2],
   [$x^2 equiv a$ modulo a prime], [`numtheory/mod-sqrt`],
-  [product is a perfect square], [exponent parities as XOR vectors],
   [$sum_i floor((a i + b) \/ m)$], [`numtheory/floor-sum`],
   [$f_(i + 1) = a_i f_i + f_(i - 1)$, resistors], [continued fractions, Euclid],
   [subtract the smaller, many rounds], [subtractive Euclid: one division],
@@ -87,13 +84,13 @@ _Number theory facts_.
   [repeated $x mod a_i$, values that halve], [only $O(log x)$ steps change $x$],
   [which sums $sum c_i a_i$ are reachable], [Dijkstra on residues mod $min a_i$],
   [the answer divides $n$ or a gcd], [all divisors: $<= 1344$ up to $10^9$],
-  [more subsets or prefixes than residues], [pigeonhole: two of them collide],
   [evenly spread, $floor(i q \/ n)$ ones], [balanced words],
   [digit sums, multiples of $b^s - 1$], [Digit sums: at least $s (b - 1)$],
 )
 
 === Bits and subsets
-_Bit tricks_, _Polynomial techniques_.
+_Bit tricks_, _Polynomial techniques_, _Sqrt decomposition and
+small tricks_.
 #cues(
   [sum over submasks, for every mask], [SOS: `poly/subset-transforms`],
   [pairs whose OR, AND or XOR is $x$], [transform, multiply, invert],
@@ -101,8 +98,6 @@ _Bit tricks_, _Polynomial techniques_.
   [same XOR move repeated $k$ times], [transform, power pointwise],
   [only how many bits flip matters], [collapse to Hamming weights],
   [wildcards `?` in bit patterns], [ternary transform, $O(3^n)$],
-  [subsets of $n <= 40$ items], [meet in the middle],
-  [AND, OR, XOR rules on numbers], [solve each bit on its own],
   [OR, AND or gcd of subarrays], [$O(log V)$ distinct values per end],
   [$min_j (f_j + (x xor x_j))$, $x < 2^(18)$], [split the bits: $O(sqrt(V))$ each],
   [edges usable if their mask $supset.eq m$], [one DSU per mask],
@@ -117,7 +112,8 @@ _Linear algebra facts_.
   [toggles, Lights Out], [chase rows, then eliminate over $FF_2$],
   [rectangle sums or flips mod 2], [2D prefix or difference parities],
   [count solutions of parity rules], [$2^f$, $f$ free variables],
-  [only "equal" and "different" rules], [parity DSU, 2-colouring],
+  [only "equal" and "different" rules], [parity DSU (`ds/dsu`), 2-colouring],
+  [product is a perfect square], [exponent parities as XOR vectors],
   [rank of unions, disjoint bases], [random coefficients mod $p$],
   [traces of $A^k$, closed walk sums], [Newton: power sums give $det$],
   [$det(I + u v^T)$, rank-one updates], [matrix determinant lemma],
@@ -133,7 +129,6 @@ _String facts_.
   [two palindromic prefixes], [a period; reflect $x -> 2 y - x$],
   [smallest rotation, suffix or cut], [Lyndon: `strings/lyndon`],
   [many patterns in one text], [`strings/aho-corasick`],
-  [many words sharing prefixes], [a trie, as in `strings/aho-corasick`],
   [distinct substrings, $k$-th substring], [`strings/suffix-automaton`],
   [compare substrings, LCP], [`strings/string-hash`, suffix array],
   [longest palindrome at each centre], [`strings/manacher`],
@@ -141,13 +136,13 @@ _String facts_.
   [squares, cubes, repetitions], [runs: fewer than $n$ of them],
   [delete one letter, compare the results], [runs of equal letters],
   [is it a subsequence, embeddings], [greedy leftmost embedding],
-  [brackets: balanced, matching], [prefix balance $>= 0$, ends at 0],
   [matching with wildcards], [FFT, one product per letter],
   [lengths $10^18$ from repeated prefixes], [Euclid-like shrinking],
 )
 
 === Geometry
-_Geometry facts_.
+_Geometry facts_, _Graph theory facts_ (Euler's formula), the
+notes of `geometry/convex-hull` and `geometry/minkowski`.
 #cues(
   [max of $a_k x + b_k y$ per query], [hull, tangent binary search],
   [sums of two choices, collisions], [`geometry/minkowski`],
@@ -174,7 +169,8 @@ _Geometry facts_.
 )
 
 === DP design and speed-ups
-_DP techniques_.
+_DP techniques_, _Numbers, estimates and numerics_ (KKT),
+_Designing a segment tree node_ (saturating maps).
 #cues(
   [$(h_i - h_j)^2$, $a_i b_j$, costs crossing once], [`ds/li-chao`, line container],
   ["exactly $k$ pieces", "at most $k$"], [`dp/wqs` if the cost is convex in $k$],
@@ -189,7 +185,6 @@ _DP techniques_.
   [longest chain, increasing subsequence], [`dp/lis`; Dilworth],
   [choose a subset and its order], [exchange argument, sort, then DP],
   [subset sums, $n S <= 10^(10)$], [bitset: $O(n S \/ 64)$],
-  [items with a small weight or value], [knapsack indexed by the small one],
   [grid with a short side ($<= 10$)], [broken profile DP],
   [lexicographically smallest optimum], [DP backwards, walk forwards],
   [best value and how many plans give it], [(best, count) pairs per state],
@@ -199,9 +194,8 @@ _DP techniques_.
 
 === Ranges and updates
 _Designing a segment tree node_, _Offline techniques_, _Sqrt
-decomposition and small tricks_.
+decomposition and small tricks_, _Technique finder_ (step 4).
 #cues(
-  [point updates, range queries], [`ds/segtree`: design the node],
   [range answer by a left-to-right scan], [node = composed function],
   ["after each update, print the DP"], [(min, +) matrices, `ds/segtree`],
   ["first position where ..."], [descend the segment tree],
@@ -220,7 +214,6 @@ decomposition and small tricks_.
   [only deletions], [reverse time: they become inserts],
   ["the first time when ..." per query], [`offline/parallel-binary-search`],
   [static ranges, $O(1)$ add and remove], [`offline/mo`; rollback variant],
-  [static range minimum], [`ds/sparse-table`],
   [for every $i$, all items except $i$], [all but one: divide and conquer],
   [a node's part depends on the query], [requests per segment-tree node],
   [cost from $|x - y|$ or $max - min$], [one 0/1 problem per threshold],
@@ -238,7 +231,7 @@ decomposition and small tricks_.
 )
 
 === Trees
-_Tree techniques_.
+_Tree techniques_, _Counting formulas_.
 #cues(
   [per subtree, a multiset statistic], [small-to-large],
   [tree DP over sizes, $n <= 5000$], [tree knapsack: $O(n^2)$ in total],
@@ -256,8 +249,6 @@ _Tree techniques_.
   [subtree sums with updates], [Euler tour + `ds/fenwick`],
   [cover or match greedily on a tree], [deepest vertex first],
   [pairs of leaves routed along paths], [Leaf pairings: edge loads],
-  [sum over pairs of vertices or pieces], [per edge: $s (n - s)$ pairs],
-  [diameter, eccentricity, centre], [two BFS; root at the centre],
   [LCA under any root, three paths meet], [the median of three vertices],
   [parents before children, orders], [Tree orders: $n! \/ product "size"$],
   [trees with given degrees], [Prüfer: degrees $>= 1$, sum $2n - 2$],
@@ -265,10 +256,11 @@ _Tree techniques_.
 )
 
 === Graphs and flows
-_Graph theory facts_, _Flow and cut modelling_, _Matroids_.
+_Graph theory facts_, _Flow and cut modelling_, _Matroids_, _Sqrt
+decomposition and small tricks_ (bitsets).
 #cues(
   [two options per object, pair rules], [`graph/two-sat`],
-  ["at most one per group" in 2-SAT], [prefix variables],
+  ["at most one per group" in 2-SAT], [prefix variables: `graph/two-sat`],
   [edges from a vertex to a range], [segment-tree graph],
   [each item takes one of its two ends], [edge per item; $E <= V$ per part],
   [fewest deletions to separate], [min cut: `flow/dinic`],
@@ -284,7 +276,7 @@ _Graph theory facts_, _Flow and cut modelling_, _Matroids_.
   [use every edge exactly once], [`graph/euler-path`],
   [degrees fixed modulo 2 or $k$], [parity fixing on a spanning tree],
   [no cycle / independent / matchable], [matroid greedy],
-  [rank, forest, matching of $[l, r]$], [latest basis: sweep $r$],
+  [vector rank, forest, matchable vertices in $[l, r]$], [latest basis: sweep $r$],
   [two such rules at once], [matroid intersection],
   ["differ by exactly 1 on each edge"], [bipartite: parity = colour],
   [closed walks of length mod $k$], [SCC period: labels mod $k$],
@@ -294,19 +286,17 @@ _Graph theory facts_, _Flow and cut modelling_, _Matroids_.
   [shortest cycle, chordless cycle], [BFS from every vertex],
   [MST of an implicit dense graph], [Borůvka with a data structure],
   [MST with small integer weights], [$sum_v (c_v - 1)$ over thresholds],
-  [edges $(u + k, v + k)$ for all $k < L$], [DSU per power of two],
-  [fewest swaps to sort], [$n - "cycles"$; adjacent: inversions],
   [bridges, cut vertices, cactus], [`graph/bcc`, block-cut tree],
   [is a free grid cell a cut vertex?], [ring of its 8 neighbours],
   [series-parallel, no $K_4$ minor], [contract degree 2, merge parallels],
   [reachability, cycles in a digraph], [`graph/scc`, condensation],
   [reachability from every vertex, DAG], [bitsets in topological order],
   [smallest order under precedences], [`graph/topo-sort` with a heap],
-  [orient $K_n$, given out-degrees], [Landau, greedy build],
 )
 
 === Games and interaction
-_Game theory_, `misc/interactive`.
+_Game theory_, `misc/interactive`, _Linear algebra facts_ (least
+squares).
 #cues(
   [sum of independent games], [Grundy values, XOR],
   [huge numbers, simple moves], [brute force table, period],
@@ -319,12 +309,13 @@ _Game theory_, `misc/interactive`.
   [hidden position, adaptive opponent], [play against the candidate set],
   [query limit near $log_2$(candidates)], [halving: `misc/interactive`],
   [replies linear in hidden numbers], [a linear system (least squares)],
-  [sort with comparison queries], [`stable_sort`, the judge compares],
+  [sort with comparison queries], [#cpp[`stable_sort`]#py[`cmp_to_key`]: the judge compares],
   [hidden vertex in a tree], [centroid search],
 )
 
 === Randomisation
-_Randomisation and hashing_.
+_Randomisation and hashing_, _Probability and expectation_
+(concentration).
 #cues(
   [all or none per value, even counts], [random XOR labels],
   [equal multisets, "is a permutation"], [sums of random labels],
@@ -352,34 +343,29 @@ _Constructive problems and invariants_.
   [the answer always seems small], [prove $<= c$, then the rest],
   ["your program runs twice"], [encode a unique structure],
   [3 values: equal stays, else the third], [it is $-(x + y)$ mod 3: linear],
+  [orient $K_n$, given out-degrees], [Landau, greedy build],
 )
 
 === Greedy, search and ad hoc
 _Technique finder_ (step 4), _Constructive problems and
-invariants_ (exchange arguments).
+invariants_ (exchange arguments), _Numbers, estimates and
+numerics_, _Sqrt decomposition and small tricks_, _DP techniques_
+(Huffman).
 #cues(
-  [largest $k$ that is still possible], [binary search $k$, greedy check],
   [$k$-th smallest of $n^2$ pair values], [binary search the value, count],
   [best order of jobs or items], [exchange two neighbours, sort],
   [pair two lists, least max or sum], [sort both, pair in or against order],
   [jobs with deadlines], [earliest deadline; heap of the taken],
-  [disjoint intervals, stabbing points], [sort by right end, greedy],
-  [longest window with a monotone rule], [two pointers],
-  [best $k$ items, a max-versus-sum rule], [a window of the sorted order],
   [reachable or feasible values], [an interval: keep both ends],
   [only a few candidates can be optimal], [prove which, try them all],
-  [$n <= 10$ orders, $<= 20$ yes/no choices], [try all: $n!$ or $2^n$],
   [one parameter decides the rest], [enumerate it, solve the rest],
-  [split into a left and a right part], [prefix and suffix aggregates],
   [long stretches of equal values], [run-length: work per run],
-  [operations merge neighbours], [each result is a block: DP over cuts],
-  [cyclic order, most $sum |x_i - x_(i + 1)|$], [top half minus bottom half],
-  [coverage by many intervals], [sweep the sorted endpoints],
+  [cyclic order, most $sum abs(x_i - x_(i + 1))$], [twice (top half $-$ bottom half)],
   [conditions that split by axis], [each axis alone, then combine],
   [cyclic array, cover a circle], [double it; total minus largest gap],
   [hard forwards, simple from the end], [run the process backwards],
   [lengths summing to $n$], [fewer than $sqrt(2n)$ distinct],
+  [no three lengths form a triangle], [sorted, they grow like Fibonacci],
   [two costs trade off through a size], [equate them, as for sqrt blocks],
   [merge two for cost $a + b$, repeatedly], [Huffman: two sorted queues],
-  [long statement, explicit rules], [simulate exactly: _Troubleshooting_],
 )
