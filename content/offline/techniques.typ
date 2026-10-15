@@ -4,7 +4,8 @@ Offline means every operation is read before any answer is due, so
 the answers may be computed in any order. Choose the order that
 makes the structure static, insert-only or monotone. It does not
 apply when queries are decoded with the previous answer (forced
-online) or the problem is interactive. Keep each query's index and
+online) or the problem is interactive, unless the answers are
+predictable (Fake online below). Keep each query's index and
 print in input order.
 
 === Reordering
@@ -21,7 +22,26 @@ print in input order.
   $plus.minus 1$), the area of a union of rectangles (min and its
   count), pairs $i < j$ with a condition on $(a_i, a_j)$: sweep
   $j$, query the inserted $i$. Fix whether events at equal $x$
-  insert before they ask.]
+  insert before they ask. A contribution that is a polynomial in
+  the query coordinate, $sum_k c_k x^k$, needs one Fenwick tree per
+  power $k$ (the coefficients $w, w l, w l^2$ of each update).]
+#fact[All left ends][Sweep `r` and keep $f(l, r)$ for every
+  `l <= r` in a lazy segment tree over `l`. Appending `a[r]`
+  changes $f(dot, r)$ on a few contiguous ranges of `l`, found with
+  a monotone stack: `a[r]` is the new maximum exactly for `l` after
+  the previous element `>= a[r]`, and each popped entry is a range
+  whose old maximum is replaced. A query `(l, r)` reads `l` at time
+  `r`; "how many good `l`" is a min and its count; sums over all
+  subarrays inside `[L, R]` need historic sums (Linear tags in
+  _Designing a segment tree node_).]
+#fact[Rectangles in the $(l, r)$ plane][To count pairs or triples
+  over all subarrays of `[L, R]`, describe the valid $(l, r)$ of
+  each element as $O(1)$ rectangles $[a, b] times [c, d]$, $O(n)$ in
+  total. Sweep $L$ downwards: a rectangle adds $(b + 1 - L) g(R)$
+  while $a <= L <= b$ and $(b - a + 1) g(R)$ once $L < a$, with
+  $g(R) = |[c, d] inter [1, R]|$. Range adds on $[c, d]$ into
+  Fenwick trees for the count, $sum (b + 1)$ and $sum (b - a + 1)$
+  give the answer as a combination linear in $L$.]
 #fact[Last occurrence][Distinct values in `a[l, r)`: sweep `r` and
   keep a mark only at the last position of each value seen; the
   answer is the number of marks in `[l, r)`. With `prev[i]`, the
@@ -58,6 +78,38 @@ for r in range(n + 1):
   and reverse the answers. "Components after each removal" is the
   standard case; an element that is never deleted is inserted at
   the start.]
+#fact[Fake online][Queries decoded with the previous answer, but
+  the answers are monotone in time (connected until some deletion,
+  then never again): decode as if every answer were the first
+  kind, find the switch offline (reverse time), and print the
+  other kind from there on. Queries decoded wrongly after the
+  switch cannot change any answer.]
+#fact[Final positions]["Insert after the `k`-th element", mixed
+  with queries: walk the insertions backwards over $q$ free slots
+  (a Fenwick tree of ones); each takes the $(k + 1)$-th free slot
+  (`lower_bound`) and removes it. That slot is its final index, so
+  the sequence becomes static: replay forwards, switching slots
+  on, and find the `k`-th active slot with the same descent.]
+#fact[Thresholds][$max - min$ of a set is the number of integers
+  $t$ with some value $<= t$ and some value $> t$, and
+  $w = sum_(t >= 0) [w > t]$. So costs built from $max - min$ or
+  $|x - y|$ split into one 0/1 problem per threshold, on
+  $[a_i > t]$; thresholds between consecutive relevant values
+  share a problem, weighted by the gap. An adjacent pair is a 1
+  followed by a 0 exactly for $t$ in $[a_(i + 1), a_i)$: one range
+  add per pair on a segment tree over thresholds, two pairs per
+  point update. MST weight (integer weights $>= 0$, connected) is
+  $sum_(t >= 0) (c_t - 1)$, $c_t$ the components of the edges of
+  weight $<= t$.]
+#fact[Nested thresholds][To minimise such a cost over free cells,
+  solve each 0/1 problem; the optima add up to the true optimum if
+  they can be chosen nested (decreasing in $t$). That holds when
+  every threshold has the same cost $f$, submodular:
+  $f(c) + f(d) >= f(max(c, d)) + f(min(c, d))$ elementwise, and
+  only the fixed cells, $[a_i > t]$, change with $t$. Divide and
+  conquer over thresholds: solve the middle one; its free cells
+  set to 1 stay 1 below it, those set to 0 stay 0 above, so each
+  free cell recurses into one half only.]
 
 === Divide and conquer
 #fact[CDQ][Updates and queries interleaved in time, or a 3D partial
@@ -89,10 +141,24 @@ for r in range(n + 1):
   depends on values from the query (the maximum left of the node),
   attach the request to the node and answer all of a node's
   requests with one sorted sweep: $O((n + q) log^2 n)$.]
+#fact[All but one][For every $i$, a structure of all items except
+  $i$ (or except group $i$), when items can be inserted but not
+  removed (knapsack bitsets, products of polynomials): recurse on
+  `[l, r)` carrying the structure of everything outside it; insert
+  `[m, r)` into a copy before recursing left and `[l, m)` before
+  recursing right. Each item is inserted $O(log n)$ times. For
+  prefix times suffix products, carry only the coefficients the
+  leaves below can still need.]
 
 === Other offline tools
 - Mo's algorithm (`offline/mo`): range queries whose answer does
   not merge from halves but changes in $O(1)$ when an end moves.
+- Mo with deletions only, when removing is cheap and adding is
+  not (unlink from a sorted linked list; relinking in reverse
+  order undoes it): per block of left ends, build the window
+  `[block start, n)` once, take its queries by decreasing `r` and
+  delete from the right for good; per query delete
+  `[block start, l)`, answer, and undo. $O((n + q) sqrt(n))$.
 - Blocks of $sqrt(q)$ operations: rebuild a static structure per
   block and handle the block's own updates by brute force
   (`ds2/sqrt`, periodic rebuild).
@@ -113,6 +179,9 @@ for r in range(n + 1):
 - "Count pairs $j < i$ with $x_j <= x_i$ and $y_j <= y_i$", "points
   inserted, rectangle asked": sweep, or CDQ when the inserts and
   asks interleave.
+- "Sum over all subarrays of `[l, r]`", "count good subarrays":
+  all left ends, or rectangles in the $(l, r)$ plane.
+- "For each item, the answer without it": all but one.
 
 === Pitfalls
 - Equal keys: decide whether an element with the same key as a

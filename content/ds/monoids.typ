@@ -50,9 +50,6 @@ T op(T a, T b) {
   $-infinity$ elsewhere. Rows are the state before, columns the
   state after. Independent set on a path: $M(w) = mat(0, w; 0,
   -infinity)$. On a cycle, take the trace: $max_s P[s][s]$.]
-#fact[Runs][Store `(first, last, runs)`; merging subtracts one
-  run when `a.last == b.first`. The identity needs a flag
-  (`runs = 0`).]
 #fact[Hash][Store `(h, p)` with $p = B^"len"$; merge to
   `(a.h * b.p + b.h, a.p * b.p)` mod a prime, identity `(0, 1)`.
   Keep a reversed hash too for palindrome checks under point
@@ -60,21 +57,55 @@ T op(T a, T b) {
 #fact[First index]["First `i >= l` with `a[i] >= x`" is
   `max_right(l, v < x)` on max (`n` if none). On sums of values
   $>= 0$, `r = max_right(l, s <= k)` makes `[l, r + 1)` the
-  shortest range from `l` with sum `> k` (none if `r = n`).]
+  shortest range from `l` with sum `> k` (none if `r = n`). Over
+  compressed values with leaves `(count, sum)`,
+  `min_left(V, c <= t)` finds where the `t` largest start: their
+  sum is that range's sum plus the missing copies of the value
+  just below.]
+#fact[Prefix maxima][Records of a range, or
+  $sum_i max(a_l, dots, a_i)$, under point updates. Node `v` keeps
+  its max and `R[v] = f(right, max(left))`, where `f(u, h)` is the
+  answer for `u` entered with running maximum `h`. `f` follows one
+  child: if `h >= max(left)`, the left part is all `h` (no
+  records) and recurse right; else return `f(left, h) + R[v]`.
+  So `f` is $O(log n)$, a pull-up calls it once ($O(log^2 n)$ per
+  update), and a query carries `h` through its $O(log n)$ nodes
+  from left to right. A running min and max together (sums of
+  $min dot max$) work the same, with a one-sided `f` where only
+  one cap still binds: $O(log^2 n)$ per call.]
+#fact[Another colour][Best value among elements whose colour is
+  not `c` (Borůvka: the cheapest edge leaving my component). Store
+  `(v1, c1, v2)`: the best value, its colour, and the best value of
+  any other colour. Merge: `v1` is the larger best; `v2` is the
+  max of both `v2` and of each child's `v1` whose colour differs
+  from the new `c1`. Answer `c1 != c ? v1 : v2`. Or sort the
+  elements by colour and query prefix and suffix structures
+  around the block of `c`.]
 
 === Lazy tags
 A tag `f` needs three laws: it acts on a node summary in $O(1)$
 (`mapping`), two tags fold into one (`composition(new, old)`,
-new on the outside), and it distributes over `op`.
-#fact[Add][On min or max: `s + f`. On sums the node also
-  stores `len`: `sum + f * len`.]
-#fact[Assign][Tag `f` or "none"; `composition` keeps the newer
-  one. On sums: `f * len`. With adds too, the tag is
-  `(assign or none, add)` and an assign wipes earlier adds.]
-#fact[Affine][On `(sum, len)`: `(b sum + c len, len)`; compose as
-  above.]
-#fact[Negate][On `(sum, mn, mx)`: `(-sum, -mx, -mn)`.]
-#fact[Flip bits][On `(ones, len)`: `(len - ones, len)`.]
+new on the outside), and it distributes over `op`. Range add,
+assign and affine are in `ds/lazy-segtree`.
+#fact[Linear tags][If an update applies the same linear map to
+  each element's vector $(x_1, dots, x_k, 1)$, the node stores the
+  sum of each coordinate (the length for the 1), a tag is a
+  $(k + 1) times (k + 1)$ matrix, and `composition` is the product
+  "new times old". This covers add, assign, affine, adding
+  $c + d i$ (keep $sum i$), power sums (on $(x, x^2, 1)$, adding
+  $d$ maps $x^2$ to $x^2 + 2 d x + d^2$) and historic sums: with
+  $(A, C)$, "add $C$ into $A$" each step makes $sum A$ the total of
+  $C$ over time. Store only the entries that can be non-zero.]
+#fact[Negate, flip][Negate on `(sum, mn, mx)` gives
+  `(-sum, -mx, -mn)`; flipping bits on `(ones, len)` gives
+  `(len - ones, len)`.]
+#fact[Sorted arrays][If the array stays non-decreasing and an
+  update applies a non-decreasing map made of "unchanged",
+  "constant" and "shift" pieces (chmax with `c` on a suffix,
+  $K -> K$ for $K < a$, $a - 1$ for $a <= K < 2 a$, $K - a$
+  above), each piece is a contiguous range of positions: find the
+  boundaries by descent, then range assign or add. The array stays
+  sorted.]
 
 === When it does not fit
 - The tag cannot update a summary without looking inside: range
@@ -105,11 +136,11 @@ new on the outside), and it distributes over `op`.
 - With many test cases, build each tree with that test's `n`.
 - Composed maps grow fast (affine, $2^k$ coefficients): reduce
   modulo a prime or saturate at a threshold.
+- Assign and add in one tag: keep `(assign or none, add)`; an
+  assign wipes the earlier adds, and a later add only grows the
+  add part.
 
 === More patterns
-- Visible buildings (count prefix maxima of a range): a node
-  answers "how many prefix maxima above `h`" by recursing into one
-  child, $O(log^2 n)$ per operation.
 - "Count positions with value `> 0`" under range add when the
   global minimum is known to be 0: compare with the node minimum
   instead, a predicate that survives lazy adds.
@@ -119,8 +150,33 @@ new on the outside), and it distributes over `op`.
   slopes. Or use the Aliens trick instead: charge $lambda$ per
   item, keep ordinary nodes (plus the item count) for that fixed
   $lambda$, and binary search $lambda$.
+- Components of the graph on `[l, r)` (cells of a $k times n$
+  grid, edges to the nearest matching element): a node stores its
+  component count and a label for each of the few vertices that
+  can have edges leaving the range (the boundary columns, the
+  first and last occurrence of each bit). Merge with a small DSU
+  on the children's labels along the crossing edges; count = sum
+  minus successful joins; then relabel the new boundary.
+- Sign of $W = sum_(i = l)^r 2^(i - l) a_i$ with $|a_i| <= M$
+  under point updates: evaluate $v <- 2 v + a_i$ from $i = r$ down
+  to $l$, clamping $v$ to $[-C, C]$ with $C = M + 1$; once
+  $|v| >= C$ the sign never changes. A node of length $k$ is the
+  map $v -> "clamp"(2^k v + W)$ on $[-C, C]$. Store $W$ exactly
+  while $2^k <= 2 C$; a longer node is a step, $C$ for $v > -A$
+  and $-C$ for $v < -A$ with $A$ the integer nearest to $W \/ 2^k$:
+  store $A$ and the value at $-A$.
+- Unit jobs with deadlines (_Matroids_): a set fits iff for every
+  $D$ at most $D$ of them are due by $D$. Keep $"slack"(D)$, that
+  is $D$ minus the number of chosen jobs due by $D$, in a range
+  add, range min tree; choosing a job due at $d$ adds $-1$ on
+  `[d, n]`. A new job fits iff no tight $D >= d$ (slack 0);
+  otherwise, with $D^*$ the first tight $D >= d$, the chosen jobs
+  due by $D^*$ are the ones it can replace. After removing a
+  chosen job, an outside job fits iff it is due after the last
+  tight $D$.
 - Cues: "after each update, print the answer", "first position
   where ...", "the sign of a huge sum" (saturating maps),
   "minimum deletions so that ..." on substrings (automaton DP as
-  min-plus matrices).
+  min-plus matrices), "components of a range" (boundary labels),
+  "sum over all subarrays" under updates (historic sums).
 ]
