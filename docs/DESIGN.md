@@ -48,6 +48,14 @@ or comments and blank lines (PyPy, a token stream with indentation as
 structure) removed. Retyped code can be checked against it; the command
 is in the Contest section.
 
+The printed C++ command uses GCC's `cpp`, but `tools/snowi/hashing.py`
+computes the same hash in Python (comments and literals scanned the way
+`cpp -fpreprocessed` does: no line splicing, literals end at a newline,
+the null directive and a column-0 `#pragma once` dropped), so the build
+needs no C toolchain. It agreed with GCC 13 on every snippet and on 20,000
+fuzzed inputs that GCC accepts; `make lint` re-checks every snippet
+whenever GCC's `cpp` is available.
+
 ## Packet contents
 
 The ICPC packets carry no contents list and no recognition advice

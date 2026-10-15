@@ -206,9 +206,8 @@ def main() -> None:
         manifest = write_manifest(out, args.allow_missing, only)
     except ContentError as err:
         sys.exit(f"content error: {err}")
-    except (OSError, subprocess.CalledProcessError) as err:
-        cpp = os.environ.get("CPP", "cpp")
-        sys.exit(f"typing hash failed: the C preprocessor CPP={cpp!r} did not run ({err})")
+    except ValueError as err:  # from the C++ typing hash: an unclosed /* comment
+        sys.exit(f"typing hash failed: {err}")
     if args.manifest_only:
         return
     typst = find_typst()
