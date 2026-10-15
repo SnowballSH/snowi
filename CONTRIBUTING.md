@@ -159,6 +159,10 @@ so do not repeat it. Use `===` for subheadings and these helpers:
   ICPC one. `#cpp[...]` and `#py[...]` show only in that language's PDFs.
 - `#fact[Name][Statement]` for a compact named theorem or formula.
 - `#code("cpp", "...")` for a short snippet inside a note.
+- `#cmd("sh", "{cxx} -std={std} {source}.cpp")` for a command block and
+  `#cmd-inline("...")` for an inline one: `{name}` placeholders are filled
+  from `[commands]` in `config/packets.toml`, and an unknown name fails the
+  build. Never hard-code a compiler, interpreter or file name in a note.
 
 Keep it terse and in plain language: state the fact, the condition, and
 when it helps. Prefer formulas and short examples over paragraphs.

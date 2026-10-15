@@ -57,8 +57,8 @@ Notes: Count first: $N$ hidden possibilities and $k$ possible
   `sorted(a, key=cmp_to_key(cmp))` (from `functools`) uses about
   $n log_2 n$ comparisons. Local testing: an interactor reads
   queries on stdin, writes replies on stdout and the verdict on
-  stderr; run both with `mkfifo io; ./judge < io | pypy3 a.py >
-  io`. A hang means a missing flush or a read the other side
+  stderr; connect the two with a named pipe (command in Contest
+  setup). A hang means a missing flush or a read the other side
   never answers. The best local judge is adversarial: it keeps
   all candidates and replies so that the larger part survives.
   Count your queries and assert the limit. `input()` and `reply()`
