@@ -75,11 +75,14 @@ $k$-subsets: `itertools.combinations(range(n), k)`.]
   a binary trie and walk each one down from the top bit, taking
   the opposite bit when it exists#full[ (`ds2/binary-trie`)].
   Largest XOR of a subset: `linalg/xor-basis`.
-- Gray code $g(i) = i xor floor(i \/ 2)$: $g(i)$ and $g(i + 1)$
-  differ exactly in the lowest set bit of $i + 1$.
-- Two's complement: `-x == ~x + 1`.#cpp[ For `ll x`,
-  `s = x >> 63` is 0 or -1, and `(x ^ s) - s` is $|x|$ (for `int`,
-  shift by 31).]
+- Gray code $g(i) = i xor floor(i \/ 2)$ (`i ^ i >> 1`): $g(i)$ and
+  $g(i + 1)$ differ exactly in the lowest set bit of $i + 1$, and
+  $g(2^n - 1)$ and $g(0)$ in bit $n - 1$, so the codes of
+  $0, dots, 2^n - 1$ form a cycle. Inverse: $i$ is the XOR of
+  $floor(g \/ 2^j)$ over all $j >= 0$.
+- $x xor (x + 1) = 2^(t + 1) - 1$, where $t$ is the number of
+  trailing 1 bits of $x$: adding 1 clears them and sets the next
+  bit.
 #cpp[
   - Precedence: `x & 1 == 0` means `x & (1 == 0)`; shifts bind
     looser than `+`: `1 << n - 1` is `1 << (n - 1)`.
@@ -92,17 +95,23 @@ $k$-subsets: `itertools.combinations(range(n), k)`.]
 
 #full[
 === More facts and cues
-- $binom(n, k)$ is odd iff $k$ is a submask of $n$ (Lucas). So
-  over GF(2), $(I + C)^t = sum C^d$ over the submasks $d$ of $t$.
+- Gray code, recursively: $0$ followed by $G_(n - 1)$, then $1$
+  followed by $G_(n - 1)$ reversed.
+- Over GF(2), $(I + C)^t = sum C^d$ over the submasks $d$ of $t$,
+  since $binom(t, d)$ is odd iff $d$ is a submask of $t$ (Lucas,
+  _Counting formulas_).
 - For a fixed right end $r$, the ORs (or ANDs, or GCDs) of
   $a_l, dots, a_r$ over all $l$ take $O(log V)$ distinct values
   (at most $b + 1$ for values below $2^b$): keep the list of
   distinct values with their leftmost $l$ and update it per
   element, $O(n log V)$ in total.
-- Popcounts of all $i < 2^n$: `pc[i] = pc[i >> 1] + (i & 1)`.
+- Items of sizes $2^j$ ($a_j$ of each) fit into bins of capacities
+  $H_i$ iff for every $l$:
+  $sum_i floor(H_i \/ 2^l) >= sum_(j >= l) a_j 2^(j - l)$.
+  Largest first, into any bin with room, is optimal: powers of two
+  up to $2^l$ with total at least $2^l$ contain a subset summing to
+  exactly $2^l$.
 - "Choose numbers so that a bitwise expression is extreme":
   decide bits from the highest down greedily, keeping the
   candidates (or a trie node) that can still reach the prefix.
-- Digit DP over bits: count $x <= N$ with a property by walking
-  the bits of $N$ from the top with a "still equal to $N$" flag.
 ]

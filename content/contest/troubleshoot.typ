@@ -19,6 +19,11 @@
 - Is the idea right? Explain it to a teammate; recheck the special
   cases (empty, $n = 1$, ties, everything equal, no solution).
 - Floating point: compare with a tolerance, print enough digits.
+  Floors, ceilings and comparisons of fractions: stay in integers
+  (cross-multiply, divide once at the end); a double misjudges an
+  exact boundary.
+- Open or closed ends, half-integer points: double every
+  coordinate so that all relevant points are integers.
 - Still stuck: let a teammate read the code, take a short walk,
   or rewrite the solution from scratch.
 
@@ -55,6 +60,9 @@
 - `int` products overflow before they are stored: with `int a, b`,
   `ll c = a * b` is wrong; write `1LL * a * b`.
   `accumulate(all(v), 0)` sums in `int`: pass `0LL`.
+- `ll` ends at $9.2 dot 10^18$: $2 dot 10^5 dot 10^9 dot 10^9$
+  needs `__int128` (which `cout` cannot print) or a test by
+  division: $a b > c$ iff `a > c / b` for $b > 0$, $c >= 0$.
 - `1 << k` is an `int`: write `1LL << k` for $k >= 31$.
   `__builtin_popcount` takes 32 bits: use `__builtin_popcountll`.
 - `v.size() - 1` is $2^64 - 1$ for an empty `v`: write
