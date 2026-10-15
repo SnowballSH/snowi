@@ -134,7 +134,7 @@ def ensure_pch() -> Path:
     return header
 
 
-COMPILE_SLOTS = 2  # machine-wide: each sanitized g++ needs up to ~450 MB
+COMPILE_SLOTS = 1  # machine-wide: each sanitized g++ needs up to ~450 MB
 
 
 @contextlib.contextmanager
