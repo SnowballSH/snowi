@@ -1,5 +1,5 @@
 // Packet layout. `packet(manifest, variant, language)` renders one PDF body.
-#import "notes.typ": variant as variant-state, lang as lang-state
+#import "notes.typ": variant as variant-state, lang as lang-state, commands as commands-state
 
 #let mono = "Inconsolata"
 #let serif = "New Computer Modern"
@@ -198,6 +198,7 @@
 
   variant-state.update(variant)
   lang-state.update(language)
+  commands-state.update(config.at("commands", default: (:)))
 
   // Size the code font so `line-limit` characters fill one column.
   context {

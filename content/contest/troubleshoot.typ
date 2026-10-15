@@ -3,7 +3,7 @@
 === Before submitting
 - Run the samples and your own tiny and extreme cases: $n = 1$,
   all values equal, sorted input, the largest values.
-- Time a maximal case#py[ (with `pypy3`, not `python3`)] and
+- Time a maximal case#py[ (with #cmd-inline("{pypy}"), not #cmd-inline("{python}"))] and
   estimate the memory.
 - Can anything overflow? Is the output format exact (case,
   spaces, precision, one answer per test)? Is it the right file?

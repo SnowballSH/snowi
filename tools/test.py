@@ -13,6 +13,7 @@ import contextlib
 import fcntl
 import hashlib
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -38,8 +39,11 @@ CXX_FLAGS = [
     # Bounds checks on operator[]; full _GLIBCXX_DEBUG with ASan is ~300x slower.
     "-D_GLIBCXX_ASSERTIONS",
 ]
-# Binaries live under a hash of the flags, so changing flags rebuilds.
-BUILD = ROOT / "build" / "tests" / hashlib.md5(" ".join(CXX_FLAGS).encode()).hexdigest()[:8]
+# The C++ compiler, overridable like TYPST and PYPY, e.g. CXX="ccache g++-14".
+CXX = shlex.split(os.environ.get("CXX", "g++"))
+# Binaries live under a hash of compiler and flags, so changing either rebuilds.
+TOOLCHAIN = " ".join(CXX + CXX_FLAGS)
+BUILD = ROOT / "build" / "tests" / hashlib.md5(TOOLCHAIN.encode()).hexdigest()[:8]
 TIMEOUT = {"cpp": 120, "py": 240, "doc": 120}
 
 
@@ -103,7 +107,7 @@ def deps_digest(depfile: Path) -> str | None:
     if not depfile.exists():
         return None
     deps = depfile.read_text().replace("\\\n", " ").split(":", 1)[1].split()
-    digest = hashlib.md5(" ".join(CXX_FLAGS).encode())
+    digest = hashlib.md5(TOOLCHAIN.encode())
     for dep in deps:
         path = Path(dep)
         if not path.exists():
@@ -127,9 +131,17 @@ def ensure_pch() -> Path:
         header.parent.mkdir(parents=True, exist_ok=True)
         header.write_text("#include <bits/stdc++.h>\n")
         partial = gch.with_suffix(f".tmp{os.getpid()}")
-        cmd = ["g++", *CXX_FLAGS, "-x", "c++-header", str(header), "-o", str(partial)]
+        cmd = [*CXX, *CXX_FLAGS, "-x", "c++-header", str(header), "-o", str(partial)]
         with compile_slot():
-            subprocess.run(cmd, check=True)
+            try:
+                build = subprocess.run(cmd, capture_output=True, text=True)
+            except FileNotFoundError:
+                sys.exit(f"C++ compiler not found: CXX={shlex.join(CXX)}")
+        if build.returncode != 0:
+            partial.unlink(missing_ok=True)
+            sys.exit(
+                f"precompiling <bits/stdc++.h> with CXX={shlex.join(CXX)} failed:\n{build.stderr}"
+            )
         os.replace(partial, gch)  # atomic: parallel runs never see half a file
     return header
 
@@ -164,7 +176,7 @@ def run_cpp(job: Job, pch: Path) -> Result:
     depfile, stamp = binary.with_suffix(".d"), binary.with_suffix(".sum")
     binary.parent.mkdir(parents=True, exist_ok=True)
     if not up_to_date(binary, depfile, stamp):
-        cmd = ["g++", *CXX_FLAGS, "-include", str(pch), "-MMD", "-MF", str(depfile)]
+        cmd = [*CXX, *CXX_FLAGS, "-include", str(pch), "-MMD", "-MF", str(depfile)]
         cmd += [str(job.path), "-o", str(binary)]
         with compile_slot():
             build = subprocess.run(cmd, capture_output=True, text=True)

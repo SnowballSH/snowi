@@ -2,12 +2,16 @@
 
 C++:  cpp -dD -P -fpreprocessed | tr -d '[:space:]' | md5sum | cut -c-6
 PyPy: tokens without comments; indentation kept as structure markers.
+
+The C preprocessor is the CPP environment variable (default "cpp").
 """
 
 from __future__ import annotations
 
 import hashlib
 import io
+import os
+import shlex
 import subprocess
 import tokenize
 
@@ -16,8 +20,9 @@ SKIPPED = {tokenize.COMMENT, tokenize.NL, tokenize.ENCODING, tokenize.ENDMARKER}
 
 
 def cpp_hash(code: str) -> str:
+    preprocessor = shlex.split(os.environ.get("CPP", "cpp"))
     stripped = subprocess.run(
-        ["cpp", "-dD", "-P", "-fpreprocessed"],
+        [*preprocessor, "-dD", "-P", "-fpreprocessed"],
         input=code,
         capture_output=True,
         text=True,

@@ -50,8 +50,8 @@
  *   (merge sort, about $n log_2 n$ comparisons); `sort` uses more
  *   and can run off the array if the replies are inconsistent.
  *   Local testing: an interactor reads queries on stdin, writes
- *   replies on stdout and the verdict on stderr; run both with
- *   `mkfifo io; ./judge < io | ./a.out > io`. A hang means a
+ *   replies on stdout and the verdict on stderr; connect the two
+ *   with a named pipe (command in Contest setup). A hang means a
  *   missing flush or a read the other side never answers. The
  *   best local judge is adversarial: it keeps all candidates and
  *   replies so that the larger part survives. Count your queries

@@ -24,6 +24,19 @@ sections = [
 university = "University"
 team = "Team snowi"
 
+# Commands and file names printed in Contest > Setup (and wherever a
+# note uses #cmd). Match them to the contest machines and your habits.
+[commands]
+cxx = "g++"          # C++ compiler
+std = "gnu++20"      # C++ standard, as in -std=...
+cpp = "cpp"          # C preprocessor, for the typing hash
+pypy = "pypy3"       # PyPy interpreter
+python = "python3"   # any Python 3, for hash.py
+source = "a"         # the solution: a.cpp or a.py, compiled to ./a
+brute = "brute"      # brute force, for stress tests
+gen = "gen"          # random test generator
+judge = "judge"      # local interactor
+
 [layout]
 paper = "us-letter"     # "a4" is also allowed by ICPC rules
 columns = 3

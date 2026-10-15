@@ -1,15 +1,15 @@
 #import "/typst/notes.typ": *
 
 === Compile and run
-#cpp[#code("sh", "# debug build: sanitizers and a checked STL; o for timing
-d() { g++ -std=gnu++20 -g -Wall -Wextra -Wshadow \\
+#cpp[#cmd("sh", "# debug build: sanitizers and a checked STL; o for timing
+d() { {cxx} -std={std} -g -Wall -Wextra -Wshadow \\
   -D_GLIBCXX_DEBUG -fsanitize=address,undefined \\
   -fno-sanitize-recover $1.cpp -o $1; }
-o() { g++ -std=gnu++20 -O2 $1.cpp -o $1; }
-d a && ./a < in          # o a && time ./a < big > /dev/null")
+o() { {cxx} -std={std} -O2 $1.cpp -o $1; }
+d {source} && ./{source} < in   # o {source} && time ./{source} < big > /dev/null")
 Deep recursion needs a bigger local stack: `ulimit -s unlimited`.]
-#py[#code("sh", "pypy3 a.py < in
-time pypy3 a.py < big > /dev/null")
+#py[#cmd("sh", "{pypy} {source}.py < in
+time {pypy} {source}.py < big > /dev/null")
 A crash in deep recursion can be a silent segmentation fault
 (exit code 139) rather than a `RecursionError`.]
 
@@ -33,29 +33,29 @@ print(n)
 print(*[random.randint(1, 10) for _ in range(n)])",
 )
 Run until the first difference or crash, then print the input:
-#cpp[#code("sh", "for i in $(seq 1000); do
-  ./gen $i > in && ./brute < in > want && ./a < in > got &&
+#cpp[#cmd("sh", "for i in $(seq 1000); do
+  ./{gen} $i > in && ./{brute} < in > want && ./{source} < in > got &&
     diff -b want got > /dev/null ||
     { echo seed $i; cat in; break; }
 done")]
-#py[#code("sh", "for i in $(seq 1000); do
-  pypy3 gen.py $i > in && pypy3 brute.py < in > want &&
-    pypy3 a.py < in > got && diff -b want got > /dev/null ||
+#py[#cmd("sh", "for i in $(seq 1000); do
+  {pypy} {gen}.py $i > in && {pypy} {brute}.py < in > want &&
+    {pypy} {source}.py < in > got && diff -b want got > /dev/null ||
     { echo seed $i; cat in; break; }
 done")]
 Interactive problems: connect a local judge with a named pipe,
-#cpp[#box[`mkfifo io; ./judge < io | ./a > io`]]#py[#box[`mkfifo io; ./judge < io | pypy3 a.py > io`]]
+#cpp[#cmd-inline("mkfifo io; ./{judge} < io | ./{source} > io")]#py[#cmd-inline("mkfifo io; ./{judge} < io | {pypy} {source}.py > io")]
 (`misc/interactive`).
 
 === Typing hash
 Each item shows the first 6 hex digits of its typing hash, which
 ignores whitespace and comments#py[ but keeps the indentation
 structure]: retyped code gets the same hash. Check a file with
-#cpp[#box[`sh hash.sh < a.cpp`]]#py[#box[`python3 hash.py < a.py`]], or in vim
+#cpp[#cmd-inline("sh hash.sh < {source}.cpp")]#py[#cmd-inline("{python} hash.py < {source}.py")], or in vim
 select the lines and type
-#cpp[#box[`:w !sh hash.sh`]]#py[#box[`:w !python3 hash.py`]].
-#cpp[#code("sh", "# hash.sh
-cpp -dD -P -fpreprocessed | tr -d '[:space:]' \\
+#cpp[#cmd-inline(":w !sh hash.sh")]#py[#cmd-inline(":w !{python} hash.py")].
+#cpp[#cmd("sh", "# hash.sh
+{cpp} -dD -P -fpreprocessed | tr -d '[:space:]' \\
   | md5sum | cut -c-6")]
 #py[#code("py", "# hash.py
 import hashlib, sys, tokenize as tk
