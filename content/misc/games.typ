@@ -1,44 +1,48 @@
 #import "/typst/notes.typ": *
 #let xor = sym.plus.o
 
-Two players alternate, both know everything, and whoever cannot
-move loses (normal play). Impartial: both players have the same
-moves from every position.
-
 === Winning and losing positions
-- A position is losing iff every move leads to a winning one; a
-  terminal position is losing. DP over positions in an order where
-  moves go to smaller states.
-- With cycles, run a BFS backwards from the terminal positions:
-  a position becomes winning once one successor is losing, and
-  losing once all its successors are winning (count them down).
-  Positions never decided are draws.
+- Retrograde analysis, cycles allowed: BFS backwards from the
+  terminal positions. A position becomes winning once one
+  successor is losing, and losing once all its successors are
+  winning (count them down). Positions never decided are draws.
 - Scoring games: with $f(s)$ = (my score) $-$ (opponent's score)
   from $s$ on, $f(s) = max_(s -> s') ("gain" - f(s'))$.
+- A number that one player maximises and the other minimises:
+  binary search the threshold $L$ and solve the win/lose game
+  "can the maximiser force at least $L$?".
 
 === Sprague-Grundy
-#fact[Theorem][For an impartial game,
-  $g(x) = "mex" {g(y) : x -> y}$ (the smallest value $>= 0$ not
-  among the moves). A sum of games, where a move changes one
-  component, has $g = g_1 xor dots xor g_k$, and the player to
-  move loses iff $g = 0$.]
+#fact[Theorem][In an impartial game (both players have the same
+  moves; whoever cannot move loses),
+  $g(x) = "mex" {g(y) : x -> y}$. A sum of games, where a move
+  changes one component, has $g = g_1 xor dots xor g_k$, and the
+  player to move loses iff $g = 0$. To win, move in a component
+  with $g_i xor g < g_i$ to a position of value $g_i xor g$.]
 - A move that splits a component into independent parts leads to
   the XOR of their values.
 - $g(x)$ is at most the number of moves from $x$: size mex arrays
   by that.
 - Different moves for the two players (partizan games): no
   Grundy values; solve win/lose on the whole state.
+- Tree, each move claims a connected set of free vertices next to
+  the claimed set (which stays connected): the position is the sum
+  of the subtrees hanging off the claimed set. Memoise one value
+  per directed edge $u -> v$, the part on $v$'s side entered at
+  $v$ (these parts have total size $n(n - 1)$); a start $s$ is
+  worth the XOR over its neighbours $v$ of $s -> v$.
 
 === Nim and relatives
-#fact[Nim][The mover wins iff $s = a_1 xor dots xor a_n != 0$.
-  Winning move: a pile with $a_i xor s < a_i$, reduced to
-  $a_i xor s$.]
 #fact[Misère Nim][Whoever makes the last move loses. If every pile
   has at most 1 stone, the mover wins iff the number of piles of
-  size 1 is even; otherwise as in normal Nim ($s != 0$).]
+  size 1 is even; otherwise iff the XOR of the piles is nonzero.]
 #fact[Subtraction games][Take 1 to $k$: $g(n) = n mod thin (k + 1)$.
-  For any finite set of allowed amounts, $g$ is eventually
-  periodic: tabulate it and find the period.]
+  More generally, if every amount $1, dots, M - 1$ is allowed and
+  no multiple of $M$ is, then $g(n) = n mod M$. Amounts with at
+  most $m$ set bits: $M = 2^(m + 1) - 1$, as a positive multiple of
+  $2^s - 1$ has at least $s$ ones. For any finite set of allowed
+  amounts, $g$ is eventually periodic: tabulate it and find the
+  period.]
 #fact[Staircase Nim][Coins on steps $0, 1, dots$; a move shifts
   coins from step $i > 0$ to step $i - 1$. It is Nim on the odd
   steps: moves from even steps are undone by the opponent.]
@@ -66,11 +70,40 @@ moves from every position.
 - Strategy stealing: if an extra move never hurts, the first
   player wins (Chomp, Hex). It shows who wins, not how.
 - Fixed length: if every play has the same number of moves (the
-  final state is forced, whatever the order), only its parity
-  matters.
+  final state is forced, whatever the order), only that number
+  matters. Writing $|x - y|$ for numbers $x, y$ on the board
+  until nothing is new always ends with all multiples of the gcd
+  $g$ up to the maximum $M$: $M \/ g - n$ moves.
 - Token on an undirected graph, visited vertices deleted: the
   mover wins iff the start vertex is in every maximum matching,
   i.e. $nu(G - s) < nu(G)$.
+
+#full[
+=== More
+- Lasker's Nim (take any, or split a pile into two nonempty
+  piles): $g(4 i + 1) = 4 i + 1$, $g(4 i + 2) = 4 i + 2$,
+  $g(4 i + 3) = 4 i + 4$, $g(4 i + 4) = 4 i + 3$.
+- Green Hackenbush with cycles: contract each 2-edge-connected
+  part into one vertex; its $E$ edges become loops, together worth
+  $E mod 2$ (fusion principle). Then apply the tree rule.
+- Games with chance: value of a chance node = probability-weighted
+  average; a cycle in the states gives an equation (solve it) or
+  value iteration until changes are below $10^(-12)$.
+- Hidden information that the opponent need not commit to (a
+  hider that only has to stay consistent with the answers): play
+  against the set of positions still possible; the hider becomes
+  an adversary choosing each answer. Memoise on that set.
+- Searching a forest: each turn probe a vertex $x$; a hidden
+  target not at $x$ stays or moves to a neighbour other than $x$.
+  Some fixed probe sequence always catches it iff every component
+  is a caterpillar (no vertex has three neighbours of degree
+  $>= 2$): along the spine, at $v$ probe $v, ell_1, v, ell_2,
+  dots, v$ over its leaves $ell_i$.
+- Recognition: "both play optimally" plus independent piles,
+  subtrees or segments: Sprague-Grundy. Huge counts with a simple
+  rule: tables and periods. A modification step before the game
+  ("change the fewest cells so Alice wins"): characterise the
+  winner exactly first, then optimise.
 
 === Patterns from brute force
 Large inputs with a simple rule hide a period or a formula. Write
@@ -108,23 +141,4 @@ vi g = grundy(100, opts); // 0 1 0 1 2 3 2, period 7",
 opts = lambda n, g: [g[n - d] for d in (1, 3, 4) if d <= n]
 g = grundy(100, opts)  # 0 1 0 1 2 3 2, period 7",
 )
-
-#full[
-=== More
-- Lasker's Nim (take any, or split a pile into two nonempty
-  piles): $g(4 i + 1) = 4 i + 1$, $g(4 i + 2) = 4 i + 2$,
-  $g(4 i + 3) = 4 i + 4$, $g(4 i + 4) = 4 i + 3$.
-- Green Hackenbush with cycles: contract each 2-edge-connected
-  part into one vertex; its $E$ edges become loops, together worth
-  $E mod 2$ (fusion principle). Then apply the tree rule.
-- Games with chance: value of a chance node = probability-weighted
-  average; a cycle in the states gives an equation (solve it) or
-  value iteration until changes are below $10^(-12)$.
-- Hidden information that the opponent need not commit to: play
-  against the set of positions still consistent with the moves.
-- Recognition: "both play optimally" plus independent piles,
-  subtrees or segments: Sprague-Grundy. Huge counts with a simple
-  rule: tables and periods. A modification step before the game
-  ("change the fewest cells so Alice wins"): characterise the
-  winner exactly first, then optimise.
 ]

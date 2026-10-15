@@ -34,7 +34,9 @@ already fail for $10^5$ objects.
   mod $2^64$)]#py[; with 62-bit labels keep sums in a machine
   word with `& ((1 << 62) - 1)`]. It keeps multiplicities: `a[l:r]`
   is a permutation of $1, dots, r - l$ iff its sum equals
-  $R_1 + dots + R_(r - l)$ (prefix sums for both).]
+  $R_1 + dots + R_(r - l)$ (prefix sums for both). If $2^t$ is the
+  largest power of 2 dividing all differences of multiplicities,
+  a collision has probability $2^(t - b)$.]
 #fact[All or nothing]["Every value has all of its occurrences
   inside the range, or none": give each occurrence but the last a
   random label and the last the XOR of the others. A range is
@@ -96,6 +98,12 @@ hash#cpp[ (`ds2/hash-map`)]#py[: store `x ^ R` for one random
 - Shuffle first so that bad orders become unlikely: incremental
   minimum enclosing circle in expected $O(n)$, insertion into
   unbalanced search trees, random pivots.
+- Random order with skipping: run each candidate $u$ in random
+  order unless an earlier run covered it; run $u$ covers
+  $s(u) in.rev u$. If $w in s(u)$ implies $s(w) subset.eq s(u)$
+  and any two sets are nested or disjoint, an element lying in $t$
+  sets is visited by $H_t <= 1 + ln t$ runs in expectation (Kahn
+  closures from every start vertex in $O((n + m) log n)$).
 #full[
 - Colour coding: to find $k$ objects that must all differ (a path
   through $k$ distinct vertices), colour everything with $k$
@@ -104,8 +112,15 @@ hash#cpp[ (`ds2/hash-map`)]#py[: store `x ^ R` for one random
   survives with probability $k! \/ k^k >= e^(-k)$, so
   $c dot k^k \/ k!$ rounds fail with probability at most $e^(-c)$.
 - Las Vegas: retry until a random choice works (random vectors
-  that form a basis, a random good pivot), checking each result
-  exactly.
+  that form a basis, see Random matrices in _Linear algebra
+  facts_; a random good pivot), checking each result exactly.
+- Random answers from the judge: keep the posterior of every
+  hypothesis (or per candidate, the number of negative answers)
+  and ask queries whose answer is far from certain. If an answer
+  carries at most $h$ bits of entropy, telling apart $N$ equally
+  likely hypotheses takes at least $log_2 N \/ h$ queries on
+  average. Never rule a candidate out on one noisy answer; tune
+  the constants with a local simulator.
 - Heuristics (random restarts, simulated annealing): keep the
   best answer and loop while the time used is below 90% of the
   limit `TL` in seconds:

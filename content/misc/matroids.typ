@@ -62,6 +62,12 @@ greedy; with two such rules at once, use matroid intersection.
   for prefix neighbourhoods Hall's condition is the prefix test.
   Most profit: by deadline, push profits into a min-heap and pop
   the cheapest whenever it holds more jobs than the deadline.
+- Lower bounds "at least $c_j$ chosen among the first $p_j$" with
+  $N$ chosen in all (caps on the unchosen prefixes: a matroid).
+  Heaviest choice: sweep, push each weight into a max-heap, and at
+  $p_j$ pop maxima until $c_j$ are chosen. The openings of a
+  bracket sequence of length $2n$ are exactly the $n$-sets with at
+  least $i$ among the first $2i - 1$ positions.
 - Not matroids: matchings of a general graph as edge sets,
   knapsack, paths, independent sets of a graph ("no two adjacent").
   Check (3) on two tiny sets before trusting a greedy.
@@ -88,7 +94,13 @@ $M_1$ and $M_2$ on the same ground set. $S$ grows by one per round:
   is, or $x$ lies on the path in $S$ between the ends of $y$.
   Partition: $y$'s colour has room, or $x$ has $y$'s colour.
   Linear: $S + y$ is independent, or $x$ has a nonzero coefficient
-  when $y$ is written in terms of $S$.
+  when $y$ is written in terms of $S$. Transversal (the right
+  vertices matched by a matching $M$ of $S$): search from $y$ to
+  its left neighbours, from each matched one to its partner in
+  $M$, and on; $S + y$ is independent iff the search reaches a
+  free left vertex, and otherwise $S - x + y$ is iff it reaches
+  $x$. Scheduling: the slack tree in _Designing a segment tree
+  node_.
 - Pairs: bipartite matching (one partition per side); rainbow or
   colour-capped spanning forest (graphic, colours); spanning
   arborescence (graphic, in-degree $<= 1$ and 0 at the root); a
