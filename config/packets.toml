@@ -1,0 +1,37 @@
+# Packet configuration. Sections print in this order.
+sections = [
+  "contest",
+  "math",
+  "ds",
+  "ds2",
+  "graph",
+  "flow",
+  "tree",
+  "strings",
+  "numtheory",
+  "combo",
+  "poly",
+  "linalg",
+  "geometry",
+  "dp",
+  "offline",
+  "misc",
+  "guide",
+]
+
+# ICPC rules: university and team name upper left, page number upper right.
+[team]
+university = "University"
+team = "Team snowi"
+
+[layout]
+paper = "us-letter"     # "a4" is also allowed by ICPC rules
+columns = 3
+line-limit = 64         # characters of code per column; code font scales
+
+[icpc]
+title = "snowi ICPC notebook"
+page-limit = 25
+
+[full]
+title = "snowi full notebook"

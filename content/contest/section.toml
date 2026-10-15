@@ -1,0 +1,15 @@
+title = "Contest"
+
+[[entry]]
+item = "template"
+icpc = true
+
+[[entry]]
+note = "setup"
+title = "Setup, stress testing, hashing"
+icpc = true
+
+[[entry]]
+note = "troubleshoot"
+title = "Troubleshooting"
+icpc = true

@@ -1,0 +1,33 @@
+title = "More data structures"
+
+[[entry]]
+item = "ordered-set"
+icpc = true
+
+[[entry]]
+item = "hash-map"
+langs = ["cpp"]
+icpc = true
+
+[[entry]]
+item = "treap"
+icpc = true
+
+[[entry]]
+item = "binary-trie"
+icpc = ["cpp"]
+
+[[entry]]
+item = "persistent-segtree"
+icpc = true
+
+[[entry]]
+item = "segtree-beats"
+icpc = ["cpp"]
+
+[[entry]]
+item = "wavelet-matrix"
+
+[[entry]]
+note = "sqrt"
+title = "Sqrt decomposition and small tricks"

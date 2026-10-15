@@ -1,0 +1,26 @@
+title = "Dynamic programming"
+
+[[entry]]
+item = "lis"
+icpc = true
+
+[[entry]]
+item = "dc-opt"
+icpc = true
+
+[[entry]]
+item = "knuth"
+icpc = true
+
+[[entry]]
+item = "wqs"
+icpc = true
+
+[[entry]]
+item = "slope-trick"
+icpc = true
+
+[[entry]]
+note = "techniques"
+title = "DP techniques"
+icpc = true

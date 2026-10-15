@@ -1,0 +1,33 @@
+title = "Flows and matchings"
+
+[[entry]]
+item = "dinic"
+icpc = true
+
+[[entry]]
+item = "min-cost-flow"
+icpc = true
+
+[[entry]]
+item = "hopcroft-karp"
+icpc = true
+
+[[entry]]
+item = "hungarian"
+icpc = true
+
+[[entry]]
+item = "general-matching"
+icpc = true
+
+[[entry]]
+item = "global-min-cut"
+icpc = ["cpp"]
+
+[[entry]]
+item = "gomory-hu"
+
+[[entry]]
+note = "modelling"
+title = "Flow and cut modelling"
+icpc = true

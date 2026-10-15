@@ -1,0 +1,32 @@
+title = "Miscellaneous"
+
+[[entry]]
+item = "ternary-search"
+icpc = true
+
+[[entry]]
+item = "interactive"
+icpc = true
+
+[[entry]]
+note = "bits"
+title = "Bit tricks"
+icpc = true
+
+[[entry]]
+note = "random"
+title = "Randomisation and hashing"
+icpc = true
+
+[[entry]]
+note = "games"
+title = "Game theory"
+icpc = true
+
+[[entry]]
+note = "constructive"
+title = "Constructive problems and invariants"
+
+[[entry]]
+note = "matroids"
+title = "Matroids"

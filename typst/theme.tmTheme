@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- snowi print theme: dark colors that stay distinct in grayscale. -->
+<plist version="1.0">
+<dict>
+  <key>name</key><string>snowi-print</string>
+  <key>settings</key>
+  <array>
+    <dict>
+      <key>settings</key>
+      <dict>
+        <key>foreground</key><string>#000000</string>
+        <key>background</key><string>#FFFFFF</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>scope</key><string>comment, punctuation.definition.comment</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#6B6B6B</string><key>fontStyle</key><string>italic</string></dict>
+    </dict>
+    <dict>
+      <key>scope</key><string>keyword, storage, keyword.control, keyword.operator.word, constant.language</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#1A3A8F</string><key>fontStyle</key><string>bold</string></dict>
+    </dict>
+    <dict>
+      <key>scope</key><string>storage.type, support.type, entity.name.type, support.class</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#5B2A86</string></dict>
+    </dict>
+    <dict>
+      <key>scope</key><string>string, punctuation.definition.string</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#2E6B30</string></dict>
+    </dict>
+    <dict>
+      <key>scope</key><string>constant.numeric, constant.character</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#9C2A1A</string></dict>
+    </dict>
+    <dict>
+      <key>scope</key><string>meta.preprocessor, keyword.control.import, keyword.control.directive</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#7A4B00</string></dict>
+    </dict>
+    <dict>
+      <key>scope</key><string>entity.name.function</string>
+      <key>settings</key>
+      <dict><key>foreground</key><string>#000000</string><key>fontStyle</key><string>bold</string></dict>
+    </dict>
+  </array>
+</dict>
+</plist>

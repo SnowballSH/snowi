@@ -1,0 +1,14 @@
+title = "Combinatorics"
+
+[[entry]]
+item = "binom"
+icpc = true
+
+[[entry]]
+note = "formulas"
+title = "Counting formulas"
+icpc = true
+
+[[entry]]
+note = "genfunc"
+title = "Generating functions"

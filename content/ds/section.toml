@@ -1,0 +1,42 @@
+title = "Data structures"
+
+[[entry]]
+item = "fenwick"
+icpc = true
+
+[[entry]]
+item = "fenwick-2d"
+
+[[entry]]
+item = "segtree"
+icpc = true
+
+[[entry]]
+item = "lazy-segtree"
+icpc = true
+
+[[entry]]
+note = "monoids"
+title = "Designing a segment tree node"
+icpc = true
+
+[[entry]]
+item = "sparse-table"
+icpc = true
+
+[[entry]]
+item = "dsu"
+icpc = true
+
+[[entry]]
+item = "dsu-rollback"
+icpc = true
+
+[[entry]]
+item = "li-chao"
+icpc = true
+
+[[entry]]
+item = "line-container"
+langs = ["cpp"]
+icpc = true
