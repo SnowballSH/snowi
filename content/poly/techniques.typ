@@ -55,6 +55,10 @@ while len(q) > 1:
   Multiply them by halves; in a merge, `ntt` all $2 s^2$ entries
   once at a common length, combine pointwise and invert $s^2$
   results.
+- Weighted sums of prefix products $sum_t c_t product_(j < t) P_j$:
+  each block returns its product $F$ and its weighted sum $H$;
+  merge $F = F_L F_R$, $H = H_L + F_L H_R$. $O(D log^2 D)$ for
+  total degree $D$.
 
 === Online (relaxed) convolution
 When $f_t$ needs $"acc"_t = sum_(0 < i <= t) g_i f_(t - i)$ and then
@@ -93,20 +97,13 @@ $O(n log^2 n)$. Depth $log n$, so recursion is fine in PyPy.
   two so that $r - l <= l$ there.
 
 === Answer polynomial in a parameter
-- If a DP over values $0, dots, K$ only adds, multiplies and takes
-  prefix sums, every cell is a polynomial in $K$: a prefix sum
-  raises the degree by one, a product adds degrees, "$K$ choices"
-  is degree 1. Bound the degree $d$, compute the answer for
-  $K = 0, dots, d + 2$ with the slow DP, check that the last two
-  values are reproduced from the first $d + 1$, then call
-  `lagrange` at the real $K$ (reduced mod $p$ if huge).
+`poly/lagrange` (Notes) covers a DP over values $0, dots, K$ whose
+answer is a polynomial in $K$. Further:
 - Degrees: $sum_(i <= n) i^k$ has degree $k + 1$; labellings of a
   tree with values $<= K$ and child $<=$ parent have degree $n$
   (the number of vertices); lattice points in the $t$-times
   dilated lattice polytope have degree = dimension (Ehrhart).
-- $min(K, a_i)$, thresholds and special small cases make it
-  piecewise polynomial: sample above the last breakpoint, or per
-  piece. Interpolate modulo a prime, never in doubles.
+  Interpolate modulo a prime, never in doubles.
 - A DP dimension that only adds up under merges (a component
   size, a total weight), where the answer is
   $sum_s q_s ["count with size" s]$: replace the size by a variable
@@ -114,24 +111,41 @@ $O(n log^2 n)$. Depth $log n$, so recursion is fine in PyPy.
   coefficients with `interpolate` (or precompute weights $w_j$ with
   answer $= sum_j w_j "DP"(z_j)$). A 2-D tree knapsack in $O(n^4)$
   becomes $O(n^3)$.
+- A rational answer $N(x) \/ D(x)$ with a known denominator (such
+  as $product_i (1 - i x)^(c_i)$) and $deg N <= d$: run the scalar
+  DP at $d + 1$ points $x_0$ that are not poles, multiply by
+  $D(x_0)$, `interpolate` $N$, then expand $N \/ D$ by dividing by
+  each factor $1 - i x$: $s_n <- s_n + i s_(n - 1)$ for increasing
+  $n$.
 - A fixed linear transition repeated $N$ times (fixed matrix or
   automaton) gives a linear recurrence instead:
   `poly/linear-rec`.
 
-=== Generating functions in code
+=== Coefficient windows
+- Middle product: for $a$ with $n$ and $b$ with $m >= n$
+  coefficients, a cyclic convolution of any length $L >= m$ gives
+  the coefficients $n - 1, dots, m - 1$ of $a b$ exactly (wrapped
+  terms land below $n - 1$), at half the NTT length of the full
+  product.
+- $[y^n] E(y) B(y)^n$ for every $n < N$, $deg B = d$: divide and
+  conquer over $n$. For $[l, r)$ only the coefficients of $E B^l$
+  with exponents in $[d l - (d - 1) r, r)$ matter. Recurse left on
+  the sub-window for $[l, m)$; for the right half multiply the
+  window by $B^(m - l)$ (a middle product) and keep
+  $[d m - (d - 1) r, r)$. $O(N log^2 N)$ for constant $d$; for
+  $B = (1 + y)^2$ the powers are binomials.
+- $[x^(c_i)]$ of a prefix times a suffix product for every $i$:
+  All but one (Offline techniques), carrying only the window of
+  coefficients that the leaves below can still read.
+
+=== Sums as convolutions
 - Binomial sums: expand into factorials and split into a factor
   in $i$, one in $k - i$ and one in $k$:
   $sum_i p_i binom(n - i, k - i) = 1/((n - k)!) sum_i (p_i (n - i)!) dot 1/((k - i)!)$,
-  one `conv` for all $k$. For $sum_i a_i b_(i + d)$ reverse $a$.
-- Sequences of pieces $1 \/ (1 - A)$: `poly_inv`. Labelled sets
-  $exp A$, connected from all $ln A$, $k$-tuples $A^k$: `poly_exp`,
-  `poly_log`, `poly_pow`. EGFs: divide coefficient $i$ by $i!$
-  first, multiply by $n!$ at the end.
-- One coefficient of a rational series $P \/ Q$ for huge $N$:
-  `poly/linear-rec` (Kitamasa with `poly_divmod` for long $Q$).
-- Products of many small factors: divide and conquer above; a
-  product of $(1 - x^(k))^(-c_k)$ is $exp(sum_k c_k sum_j x^(j k) \/ j)$,
-  $O(n log n)$ terms by the harmonic sum.
+  one `conv` for all $k$.
+- Correlations $sum_i a_i b_(i + d)$: reverse $a$ (`poly/ntt`
+  Notes). Cyclic $sum_i a_i b_((i + d) mod n)$: also concatenate
+  $b$ with itself; $d$ is then at index $n - 1 + d$.
 
 === Transforms on bit masks
 #table(
@@ -150,10 +164,6 @@ $O(n log^2 n)$. Depth $log n$, so recursion is fine in PyPy.
   [disjoint $i union j = S$], [zeta per rank, product in rank],
   [`subset_conv`],
 )
-- $k$ tuples instead of pairs: transform, raise each entry to the
-  $k$-th power, invert. Minimum, maximum or "any witness" over
-  submasks: the same zeta loop with `min`, no inverse and no
-  final reduction mod $p$ (Tweak of `poly/subset-transforms`).
 - Sizes: $n = 20$ gives $n 2^n = 2 dot 10^7$ (easy) and
   $n^2 2^n = 4 dot 10^8$ (subset convolution: 1 s and 200 MB in
   C++, 3.5 s and 450 MB in PyPy). Enumerating all submasks of all
@@ -167,12 +177,9 @@ $O(n log^2 n)$. Depth $log n$, so recursion is fine in PyPy.
   sums in $O(3^n)$.
 - XOR moves that depend only on the weight ("flip exactly $a$ of
   $n$ bits"): the transform depends only on the weight $j$ of the
-  frequency, $K_a (j) = [t^a] (1 + t)^(n - j) (1 - t)^j$ with
+  frequency, the Krawtchouk number
+  $K_a (j) = [t^a] (1 + t)^(n - j) (1 - t)^j$ with
   $(a + 1) K_(a + 1) = (n - 2j) K_a - (n - a + 1) K_(a - 1)$. Work on
   the $n + 1$ weights in $O(n^2)$: the number of ways to get from
   0 to a fixed $y$ of weight $r$ with moves $a_1, a_2, dots$ is
   $2^(-n) sum_j K_j (r) product_i K_(a_i) (j)$.
-- Cues: masks over $n <= 20$ items, "sum over submasks", pairs
-  combined by a bitwise operation, "partition the set into
-  groups" (subset convolution, or a set-power-series $exp$),
-  "toggle", "flip" or "XOR" repeated many times.

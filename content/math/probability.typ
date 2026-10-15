@@ -16,20 +16,31 @@
   $P(min >= k) = product_i P(Y_i >= k)$.]
 #fact[Second moment][For indicators $X = sum_t I_t$:
   $E[X^2] = E[X] + sum_(s != t) P(s "and" t)$; variance adds over
-  pairwise uncorrelated terms.]
+  pairwise uncorrelated terms. Total variance:
+  $op("Var") X = E[op("Var")(X | Y)] + op("Var")(E[X | Y])$, so a
+  mixture varies at least as much as its least varying part.]
 
-=== Distributions
-- Geometric (tries until the first success, probability $p$): mean
-  $1\/p$, variance $(1 - p)\/p^2$; memoryless.
+=== Random subsets and orders
+- Removing uniformly random elements one at a time: the $k$
+  survivors are a uniform $k$-subset. If the stopping property is
+  inherited by subsets (sorted, independent, pairwise far), the
+  number $X$ left at the stop has $P(X >= k) = g_k \/ binom(n, k)$
+  with $g_k$ the good $k$-subsets, so the expected number of
+  removals is $n - sum_(k = 1)^n g_k \/ binom(n, k)$.
+- In a uniform permutation of $n$ items the $K$-th of $N$ marked
+  items has expected position $K (n + 1)\/(N + 1)$: the other
+  $n - N$ items spread evenly over the $N + 1$ gaps.
+- $k$ independent draws, outcome $s$ with probability $p_s$: the
+  expected number of distinct outcomes is
+  $sum_s (1 - (1 - p_s)^k) = sum_(i = 1)^k (-1)^(i + 1) binom(k, i)
+  sum_s p_s^i$; the power sums factorise when $p_s$ is a product
+  over independent choices.
 - Hypergeometric ($n$ drawn without replacement from $N$, $K$
   marked): mean $n K\/N$, variance
   $n K/N (N - K)/N (N - n)/(N - 1)$.
-- Poisson $lambda$: $P(k) = e^(-lambda) lambda^k\/k!$, mean = variance
-  $= lambda$; binomial with small $p$ is about Poisson $n p$.
 - Exponential races: the minimum of independent exponentials has
   rate $sum lambda_i$, and the $i$-th finishes first with
   probability $lambda_i\/sum lambda_i$.
-- Uniform integer on $m$ values: variance $(m^2 - 1)\/12$.
 
 === Markov chains
 - Expected cost to absorption, backwards: $E_s = c_s + sum_t
@@ -39,10 +50,11 @@
   (1 - P_(s s))$; success probability $p$ per try: $1\/p$ tries.
 - Structure first: DAG order; tree walk, write $E_v = A_v E_"par" +
   B_v$ bottom-up; everything jumps back to the start, write
-  $E_i = a_i E_0 + b_i$ and solve one equation; otherwise Gaussian
-  elimination in $O(S^3)$ (`linalg/gauss-mod`).
-- Distribution after $t$ steps: $pi_0 P^t$ by matrix power.
-  Stationary: $pi P = pi$, $sum pi = 1$ (replace one equation);
+  $E_i = a_i E_0 + b_i$ and solve one equation; states on a line
+  (or one level at a time) give tridiagonal systems, solved in
+  $O(S)$ (Thomas algorithm, Linear algebra facts); otherwise
+  Gaussian elimination in $O(S^3)$ (`linalg/gauss-mod`).
+- Stationary: $pi P = pi$, $sum pi = 1$ (replace one equation);
   unique for an irreducible chain; expected return time to $s$ is
   $1\/pi_s$. Random walk on an undirected graph: $pi_v = deg v\/(2m)$.
 - Tree walk from $v$ to its parent: $2 |"subtree"(v)| - 1$ steps on
@@ -75,6 +87,11 @@
 - Waiting for a pattern $s$ over an alphabet of size $A$:
   $sum A^k$ over the $k$ with `s[0, k) == s[n - k, n)`, $k = n$
   included (HH: 6 flips, HT: 4).
+- Random translation: $integral "area"(P inter (Q + t)) dif t =
+  "area"(P) "area"(Q)$ (Fubini). For $t$ uniform over the
+  translations with overlap (the polygon $P - Q$,
+  `geometry/minkowski`) the expected overlap is
+  $"area"(P) "area"(Q) \/ "area"(P - Q)$.
 
 === Stopping times
 #fact[Wald][$E[sum_(i = 1)^N X_i] = E[N] E[X]$ for i.i.d. $X_i$ and a
@@ -89,12 +106,25 @@
   V(t))$ in floating point: the max needs real comparisons. Look
   for a threshold rule, or a one-step lookahead when stopping stays
   better once it is; then compute the value mod $p$ if asked.]
+#full[
+#fact[Index policy][Independent Markov chains, each with a target;
+  a step advances one chosen chain at cost 1, and play stops when
+  any chain reaches its target (golf with several balls). It is
+  optimal to always advance the chain whose current state $s$ has
+  the smallest index
+  $g(s) = min_C E[T_C] \/ P("target before leaving" C)$
+  over state sets $C in.rev s$, where $T_C$ counts the
+  steps until the target or the first step out of $C$: the least
+  expected time to the target from $s$ if you may restart at $s$
+  at any moment (Gittins; Dumitriu, Tetali, Winkler). For a walk
+  on a tree towards its root the index never decreases away from
+  the root, so the best $C$ are the connected sets $g <= G$: grow
+  them greedily from the root.]
+]
 
 === Modulo a prime
-- A rational answer $p\/q$ is printed as $p q^(-1)$ mod $M$; $+, -,
-  times, \/$ all commute with reduction. Divide once by the total
-  (count favourable outcomes, then multiply by the inverse of the
-  number of outcomes).
+- Count favourable outcomes, then multiply once by the inverse of
+  the number of outcomes.
 - Never compare residues or take max or min of them; never drop
   "tiny" probabilities. Decide the strategy first in doubles or by
   proof.
@@ -104,36 +134,49 @@
   small.
 
 #full[
-=== Inequalities
+=== Concentration
 Markov: $P(X >= a) <= E[X]\/a$ for $X >= 0$. Chebyshev:
 $P(|X - mu| >= k sigma) <= 1\/k^2$. Chernoff for a sum of
 independent $[0, 1]$ variables with mean $mu$:
 $P(X >= (1 + delta) mu) <= e^(-delta^2 mu\/3)$ ($0 < delta <= 1$),
 $P(X <= (1 - delta) mu) <= e^(-delta^2 mu\/2)$. Hoeffding:
-$P(X - E X >= t) <= e^(-2t^2\/n)$. Union bound:
-$P(union.big A_i) <= sum P(A_i)$. Use them to size random trials:
-a test that fails with probability $1\/2$ repeated 60 times fails
-with probability $2^(-60)$.
+$P(X - E X >= t) <= e^(-2t^2\/n)$, also for $n$ draws without
+replacement from a set of numbers in $[0, 1]$. Azuma: a martingale
+with $|M_i - M_(i - 1)| <= c_i$ has $P(M_n - M_0 >= t) <=
+e^(-t^2 \/ (2 sum c_i^2))$. Union bound:
+$P(union.big A_i) <= sum P(A_i)$. A test that fails with
+probability $1\/2$ repeated 60 times fails with probability
+$2^(-60)$.
+- So a random process of $n$ bounded steps rarely strays more
+  than a few $sqrt(n)$ from its expected path: a DP over (step,
+  state) may skip the states outside that band. Grow the band
+  until the answer stops changing (400 balls $+1$ and 250 balls
+  $-1$ drawn without replacement, stop at will: error $10^(-7)$
+  with half-width 40).
+- Total variation $d(P, Q) = max_A |P(A) - Q(A)| = 1/2 sum_x
+  |p_x - q_x|$. One sample from $P$ or $Q$ (prior $1\/2$ each) is
+  classified correctly with probability at most $(1 + d)\/2$
+  (guess the likelier source). $d <= P(X != Y)$ whenever
+  $X tilde P$ and $Y tilde Q$ live on one probability space
+  (coupling); some coupling attains it.
 
-=== Worked examples
-- Maximum of two dice: $P(M <= v) = (v\/6)^2$, so
-  $E[M] = sum_(v = 0)^5 (1 - v^2\/36) = 161\/36$.
-- Walk on the path 0 - 1 - 2 absorbed at 0: $E_2 = 1 + E_1$,
-  $E_1 = 1 + (E_0 + E_2)\/2$, so $E_1 = 3 = 2 dot 2 - 1$ (subtree
-  of 1 has 2 vertices) and $E_2 = 4$.
-- Expected maximum of $n$ dice with $k$ faces:
-  $sum_(v = 0)^(k - 1) (1 - (v\/k)^n)$.
+=== Continuous
+- A walk of $n$ steps of length $ell$ in uniformly random
+  directions in the plane is close to a Gaussian with independent
+  coordinates of variance $n ell^2 \/ 2$ (CLT). A centred 2D
+  Gaussian with coordinate variance $sigma^2$ lies within distance
+  $R$ of its centre with probability $1 - e^(-R^2 \/ (2 sigma^2))$.
 - Biased ruin duration ($p != 1\/2$, $q = 1 - p$):
   $i\/(q - p) - N\/(q - p) dot (1 - (q\/p)^i)\/(1 - (q\/p)^N)$.
 - Absorbing chain with transient part $Q$ and $R$ to absorbing
   states: $(I - Q)^(-1)$ holds expected visits, its row sums the
   expected steps, $(I - Q)^(-1) R$ the absorption probabilities.
+- Distribution after $t$ steps: $pi_0 P^t$ by matrix power.
 
 === Recognition
 - A uniformly random process often hides a uniform permutation:
-  removing random elements one by one leaves a uniform random
-  subset; in a shuffled deck every order of any $k$ given cards is
-  equally likely.
+  in a shuffled deck every order of any $k$ given cards is equally
+  likely; random removals leave a uniform random subset.
 - "Expected number of X": indicators, one probability per
   element or pair.
 - "Expected maximum / time until all": tail sums with products,
@@ -146,6 +189,8 @@ with probability $2^(-60)$.
   doubles, then look for a threshold.
 - Hidden information but a strategy that meets an offline lower
   bound on every outcome: the answer is $E["offline optimum"]$.
+- Several independent processes, one advanced per step, first to
+  finish ends the game: index policy.
 - Always check a formula on tiny cases with exact fractions
   (Python `fractions.Fraction`).
 
