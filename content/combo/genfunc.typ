@@ -51,9 +51,6 @@ numbers of Counting formulas.
   $k e_k = sum_(i = 1)^k (-1)^(i - 1) e_(k - i) p_i$.
 
 === Operations
-- $x A'$ gives $n a_n$, $A\/(1 - x)$ prefix sums, $A(c x)$ gives
-  $c^n a_n$, $A(x^k)$ spreads the terms; for an EGF, $A'$ gives
-  $a_(n + 1)$.
 - Binomial transform: $b_n = sum_k binom(n, k) a_k$ iff
   $B = e^x A$ as EGFs; invert with $e^(-x)$. So $a_k = (Delta^k
   b)(0)$ and $b(m) = sum_k binom(m, k) (Delta^k b)(0)$ (Newton
@@ -141,6 +138,10 @@ numbers of Counting formulas.
   rotation whose proper prefix sums are all $>= 0$. Write a plane
   tree in preorder as (children $- 1$) per node: trees with a
   given multiset of child counts number (arrangements)$\/n$.
+- Sum 0: the rotations of a $plus.minus 1$ sequence with sum 0 whose
+  prefix sums all stay $>= 0$ are exactly those starting right
+  after a minimum of its prefix sums. So a bracket string with as
+  many `(` as `)` has a regular rotation.
 - Dissections of an $N$-gon are plane trees: a $c$-gon is a node
   with $c - 1$ children, the $N - 1$ sides other than the root side
   are leaves. With $k$ diagonals and face sizes in $S$:

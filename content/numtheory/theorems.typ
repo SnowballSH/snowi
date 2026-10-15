@@ -79,9 +79,6 @@ $d(n)$, $sigma(n)$ the number and the sum of the divisors of `n`.
 
 === Factorials and binomials
 Legendre's $v_p (n!)$, Kummer and Lucas: see Counting formulas.
-#fact[Lucas period][For $0 <= a < p$, $binom(m, a) equiv
-  binom(m mod p, a) thick (mod p)$, so $binom(m, a) mod p$, and
-  any product of such binomials, has period `p` in `m`.]
 #fact[Modulo $p^k$][Only multiples of `p` lack inverses: write
   each factor as $p^v u$ with $p divides.not u$, add and subtract
   the exponents `v` as integers and multiply the units
@@ -163,7 +160,10 @@ while l <= n:
   in lowest terms, $h_i k_(i - 1) - h_(i - 1) k_i = (-1)^(i - 1)$
   and $|x - h_i\/k_i| <= 1\/(k_i k_(i + 1))$. For $i >= 1$ a
   fraction closer to `x` than $h_i\/k_i$ has a denominator
-  above $k_i$: truncating gives the best approximations.]
+  above $k_i$. The closest fraction with denominator at most $N$
+  is the closer of the last $h_i\/k_i$ with $k_i <= N$ and
+  $(h_(i - 1) + t h_i)\/(k_(i - 1) + t k_i)$,
+  $t = floor((N - k_(i - 1))\/k_i)$.]
 #fact[Square roots][For a non-square $D$, from $m = 0$, $d = 1$,
   $a = a_0 = floor(sqrt(D))$ repeat $m <- d a - m$,
   $d <- (D - m^2)\/d$, $a <- floor((a_0 + m)\/d)$: exact integers,
@@ -218,7 +218,7 @@ while l <= n:
 #fact[Continuants][The numerator $K(a_1, dots, a_n)$ of
   $[a_1; a_2, dots, a_n]$ satisfies $K(a_1, dots, a_n) =
   K(a_n, dots, a_1)$. A rational has exactly two expansions,
-  $[dots, a_n]$ with $a_n >= 2$ (or $n = 0$) and
+  $[dots, a_n]$ with $a_n >= 2$ (or a single term) and
   $[dots, a_n - 1, 1]$. So sequences $(a_1, dots, a_n)$ of
   positive integers, $n >= 0$, match one-to-one the rationals
   $y\/x = [a_n; dots, a_1, 1] >= 1$ (empty: $1\/1$), i.e. the
@@ -265,9 +265,9 @@ while l <= n:
   subtractive Euclid: replace each run of equal steps by one
   division, $O(log)$ phases.
 - $f_(i + 1) = a_i f_i + f_(i - 1)$, a best fraction, a network
-  of unit resistors in series and parallel (its resistance is
-  $[a_0; a_1, dots]$ with $sum a_i$ resistors): continued
-  fractions.
+  built by adding unit resistors one at a time, each in series or
+  in parallel with all of it (resistance $[a_0; a_1, dots]$ needs
+  $sum a_i$ of them): continued fractions.
 - Sums of floors or of `mod` over an arithmetic progression:
   `numtheory/floor-sum`; with squares or an extra factor `i`, the
   degree-2 floor sums above.

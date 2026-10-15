@@ -30,7 +30,7 @@ matrix has different ranks over $FF_2$ and over $RR$.
 - Intersection of spans $U$ and $W$ (Zassenhaus): eliminate the
   rows $(u, u)$ for a basis of $U$ and $(w, 0)$ for a basis of $W$;
   the echelon rows of the form $(0, x)$ are a basis of
-  $U inter W$. Also $dim(U + W) = dim U + dim W - dim(U inter W)$.
+  $U inter W$.
 - Least squares for an overdetermined or noisy $A x approx b$:
   solve $A^T A x = A^T b$ (`linalg/gauss-real`). Measurements
   known only up to sign (unsigned areas that are linear in the
@@ -122,7 +122,8 @@ matroids) by random lifting in Matroids.
   the wedge product $product_i (1 + r_i v_i)$ with random $r_i$ mod
   a large prime has a nonzero part of degree $d$ iff the $v_i$
   have rank $>= d$ (w.h.p.). It sums over all subsets at $O(2^n)$
-  per vector: "fewest groups whose edges reach rank $d$" for
+  per edge vector $e_u - e_v$ ($O(n 2^n)$ per dense vector):
+  "fewest groups whose edges reach rank $d$" for
   $n <= 16$ is a DP over groups of such sums.]
 
 === Counting with determinants

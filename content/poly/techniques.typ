@@ -98,19 +98,15 @@ $O(n log^2 n)$. Depth $log n$, so recursion is fine in PyPy.
 
 === Answer polynomial in a parameter
 `poly/lagrange` (Notes) covers a DP over values $0, dots, K$ whose
-answer is a polynomial in $K$. Further:
-- Degrees: $sum_(i <= n) i^k$ has degree $k + 1$; labellings of a
-  tree with values $<= K$ and child $<=$ parent have degree $n$
-  (the number of vertices); lattice points in the $t$-times
-  dilated lattice polytope have degree = dimension (Ehrhart).
-  Interpolate modulo a prime, never in doubles.
-- A DP dimension that only adds up under merges (a component
-  size, a total weight), where the answer is
-  $sum_s q_s ["count with size" s]$: replace the size by a variable
-  $z$, run the cheaper DP at $n + 1$ numbers $z_j$ and recover the
-  coefficients with `interpolate` (or precompute weights $w_j$ with
-  answer $= sum_j w_j "DP"(z_j)$). A 2-D tree knapsack in $O(n^4)$
-  becomes $O(n^3)$.
+answer is a polynomial in $K$, its degree, and a DP dimension that
+only adds under merges replaced by a variable $z$. Further:
+- Lattice points in the $t$-times dilated lattice polytope: a
+  polynomial in $t$ of degree = dimension (Ehrhart).
+- With that $z$ (a component size, a total weight) and an answer
+  $sum_s q_s ["count with size" s]$, $s <= n$: precompute weights
+  $w_j$ with $sum_j w_j z_j^s = q_s$; the answer is
+  $sum_j w_j "DP"(z_j)$, no interpolation. A 2-D tree knapsack in
+  $O(n^4)$ becomes $O(n^3)$.
 - A rational answer $N(x) \/ D(x)$ with a known denominator (such
   as $product_i (1 - i x)^(c_i)$) and $deg N <= d$: run the scalar
   DP at $d + 1$ points $x_0$ that are not poles, multiply by

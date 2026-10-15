@@ -99,9 +99,10 @@
   `expm1(x)` and `log1p(x)` keep the digits of $e^x - 1$ and
   $ln(1 + x)$ for tiny `x`; a difference of two large close values
   (say $E[X^2] - E[X]^2$) loses them, so compute it exactly.]
-#fact[KKT][Minimise a convex `f` under convex constraints
-  $g_j (x) <= 0$ (one point satisfies all strictly): `x` is optimal
-  iff $nabla f(x) + sum_j mu_j nabla g_j (x) = 0$ for some
+#fact[KKT][Minimise a convex differentiable `f` under convex
+  differentiable constraints $g_j (x) <= 0$ (one point satisfies
+  all strictly): a feasible `x` is optimal iff
+  $nabla f(x) + sum_j mu_j nabla g_j (x) = 0$ for some
   $mu_j >= 0$ with $mu_j g_j (x) = 0$. Usually one multiplier is
   found by bisection.#full[ Projection of `x` onto the box
   $|y_i| <= l_i$ cut by the ball $|y|^2 <= a$: if clamping `x`
@@ -112,9 +113,10 @@
 #fact[Saturating sums][The sign of $sum_(i < n) 2^i a_i$ with all
   $|a_i| <= M$, without big integers: Horner from the top,
   $v <- 2 v + a_i$, clamping $v$ to $[-(M + 1), M + 1]$. Once
-  $|v| = M + 1$ the sign never changes. The clamped maps
-  $v -> op("clamp")(2^k v + W)$ compose, so a segment tree can
-  keep them.]
+  $|v| = M + 1$ the sign never changes. A block of terms maps the
+  clamped $v$ to the clamped $v$: store that map as its table of
+  $2M + 3$ values and compose tables, so a segment tree can keep
+  them.]
 
 === Fibonacci
 - $F_(n + m) = F_n F_(m + 1) + F_(n - 1) F_m$; doubling:

@@ -18,9 +18,8 @@ second and (unsigned) first kind, $x^(underline(k)) = x (x - 1) dots
   $0 <= x_i <= c$ has
   $sum_j (-1)^j binom(k, j) binom(n - j (c + 1) + k - 1, k - 1)$
   solutions; for a sum $<= n$ use $binom(n - j (c + 1) + k, k)$.
-- Compositions of $n$ into $p$ positive parts: $binom(n - 1, p - 1)$.
-  Summed over all of them, the product of $r$ fixed parts is
-  $binom(n + r - 1, p + r - 1)$.
+- Over the compositions of $n$ into $p$ positive parts, the
+  product of $r$ fixed parts sums to $binom(n + r - 1, p + r - 1)$.
 
 === Paths and Catalan numbers
 #fact[Reflection][$plus.minus 1$ walks of $n$ steps from $a$ to $b$:
@@ -62,8 +61,8 @@ second and (unsigned) first kind, $x^(underline(k)) = x (x - 1) dots
 #fact[Bell][$B_n = sum_k S(n, k)$: all set partitions.
   $B_(n + 1) = sum_k binom(n, k) B_k$. 1, 1, 2, 5, 15, 52, 203, 877,
   4140, 21147, 115975.]
-#fact[Partitions][$p(n)$: 1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42;
-  $p(100) approx 1.9 dot 10^8$. Pentagonal recurrence in
+#fact[Partitions][$p(n)$: 1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42.
+  Pentagonal recurrence in
   $O(n sqrt(n))$: $p(n) = sum_(k >= 1) (-1)^(k + 1) (p(n - g_k) +
   p(n - g_(-k)))$, $g_k = k (3k - 1)\/2$, $p(m < 0) = 0$. Exactly
   $k$ parts:
@@ -102,7 +101,10 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
   the cells right of it in its row and below it in its column.
   RSK: permutations biject
   with pairs of tableaux of one shape ($sum (f^lambda)^2 = n!$), with
-  LIS $= lambda_1$ and LDS = number of rows. Involutions biject with
+  LIS $= lambda_1$ and LDS = number of rows. Greene: $k$ disjoint
+  increasing subsequences cover at most $lambda_1 + dots + lambda_k$
+  elements, and some reach it; for decreasing ones, the $k$ longest
+  columns. Involutions biject with
   single tableaux, fixed points = number of odd-length columns.]
 #fact[Tree orders][Orders of the vertices of a rooted forest with
   every vertex before its descendants: $n! \/ product_v "size"(v)$.]
@@ -159,7 +161,8 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
   disjoint (planar, ends in order), it is the count.]
 #fact[Lucas][$binom(n, k) equiv product_i binom(n_i, k_i)$ mod $p$ for
   base-$p$ digits $n_i, k_i$; odd iff `(k & ~n) == 0`. For fixed
-  $k < p$, $binom(m, k) equiv binom(m mod p, k)$: $p$-periodic in $m$.]
+  $k < p$, $binom(m, k) equiv binom(m mod p, k)$, so it, and any
+  product of such binomials, is $p$-periodic in $m$.]
 #fact[Kummer][The exponent of $p$ in $binom(n, k)$ is the number of
   carries when adding $k$ and $n - k$ in base $p$. Legendre: \
   $v_p (n!) = sum_(i >= 1) floor(n\/p^i) = (n - s_p (n))\/(p - 1)$,
@@ -179,16 +182,12 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
   [7], [720 1764 1624 735 175 21 1], [1 63 301 350 140 21 1],
 )
 - $n!$ for $n = 0..12$: 1, 1, 2, 6, 24, 120, 720, 5040, 40320,
-  362880, 3628800, 39916800, 479001600. $20! approx 2.4 dot 10^18$
-  is the last that fits `ll`.
+  362880, 3628800, 39916800, 479001600.
 - Catalan up to $C_(19) = 1767263190$: 58786, 208012, 742900,
   2674440, 9694845, 35357670, 129644790, 477638700 for $n = 11..18$.
-  $C_(35) approx 3.1 dot 10^18$ is the last in `ll`.
 - Bell: 678570, 4213597, 27644437, 190899322, 1382958545 for
-  $n = 11..15$; $B_(25) approx 4.6 dot 10^18$ is the last in `ll`.
-- Partitions: $p(20) = 627$, $p(50) = 204226$,
-  $p(200) approx 4.0 dot 10^12$; $p(405) approx 9.1 dot 10^18$ is the
-  last in `ll`.
+  $n = 11..15$. Partitions: $p(200) approx 4.0 dot 10^12$. Larger
+  values and the 64-bit limits: Numbers, estimates and numerics.
 - Involutions $I_n = I_(n - 1) + (n - 1) I_(n - 2)$: 1, 1, 2, 4, 10,
   26, 76, 232, 764. Ordered set partitions (Fubini)
   $sum_k k! S(n, k)$: 1, 1, 3, 13, 75, 541, 4683. Motzkin (paths
@@ -227,13 +226,11 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
 - Bracelets (rotations and reflections): necklaces$\/2$ plus
   $k^((n + 1)\/2)\/2$ for odd $n$, $(k + 1) k^(n\/2)\/4$ for even
   $n$. Cube faces: $(k^6 + 3k^4 + 12k^3 + 8k^2)\/24$.
-- Translations of the torus $ZZ_n^r$: exactly $J_r (d) = d^r
-  product_(p | d) (1 - p^(-r))$ of them have order $d$ (for
-  $d | n$), and such a shift splits the $m$ cells (or edges) into
-  cycles of length $d$. Colourings of an $n times n$ torus up to
-  translation: $1/n^2 sum_(d | n) J_2 (d) k^(m\/d)$.
-- $k$-ary trees with $n$ internal nodes:
-  $1/((k - 1) n + 1) binom(k n, n)$.
+- Colourings of the $m$ cells (or edges) of an $n times n$ torus up
+  to translation: $1/n^2 sum_(d | n) J_2 (d) k^(m\/d)$. Exactly
+  $J_2 (d)$ shifts have order $d$ (Jordan's totient: Totients in
+  Number theory facts), and each splits them into cycles of
+  length $d$.
 - $sum_(m >= r) binom(m, r) x^m = x^r \/ (1 - x)^(r + 1)$, so
   $sum_m binom(m, r) \/ 2^(m + 1) = 1$ for every $r$. With Newton
   series (Generating functions), a polynomial $g$ has

@@ -56,7 +56,8 @@
   B_v$ bottom-up; everything jumps back to the start, write
   $E_i = a_i E_0 + b_i$ and solve one equation; states on a line
   (or one level at a time) give tridiagonal systems, solved in
-  $O(S)$ (Thomas algorithm, Linear algebra facts); otherwise
+  $O(S)$ (Thomas: eliminate $x_(i - 1)$ forwards, then substitute
+  backwards#full[; Linear algebra facts]); otherwise
   Gaussian elimination in $O(S^3)$ (`linalg/gauss-mod`).
 - Stationary: $pi P = pi$, $sum pi = 1$ (replace one equation);
   unique for an irreducible chain; expected return time to $s$ is
@@ -91,15 +92,14 @@
   inversions $n(n - 1)\/4$; the cycle of a given element has a
   uniform length in $1..n$; two given elements share a cycle with
   probability $1\/2$. Its longest increasing subsequence has length
-  about $2 sqrt(n) - 1.77 n^(1\/6)$ (greedy monotone piles: about
-  $2 sqrt(n)$).
+  about $2 sqrt(n) - 1.77 n^(1\/6)$.
 - Waiting for a pattern $s$ over an alphabet of size $A$:
   $sum A^k$ over the $k$ with `s[0, k) == s[n - k, n)`, $k = n$
   included (HH: 6 flips, HT: 4).
 - Random translation: $integral "area"(P inter (Q + t)) dif t =
   "area"(P) "area"(Q)$ (Fubini). For $t$ uniform over the
-  translations with overlap (the polygon $P - Q$,
-  `geometry/minkowski`) the expected overlap is
+  translations with overlap (the set $P - Q$; for convex $P$, $Q$
+  a polygon from `geometry/minkowski`) the expected overlap is
   $"area"(P) "area"(Q) \/ "area"(P - Q)$.
 
 === Stopping times
@@ -136,8 +136,6 @@
 ]
 
 === Modulo a prime
-- Count favourable outcomes, then multiply once by the inverse of
-  the number of outcomes.
 - Never compare residues or take max or min of them; never drop
   "tiny" probabilities. Decide the strategy first in doubles or by
   proof.
@@ -165,7 +163,8 @@ $2^(-60)$.
   state) may skip the states outside that band. Grow the band
   until the answer stops changing (400 balls $+1$ and 250 balls
   $-1$ drawn without replacement, stop at will: error $10^(-7)$
-  with half-width 40).
+  with half-width 40 in the number of $+1$ balls drawn, i.e. 80
+  in the running sum).
 - Total variation $d(P, Q) = max_A |P(A) - Q(A)| = 1/2 sum_x
   |p_x - q_x|$. One sample from $P$ or $Q$ (prior $1\/2$ each) is
   classified correctly with probability at most $(1 + d)\/2$
