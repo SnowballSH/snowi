@@ -62,7 +62,7 @@
   if "Time" in fields { info.push(label-run("Time", rich(fields.Time))) }
   if snippet.uses.len() > 0 {
     let names = snippet.uses.map(u => by-id.at(u, default: u))
-    info.push(label-run("Uses", names.join(", ")))
+    info.push(label-run("Uses", names.join(", ") + "."))
   }
   if "Tweak" in fields { info.push(label-run("Tweak", rich(fields.Tweak))) }
   if is-full and "Notes" in fields { info.push(label-run("Notes", rich(fields.Notes))) }

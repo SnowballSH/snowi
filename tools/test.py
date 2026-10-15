@@ -96,12 +96,25 @@ def discover(selector: str | None, lang: str | None) -> list[Job]:
     return jobs
 
 
-def up_to_date(binary: Path, depfile: Path) -> bool:
-    if not binary.exists() or not depfile.exists():
-        return False
+def deps_digest(depfile: Path) -> str | None:
+    """MD5 over the contents of every file the binary was built from."""
+    if not depfile.exists():
+        return None
     deps = depfile.read_text().replace("\\\n", " ").split(":", 1)[1].split()
-    built = binary.stat().st_mtime
-    return all(Path(d).exists() and Path(d).stat().st_mtime <= built for d in deps)
+    digest = hashlib.md5(" ".join(CXX_FLAGS).encode())
+    for dep in deps:
+        path = Path(dep)
+        if not path.exists():
+            return None
+        digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
+def up_to_date(binary: Path, depfile: Path, stamp: Path) -> bool:
+    """Content-based, so restoring a file with an old mtime still rebuilds."""
+    if not binary.exists() or not stamp.exists():
+        return False
+    return deps_digest(depfile) == stamp.read_text()
 
 
 def ensure_pch() -> Path:
@@ -121,16 +134,19 @@ def ensure_pch() -> Path:
 def run_cpp(job: Job, pch: Path) -> Result:
     start = time.perf_counter()
     binary = BUILD / (job.item + ".bin")
-    depfile = binary.with_suffix(".d")
+    depfile, stamp = binary.with_suffix(".d"), binary.with_suffix(".sum")
     binary.parent.mkdir(parents=True, exist_ok=True)
-    if not up_to_date(binary, depfile):
+    if not up_to_date(binary, depfile, stamp):
         cmd = ["g++", *CXX_FLAGS, "-include", str(pch), "-MMD", "-MF", str(depfile)]
         cmd += [str(job.path), "-o", str(binary)]
         build = subprocess.run(cmd, capture_output=True, text=True)
         if build.returncode != 0 or "warning:" in build.stderr:
             binary.unlink(missing_ok=True)
             return Result(job, False, time.perf_counter() - start, build.stderr)
-    env = os.environ | {"ASAN_OPTIONS": "detect_leaks=0", "UBSAN_OPTIONS": "print_stacktrace=1"}
+        stamp.write_text(deps_digest(depfile) or "")
+    # Fake stacks for use-after-return make small calls ~1000x slower here.
+    asan = "detect_leaks=0:detect_stack_use_after_return=0"
+    env = os.environ | {"ASAN_OPTIONS": asan, "UBSAN_OPTIONS": "print_stacktrace=1"}
     return execute(job, [str(binary)], env, start)
 
 
