@@ -21,7 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from snowi.meta import CONTENT, ROOT, TESTS, all_sections, test_paths  # noqa: E402
+from snowi.meta import CONTENT, ROOT, TESTS, ContentError, all_sections, load_sections, test_paths  # noqa: E402
 
 CXX_FLAGS = [
     "-std=gnu++20",
@@ -108,15 +108,13 @@ def ensure_pch() -> Path:
     """Precompile <bits/stdc++.h> with the test flags; returns the header to -include."""
     header = BUILD / "pch" / "stdc.hpp"
     gch = header.with_suffix(".hpp.gch")
-    header.parent.mkdir(parents=True, exist_ok=True)
-    stamp = header.with_suffix(".flags")
-    flags = " ".join(CXX_FLAGS)
-    if not gch.exists() or not stamp.exists() or stamp.read_text() != flags:
+    if not gch.exists():
+        header.parent.mkdir(parents=True, exist_ok=True)
         header.write_text("#include <bits/stdc++.h>\n")
-        subprocess.run(
-            ["g++", *CXX_FLAGS, "-x", "c++-header", str(header), "-o", str(gch)], check=True
-        )
-        stamp.write_text(flags)
+        partial = gch.with_suffix(f".tmp{os.getpid()}")
+        cmd = ["g++", *CXX_FLAGS, "-x", "c++-header", str(header), "-o", str(partial)]
+        subprocess.run(cmd, check=True)
+        os.replace(partial, gch)  # atomic: parallel runs never see half a file
     return header
 
 
@@ -161,8 +159,12 @@ def execute(job: Job, cmd: list[str], env: dict, start: float) -> Result:
 
 
 def missing_tests(selector: str | None) -> list[str]:
+    try:
+        sections = load_sections([selector.split("/")[0]]) if selector else all_sections()
+    except ContentError as err:
+        return [f"(cannot check: {err})"]
     missing = []
-    for section in all_sections():
+    for section in sections:
         for entry in section.entries:
             if entry.kind != "item":
                 continue

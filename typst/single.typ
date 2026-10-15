@@ -2,7 +2,7 @@
 #import "packet.typ": packet
 
 #packet(
-  json("/build/manifest.json"),
+  json(sys.inputs.at("manifest", default: "/build/manifest.json")),
   sys.inputs.at("variant", default: "full"),
   sys.inputs.at("lang", default: "cpp"),
 )

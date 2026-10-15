@@ -24,6 +24,7 @@ from snowi.meta import (  # noqa: E402
     TESTS,
     ContentError,
     all_sections,
+    load_sections,
     test_paths,
 )
 
@@ -52,7 +53,7 @@ def check_lines(label: str, text: str, problems: list[str]) -> None:
 def check_content(selector: str | None) -> list[str]:
     problems: list[str] = []
     try:
-        sections = all_sections()
+        sections = load_sections([selector.split("/")[0]]) if selector else all_sections()
     except ContentError as err:
         return [str(err)]
     listed: set[Path] = set()
@@ -89,18 +90,26 @@ def check_content(selector: str | None) -> list[str]:
     return problems
 
 
+def file_item(base: Path, path: Path) -> str:
+    """Item id a content or test file belongs to (best effort for helpers)."""
+    rel = path.relative_to(base)
+    name = rel.name
+    for suffix in (".test.cpp", ".hpp", ".cpp", ".py"):
+        if name.endswith(suffix):
+            name = name[: -len(suffix)]
+            break
+    if base == TESTS and name.startswith("test_"):
+        name = name[len("test_") :].replace("_", "-")
+    return f"{rel.parent.as_posix()}/{name}"
+
+
 def scoped_files(selector: str | None, suffixes: tuple[str, ...]) -> list[str]:
     files = []
     for base in (CONTENT, TESTS):
         for path in base.rglob("*"):
-            if path.suffix not in suffixes or not path.is_file():
-                continue
-            rel = path.relative_to(base).as_posix()
-            if selector and not (
-                rel.startswith(selector + "/") or selector in rel.replace("_", "-")
-            ):
-                continue
-            files.append(str(path))
+            if path.suffix in suffixes and path.is_file():
+                if matches(file_item(base, path), selector):
+                    files.append(str(path))
     return sorted(files)
 
 
