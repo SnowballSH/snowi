@@ -1,13 +1,6 @@
 #include "../testlib.hpp"
 #include "../../content/geometry/circles.hpp"
 
-// ASan's fake stacks make each by-value call of a small struct
-// about 1000x slower on this toolchain; geometry code is all such
-// calls and never returns pointers to locals.
-extern "C" const char* __asan_default_options() {
-  return "detect_stack_use_after_return=0";
-}
-
 typedef P<double> Pd;
 
 Pd rnd_pt(double c) { return {rnd_real(-c, c), rnd_real(-c, c)}; }

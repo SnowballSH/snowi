@@ -1,14 +1,6 @@
 #include "../testlib.hpp"
 #include "../../content/numtheory/floor-sum.hpp"
 
-// With ASan+UBSan, GCC 13's fake stacks (stack-use-after-return
-// detection) make small hot functions with addressable locals
-// (here `swap`) up to 1000x slower. Nothing here returns a pointer
-// to a local, so turn the check off.
-extern "C" const char* __asan_default_options() {
-  return "detect_stack_use_after_return=0";
-}
-
 typedef __int128 L;
 
 L floor_div(L x, L m) { return x / m - (x % m < 0); }

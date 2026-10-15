@@ -25,6 +25,10 @@ ICPC packet. The full packet prints everything, plus the `Example`,
 - The code font size is computed in a `context` block from the column
   width so that exactly `line-limit` (64) characters fit; the linter
   enforces 64 columns, so code never wraps.
+- Code longer than 20 lines is split at blank lines into pieces that
+  each stay in one column (pieces over 16 lines may still break), and an
+  item's title, description, usage and file line stick to its first
+  piece, so a column never ends with a header or inside a short function.
 - Inconsolata is a variable font; the packets use weight 500, which
   prints darker than the regular cut at small sizes.
 - The ICPC page limit is checked inside Typst (`counter(page).final()`),
@@ -44,12 +48,24 @@ or comments and blank lines (PyPy, a token stream with indentation as
 structure) removed. Retyped code can be checked against it; the command
 is in the Contest section.
 
+## Packet contents
+
+The ICPC packets carry no contents list and no recognition advice
+(notes wrap cues in `#full[...]`), and textbook facts are left out of all
+notes. `icpc` in `section.toml` may name languages, because the PyPy code
+is longer and its 25 pages fill first.
+
 ## Tests
 
 Every snippet has a stress test per language against an independent
 brute force. C++ tests build with ASan, UBSan and libstdc++ assertions
 (full `_GLIBCXX_DEBUG` combined with ASan was about 300 times slower);
-`<bits/stdc++.h>` is precompiled once per flag set. PyPy tests load
+`<bits/stdc++.h>` is precompiled once per flag set. ASan's fake stacks are
+off (they made small calls about 1000 times slower). Rebuilds are decided
+by content hashes, so restoring a file after a mutation check rebuilds.
+The box is shared and memory-limited: at most one sanitized compile runs
+at a time across all test runs (a file lock), and every test runs in a
+transient systemd scope capped at 1.5 GB, so a runaway mutant dies alone. PyPy tests load
 snippets with `testlib.load`, which executes the files and their declared
 dependencies into one namespace, exactly as pasting them would. Python
 `Example` fields are doctests.

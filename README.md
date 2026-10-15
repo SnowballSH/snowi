@@ -10,15 +10,27 @@ printed packets are generated from the sources with Typst.
 
 | File | Contents |
 |---|---|
-| `snowi-icpc-cpp.pdf` | ICPC team reference document, C++ (at most 25 pages) |
-| `snowi-icpc-py.pdf` | ICPC team reference document, PyPy (at most 25 pages) |
-| `snowi-full-cpp.pdf` | Everything: all snippets, examples, notes, guides (C++) |
-| `snowi-full-py.pdf` | Everything (PyPy) |
+| `snowi-icpc-cpp.pdf` | ICPC team reference document, C++ (24 of 25 pages) |
+| `snowi-icpc-py.pdf` | ICPC team reference document, PyPy (24 of 25 pages) |
+| `snowi-full-cpp.pdf` | Everything: all snippets, examples, notes, guides (C++, 51 pages) |
+| `snowi-full-py.pdf` | Everything (PyPy, 55 pages) |
 
 The ICPC packets follow the North America / World Finals rules: letter
 paper, single-sided, at most 25 pages, university and team name upper
-left, page number upper right. Set the names in `config/packets.toml`. The
-build fails if an ICPC packet goes over the page limit.
+left, page number upper right. **Set your university and team name in
+`config/packets.toml`** (the default is a placeholder). The build fails if
+an ICPC packet goes over the page limit.
+
+The ICPC packets hold code and facts only: no table of contents, no
+recognition advice, no worked examples. The full packets add every
+snippet's Example and Notes fields, the full-only notes, the technique
+finder and a cue table that maps statement shapes to techniques. An item
+can be in the ICPC packet of one language only (`icpc = ["cpp"]` in
+`section.toml`), since PyPy code is longer.
+
+The notes cover every theorem and niche fact needed by the 474 problems of
+the UCup Season 4-5 training set; `docs/COVERAGE.md` describes how this
+was checked.
 
 ## Requirements
 
@@ -33,8 +45,10 @@ build fails if an ICPC packet goes over the page limit.
 ```
 make pdf                      build the four PDFs (one Typst bundle compile)
 make test                     all stress tests: C++ (ASan/UBSan) and PyPy
+                              (each test runs in a 1.5 GB memory scope)
 make test ITEM=ds/segtree     one item; ITEM=ds for a section; ONLY=cpp|py
 make lint                     headers, 64-column code, clang-format, ruff
+python3 tools/build.py --report icpc-py   columns used per entry
 make format                   apply clang-format and ruff format
 make check                    lint, test and pdf
 ```
@@ -51,7 +65,8 @@ fonts/                Inconsolata (OFL), the code font
 ```
 
 `CONTRIBUTING.md` specifies the snippet header format, the code style
-and the test conventions. `docs/DESIGN.md` explains the design choices.
+and the test conventions. `docs/DESIGN.md` explains the design choices,
+`docs/COVERAGE.md` the coverage of the training set.
 
 ## Using a snippet
 
