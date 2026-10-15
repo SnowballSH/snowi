@@ -24,7 +24,8 @@ an ICPC packet goes over the page limit.
 The commands printed in the Contest setup note (compiler, `-std`,
 preprocessor, PyPy and Python commands, and the names of the solution,
 brute force, generator and local judge) come from `[commands]` in
-`config/packets.toml`; change them to match the contest machines.
+`config/packets.toml`; change them to match the contest machines. They are
+only printed: the build on your own machine uses `CXX` and `CPP` (below).
 
 The ICPC packets hold code and facts only: no table of contents, no
 recognition advice, no worked examples. The full packets add every
@@ -43,9 +44,13 @@ was checked.
   the ICPC World Finals version), Python 3.11+ for the tools.
 - For `make lint`: `clang-format` and `ruff` (`uv tool install clang-format ruff`).
 - Tools are looked up on `PATH`, then in `~/.local/bin`; override with
-  `TYPST=...` and `PYPY=...`. The C++ compiler and preprocessor used by
-  the tests and the typing hash are `CXX` (default `g++`) and `CPP`
-  (default `cpp`); both may include arguments, e.g. `CXX="ccache g++"`.
+  `TYPST=...` and `PYPY=...`. The tests compile with `CXX` (default `g++`,
+  arguments allowed, e.g. `CXX="ccache g++"`). `make pdf` needs no C
+  compiler: the typing hash is computed in Python, and `make lint` checks
+  it against GCC's preprocessor `CPP` (default `cpp`) when one is present.
+- macOS: `g++` and `cpp` there are Clang, which lacks `<bits/stdc++.h>` and
+  `-fpreprocessed`. With Homebrew GCC: `make test CXX=g++-16` and
+  `make lint CPP=cpp-16`.
 
 ## Commands
 

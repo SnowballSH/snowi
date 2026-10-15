@@ -21,15 +21,16 @@ sections = [
 
 # ICPC rules: university and team name upper left, page number upper right.
 [team]
-university = "University"
-team = "Team snowi"
+university = "Carnegie Mellon University"
+team = "Team SnowballSH"
 
-# Commands and file names printed in Contest > Setup (and wherever a
-# note uses #cmd). Match them to the contest machines and your habits.
+# Commands and file names PRINTED in Contest > Setup (and wherever a note
+# uses #cmd), for the contest machines. The build does not run them: see
+# README for CXX and CPP on your own machine.
 [commands]
 cxx = "g++"          # C++ compiler
 std = "gnu++20"      # C++ standard, as in -std=...
-cpp = "cpp"          # C preprocessor, for the typing hash
+cpp = "cpp"          # GCC's preprocessor for hash.sh (-fpreprocessed is GCC-only)
 pypy = "pypy3"       # PyPy interpreter
 python = "python3"   # any Python 3, for hash.py
 source = "a"         # the solution: a.cpp or a.py, compiled to ./a

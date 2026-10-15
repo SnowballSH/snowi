@@ -9,6 +9,10 @@ tools/lint.py --fix      apply clang-format and ruff format first
 from __future__ import annotations
 
 import argparse
+import hashlib
+import os
+import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -16,6 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from snowi.hashing import cpp_hash  # noqa: E402
 from snowi.meta import (  # noqa: E402
     CODE_FIELDS,
     CONTENT,
@@ -90,6 +95,45 @@ def check_content(selector: str | None) -> list[str]:
     return problems
 
 
+def gcc_cpp() -> list[str] | None:
+    """GCC's preprocessor (CPP, default cpp) if it supports -fpreprocessed."""
+    command = shlex.split(os.environ.get("CPP", "cpp"))
+    try:
+        probe = subprocess.run(
+            [*command, "-dD", "-P", "-fpreprocessed"],
+            input="a // b\n",
+            capture_output=True,
+            text=True,
+        )
+    except OSError:
+        return None
+    return command if probe.returncode == 0 and probe.stdout.strip() == "a" else None
+
+
+def check_typing_hash(selector: str | None, problems: list[str]) -> None:
+    """The packet's C++ hashes come from snowi.hashing; the printed command
+    is GCC's cpp. Check they agree on every C++ snippet."""
+    command = gcc_cpp()
+    if command is None:
+        print("note: no GCC cpp (set CPP, e.g. CPP=cpp-16); typing hash check skipped")
+        return
+    sections = load_sections([selector.split("/")[0]]) if selector else all_sections()
+    for section in sections:
+        for entry in section.entries:
+            snippet = entry.snippets.get("cpp")
+            if snippet is None or not matches(entry.id, selector):
+                continue
+            out = subprocess.run(
+                [*command, "-dD", "-P", "-fpreprocessed"],
+                input=snippet.code,
+                capture_output=True,
+                text=True,
+            ).stdout
+            want = hashlib.md5(re.sub(r"[ \t\n\v\f\r]", "", out).encode()).hexdigest()[:6]
+            if cpp_hash(snippet.code) != want:
+                problems.append(f"{snippet.rel}: typing hash differs from GCC cpp ({want})")
+
+
 def file_item(base: Path, path: Path) -> str:
     """Item id a content or test file belongs to (best effort for helpers)."""
     rel = path.relative_to(base)
@@ -140,6 +184,7 @@ def main() -> None:
             subprocess.run([ruff, "check", "-q", "--fix", *py_files])
 
     problems = check_content(args.selector)
+    check_typing_hash(args.selector, problems)
     if cpp_files:
         run([clang, "--dry-run", "-Werror", *cpp_files], problems, "clang-format")
     if py_files:
