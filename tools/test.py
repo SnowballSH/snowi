@@ -9,6 +9,8 @@ tools/test.py ds --lang py    one section, one language
 from __future__ import annotations
 
 import argparse
+import contextlib
+import fcntl
 import hashlib
 import os
 import shutil
@@ -126,9 +128,34 @@ def ensure_pch() -> Path:
         header.write_text("#include <bits/stdc++.h>\n")
         partial = gch.with_suffix(f".tmp{os.getpid()}")
         cmd = ["g++", *CXX_FLAGS, "-x", "c++-header", str(header), "-o", str(partial)]
-        subprocess.run(cmd, check=True)
+        with compile_slot():
+            subprocess.run(cmd, check=True)
         os.replace(partial, gch)  # atomic: parallel runs never see half a file
     return header
+
+
+COMPILE_SLOTS = 2  # machine-wide: each sanitized g++ needs up to ~450 MB
+
+
+@contextlib.contextmanager
+def compile_slot():
+    """Hold one of COMPILE_SLOTS file locks shared by every test.py process."""
+    lock_dir = ROOT / "build" / "locks"
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    handles = [open(lock_dir / f"compile-{i}.lock", "w") for i in range(COMPILE_SLOTS)]
+    try:
+        while True:
+            for handle in handles:
+                try:
+                    fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except BlockingIOError:
+                    continue
+                yield
+                return
+            time.sleep(0.2)
+    finally:
+        for handle in handles:
+            handle.close()
 
 
 def run_cpp(job: Job, pch: Path) -> Result:
@@ -139,7 +166,8 @@ def run_cpp(job: Job, pch: Path) -> Result:
     if not up_to_date(binary, depfile, stamp):
         cmd = ["g++", *CXX_FLAGS, "-include", str(pch), "-MMD", "-MF", str(depfile)]
         cmd += [str(job.path), "-o", str(binary)]
-        build = subprocess.run(cmd, capture_output=True, text=True)
+        with compile_slot():
+            build = subprocess.run(cmd, capture_output=True, text=True)
         if build.returncode != 0 or "warning:" in build.stderr:
             binary.unlink(missing_ok=True)
             return Result(job, False, time.perf_counter() - start, build.stderr)
