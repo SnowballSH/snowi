@@ -9,22 +9,34 @@ second and (unsigned) first kind, $x^(underline(k)) = x (x - 1) dots
 - $binom(n, m) binom(m, k) = binom(n, k) binom(n - k, m - k)$ (pick
   the inner set first).
 - Vandermonde: $sum_i binom(m, i) binom(n, k - i) = binom(m + n, k)$;
-  squares: $sum_k binom(n, k)^2 = binom(2n, n)$.
+  squares: $sum_k binom(n, k)^2 = binom(2n, n)$. Upper indices:
+  $sum_(k = 0)^N binom(k, a) binom(N - k, b) = binom(N + 1, a + b + 1)$
+  ($k$ is the $(a + 1)$-th chosen element).
 - Hockey stick: $sum_(i = r)^n binom(i, r) = binom(n + 1, r + 1)$,
   $sum_(i = 0)^k binom(n + i, i) = binom(n + k + 1, k)$.
-- $(1 - x)^(-n) = sum_k binom(n + k - 1, k) x^k$.
 - Bounded stars and bars: $x_1 + dots + x_k = n$ with
   $0 <= x_i <= c$ has
   $sum_j (-1)^j binom(k, j) binom(n - j (c + 1) + k - 1, k - 1)$
-  solutions.
+  solutions; for a sum $<= n$ use $binom(n - j (c + 1) + k, k)$.
+- Compositions of $n$ into $p$ positive parts: $binom(n - 1, p - 1)$.
+  Summed over all of them, the product of $r$ fixed parts is
+  $binom(n + r - 1, p + r - 1)$.
 
 === Paths and Catalan numbers
 #fact[Reflection][$plus.minus 1$ walks of $n$ steps from $a$ to $b$:
   $W(b - a)$ with $W(d) = binom(n, (n + d)\/2)$ (0 if parity
   differs). For $a, b >= 0$, those that never go below 0:
-  $W(b - a) - W(a + b + 2)$ (reflect the start across $-1$). Grid
-  paths to $(n, m)$, $m <= n$, never more ups than rights:
+  $W(b - a) - W(a + b + 2)$ (reflect the start across $-1$). Inside
+  $[0, w]$: $sum_(j in ZZ) (W(b - a + 2j(w + 2)) - W(-a - b - 2 +
+  2j(w + 2)))$, $O(n\/w)$ nonzero terms. Grid paths to $(n, m)$,
+  $m <= n$, never more ups than rights:
   $binom(n + m, m) - binom(n + m, m - 1)$.]
+#fact[Sticky walk][$x_0 = 0$, $x_t = max(0, x_(t - 1) + s_t)$ for
+  steps $s_t = plus.minus 1$ (Kadane: $max_t x_t$ is the largest
+  subarray sum, empty allowed). The free walk $y$ from 0 that steps
+  $s_t$ from $y >= 0$ and $-s_t$ from $y < 0$ is a bijection with
+  $x = y$ or $x = -1 - y$, so $max_t x_t <= k$ iff $y$ stays in
+  $[-k - 1, k]$: a strip, as above.]
 #fact[Ballot][$A$ gets $a$ votes, $B$ gets $b < a$: $A$ stays strictly
   ahead during a random count with probability $(a - b)\/(a + b)$.]
 #fact[Catalan][1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796.
@@ -38,7 +50,8 @@ second and (unsigned) first kind, $x^(underline(k)) = x (x - 1) dots
   (stack-sortable) permutations.]
 
 === Stirling, Bell, partitions
-#fact[First kind][$c(n, k)$: permutations of $n$ with $k$ cycles.
+#fact[First kind][$c(n, k)$: permutations of $n$ with $k$ cycles,
+  or with $k$ prefix maxima.
   $c(n + 1, k) = n c(n, k) + c(n, k - 1)$;
   $x^(overline(n)) = sum_k c(n, k) x^k$; $c(n, 1) = (n - 1)!$.]
 #fact[Second kind][$S(n, k)$: partitions of $n$ labelled items into
@@ -56,9 +69,6 @@ second and (unsigned) first kind, $x^(underline(k)) = x (x - 1) dots
   $k$ parts:
   $p_k (n) = p_(k - 1) (n - 1) + p_k (n - k)$. Distinct parts and
   odd parts are equinumerous.]
-#fact[Derangements][$D_n = (n - 1)(D_(n - 1) + D_(n - 2))$
-  $= n D_(n - 1) + (-1)^n approx n!\/e$, starting 1, 0, 1, 2, 9, 44,
-  265, 1854, 14833. Exactly $k$ fixed points: $binom(n, k) D_(n - k)$.]
 
 === Twelvefold way
 $n$ balls into $k$ boxes; L = labelled, U = identical. $p_k (n)$ =
@@ -74,6 +84,29 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
   [U, U], [$p_k (n + k)$], [$[n <= k]$], [$p_k (n)$],
 )
 
+=== Permutations and tableaux
+#fact[Derangements][$D_n = (n - 1)(D_(n - 1) + D_(n - 2))$
+  $= n D_(n - 1) + (-1)^n approx n!\/e$, starting 1, 0, 1, 2, 9, 44,
+  265, 1854, 14833. Exactly $k$ fixed points: $binom(n, k) D_(n - k)$.]
+#fact[Position bounds][Permutations with $p_i <= b_i$ for all $i$:
+  cap the $b_i$ at $n$ and sort them ascending, then
+  $product_(i = 1)^n max(0, b_((i)) - i + 1)$ (fill the tightest
+  position first). For $p_i >= a_i$ apply it to
+  $n + 1 - p_i <= n + 1 - a_i$.]
+#fact[Prefix maxima][Insert the values $n, n - 1, dots, 1$: $x$ is a
+  prefix maximum iff it goes in front (1 of $n - x + 1$ places). So
+  a given set $S in.rev n$ of prefix-maximum values has
+  $product_(x in.not S) (n - x)$ permutations.]
+#fact[Hook length][Standard Young tableaux of shape $lambda$:
+  $f^lambda = n! \/ product "hook"(c)$, the hook of cell $c$ being $c$,
+  the cells right of it in its row and below it in its column.
+  RSK: permutations biject
+  with pairs of tableaux of one shape ($sum (f^lambda)^2 = n!$), with
+  LIS $= lambda_1$ and LDS = number of rows. Involutions biject with
+  single tableaux, fixed points = number of odd-length columns.]
+#fact[Tree orders][Orders of the vertices of a rooted forest with
+  every vertex before its descendants: $n! \/ product_v "size"(v)$.]
+
 === Inclusion-exclusion and inversion
 #fact[PIE][Objects in no bad event: $sum_(S) (-1)^(|S|) g(S)$ where
   $g(S)$ counts objects in every event of $S$ (force $S$, leave the
@@ -86,20 +119,17 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
 #fact[Subsets][$g(S) = sum_(T subset.eq S) f(T) <=> f(S) =
   sum_(T subset.eq S) (-1)^(|S| - |T|) g(T)$; $O(2^n n)$ with
   `poly/subset-transforms`.]
-#fact[Divisors][From $sum_(d | n) mu(d) = [n = 1]$:
-  if $g(n) = sum_(d | n) f(d)$ then $f(n) = sum_(d | n) mu(n\/d) g(d)$.
-  Over multiples, $g(d) = sum_(d | m) f(m)$ gives
-  $f(d) = sum_(d | m) mu(m\/d) g(m)$: "gcd exactly $d$" from "all
-  divisible by $d$". Without $mu$: $f(d) = g(d) -
-  sum_(m = 2d, 3d, dots) f(m)$ for $d$ descending, $O(V log V)$.]
+#fact[Multiples][With $g(d)$ counting objects whose values are all
+  divisible by $d$, "gcd exactly $d$" is $f(d) = g(d) -
+  sum_(m = 2d, 3d, dots) f(m)$ for $d$ descending, $O(V log V)$; or
+  Möbius over multiples (Number theory facts).]
 #fact[Stirling inversion][Count with collisions allowed, then
   remove them: \
   $h(n) = sum_j S(n, j) a(j) <=> a(n) =
   sum_j (-1)^(n - j) c(n, j) h(j)$.]
 #fact[Min-max][$max(S) = sum_(emptyset != T subset.eq S)
-  (-1)^(|T| + 1) min(T)$, also in expectation: the expected time to
-  collect all coupons is $sum_T (-1)^(|T| + 1) \/ P(T)$ with
-  $P(T) = sum_(i in T) p_i$.]
+  (-1)^(|T| + 1) min(T)$, also in expectation (unequal coupons:
+  Probability and expectation).]
 
 === Symmetry, trees, determinants
 #fact[Burnside][Orbits $= 1/(|G|) sum_(g in G) |"Fix"(g)|$; a
@@ -109,18 +139,18 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
 #fact[Cayley][$n^(n - 2)$ labelled trees, $n^(n - 1)$ rooted.
   Degrees $d_i$: $(n - 2)! \/ product_i (d_i - 1)!$. Forests with $k$
   trees whose roots are $k$ given vertices: $k n^(n - k - 1)$.
-  $K_(n, m)$ has $n^(m - 1) m^(n - 1)$ spanning trees.]
+  $K_(n, m)$ has $n^(m - 1) m^(n - 1)$ spanning trees. Spanning
+  trees of any graph (matrix-tree): Graph theory facts.]
 #fact[Prüfer][Remove the smallest leaf $n - 2$ times, writing its
   neighbour: a bijection between labelled trees and $[n]^(n - 2)$;
   vertex $v$ appears $deg(v) - 1$ times.]
-#fact[Kirchhoff][Spanning trees = any cofactor of the Laplacian
-  $D - A$ (multi-edges allowed); determinant by `linalg/gauss-mod`.]
 #fact[LGV][Vertex-disjoint path systems $a_i -> b_(sigma(i))$ in a
   DAG: $det(M)$ with $M_(i j)$ = number of paths $a_i -> b_j$ counts
   them with sign $"sgn"(sigma)$. If only $sigma = "id"$ can be
   disjoint (planar, ends in order), it is the count.]
 #fact[Lucas][$binom(n, k) equiv product_i binom(n_i, k_i)$ mod $p$ for
-  base-$p$ digits $n_i, k_i$; odd iff `(k & ~n) == 0`.]
+  base-$p$ digits $n_i, k_i$; odd iff `(k & ~n) == 0`. For fixed
+  $k < p$, $binom(m, k) equiv binom(m mod p, k)$: $p$-periodic in $m$.]
 #fact[Kummer][The exponent of $p$ in $binom(n, k)$ is the number of
   carries when adding $k$ and $n - k$ in base $p$. Legendre: \
   $v_p (n!) = sum_(i >= 1) floor(n\/p^i) = (n - s_p (n))\/(p - 1)$,
@@ -165,16 +195,29 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
   $x^n = sum_k A(n, k) binom(x + k, n)$.]
 #fact[Narayana][$N(n, k) = 1/n binom(n, k) binom(n, k - 1)$: Dyck
   paths with $k$ peaks; $sum_k N(n, k) = C_n$.]
-- Compositions of $n >= 1$ into $k$ positive parts:
-  $binom(n - 1, k - 1)$; into any number: $2^(n - 1)$.
-- Walks of $n$ steps $plus.minus 1$ from $x$ to $y$ inside $[0, w]$:
-  $sum_(j in ZZ) (W(y - x + 2j(w + 2)) - W(-y - 2 - x +
-  2j(w + 2)))$, reflecting across $-1$ and $w + 1$ alternately.
+- Dissections of a convex $n$-gon by $k$ non-crossing diagonals:
+  $1/(k + 1) binom(n - 3, k) binom(n + k - 1, k)$; with restricted
+  face sizes see the cycle lemma in Generating functions.
+- Binary trees and forests: the left child is the first child and
+  the right child the next sibling. Binary preorder is forest
+  preorder and binary inorder is forest postorder; in the forest's
+  bracket string the $k$-th "(" belongs to the $k$-th vertex in
+  preorder and the $k$-th ")" to the $k$-th in postorder.
+- Monotone paths that must stay on one side of a monotone
+  staircase: divide and conquer over columns. A rectangle the
+  staircase does not cut passes the counts on its left and bottom
+  edges to its right and top edges by convolutions with binomials,
+  $O(N log^2 N)$ in all.
 - $k$-th largest by min-max:
   $sum_(|T| >= k) (-1)^(|T| - k) binom(|T| - 1, k - 1) min(T)$.
 - Bracelets (rotations and reflections): necklaces$\/2$ plus
   $k^((n + 1)\/2)\/2$ for odd $n$, $(k + 1) k^(n\/2)\/4$ for even
   $n$. Cube faces: $(k^6 + 3k^4 + 12k^3 + 8k^2)\/24$.
+- Translations of the torus $ZZ_n^r$: exactly $J_r (d) = d^r
+  product_(p | d) (1 - p^(-r))$ of them have order $d$ (for
+  $d | n$), and such a shift splits the $m$ cells (or edges) into
+  cycles of length $d$. Colourings of an $n times n$ torus up to
+  translation: $1/n^2 sum_(d | n) J_2 (d) k^(m\/d)$.
 - $k$-ary trees with $n$ internal nodes:
   $1/((k - 1) n + 1) binom(k n, n)$.
 - Kummer corollaries: $binom(2n, n)$ is even for $n >= 1$;
@@ -189,8 +232,12 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
 - "Never below zero", "prefix balance", "first return":
   reflection or Catalan; a step sequence with steps $>= -1$
   summing to $-1$ has exactly one valid rotation (cycle lemma).
+  "Maximum subarray sum" of a $plus.minus 1$ sequence: sticky walk.
 - "Up to rotation", "distinct colourings": Burnside.
 - "Non-intersecting paths", "disjoint routes in a grid": LGV.
+- "Value at position $i$ at most $b_i$", "$max_i i a_i <= k$":
+  position bounds. LIS or LDS over all permutations or matchings:
+  RSK and hook lengths.
 - gcd conditions: Möbius over multiples; mod a small prime with
   $n >= p$: Lucas.
 - Answer sequence for small $n$ looks familiar: compare with the

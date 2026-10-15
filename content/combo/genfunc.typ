@@ -2,10 +2,10 @@
 
 A generating function packs a sequence into a power series;
 $[x^n] A$ is the coefficient of $x^n$. Model the objects, write an
-equation between series, then extract coefficients with `poly/`.
-Everything is modulo a prime, so division by $n$ is fine for
-$n < p$. $S$ and $c$ are the Stirling numbers of Counting
-formulas.
+equation between series, then extract coefficients (the algorithms
+are in Polynomial techniques). Everything is modulo a prime, so
+division by $n$ is fine for $n < p$. $S$ and $c$ are the Stirling
+numbers of Counting formulas.
 
 === OGF or EGF
 #fact[OGF][$A(x) = sum_n a_n x^n$ for unlabelled objects glued in
@@ -28,10 +28,9 @@ formulas.
 )
 
 === Common series
-- $1\/(1 - a x) = sum_n a^n x^n$, $(1 + x)^m = sum_k binom(m, k) x^k$,
-  \ $1\/(1 - x)^k = sum_n binom(n + k - 1, k - 1) x^n$.
-- $x\/(1 - x)^2 = sum_n n x^n$, $x (1 + x)\/(1 - x)^3 = sum_n n^2 x^n$.
-- $ln 1\/(1 - x) = sum_(n >= 1) x^n\/n$; Fibonacci $x\/(1 - x - x^2)$.
+- $1\/(1 - x)^k = sum_n binom(n + k - 1, k - 1) x^n$,
+  $x (1 + x)\/(1 - x)^3 = sum_n n^2 x^n$,
+  $ln 1\/(1 - x) = sum_(n >= 1) x^n\/n$.
 - Catalan numbers: $(1 - sqrt(1 - 4x))\/(2x)$; central binomials:
   $1\/sqrt(1 - 4x) = sum_n binom(2n, n) x^n$.
 - EGFs: Bell $e^(e^x - 1)$, $S(dot, k)$: $(e^x - 1)^k\/k!$,
@@ -46,22 +45,33 @@ formulas.
   $product_(k in T) 1\/(1 - x^k)$. Pentagonal theorem:
   $product_(k >= 1) (1 - x^k) = sum_(j in ZZ) (-1)^j x^(j (3j - 1)\/2)$, so
   $p(0..n)$ is one series inverse.
+- Symmetric sums of $a_1, dots, a_m$ with power sums
+  $p_k = sum_i a_i^k$: $sum_k e_k t^k = product_i (1 + a_i t) =
+  exp(sum_(k >= 1) (-1)^(k - 1) p_k t^k\/k)$; Newton:
+  $k e_k = sum_(i = 1)^k (-1)^(i - 1) e_(k - i) p_i$.
 
 === Operations
-- Shifts: $x^m A$ gives $a_(n - m)$; $(A - a_0)\/x$ gives $a_(n + 1)$.
-  Prefix sums: $A\/(1 - x)$. Differences: $(1 - x) A$.
-- $x A'$ gives $n a_n$ (OGF); for an EGF, $A'$ gives $a_(n + 1)$.
-  $A(c x)$ gives $c^n a_n$; $A(x^k)$ spreads the terms.
-- Product = convolution (`poly/ntt`); binomial convolution
-  $sum_i binom(n, i) a_i b_(n - i)$ = EGF product.
+- $x A'$ gives $n a_n$, $A\/(1 - x)$ prefix sums, $A(c x)$ gives
+  $c^n a_n$, $A(x^k)$ spreads the terms; for an EGF, $A'$ gives
+  $a_(n + 1)$.
 - Binomial transform: $b_n = sum_k binom(n, k) a_k$ iff
-  $B = e^x A$ as EGFs; invert with $e^(-x)$.
+  $B = e^x A$ as EGFs; invert with $e^(-x)$. So $a_k = (Delta^k
+  b)(0)$ and $b(m) = sum_k binom(m, k) (Delta^k b)(0)$ (Newton
+  series).
 - Even part $(A(x) + A(-x))\/2$. Sum of $a_n$ over $n equiv r$
   (mod $k$): $1/k sum_(j < k) omega^(-j r) A(omega^j)$ with $omega$ a
   primitive $k$-th root of unity (mod $p$ it exists iff
-  $k | p - 1$).
+  $k | p - 1$). Several such constraints (every row sum and column
+  sum $equiv 0$): give each its own root; if a term depends only
+  on how many constraints took each root, sum over those counts
+  with multinomial weights.
 - Taylor shift $A(x + c)$: $n! [x^n] = sum_(m >= n) m! a_m c^(m - n)
   \/ (m - n)!$, one convolution after reversing.
+- $sum_m b_m binom(m, k - m) = [x^k] B(x + x^2)$. A quadratic
+  inside a polynomial $A$ costs two Taylor shifts:
+  $A(a x^2 + b x + c) = h(a (x +
+  b\/(2a))^2)$ with $h(z) = A(z + c - b^2\/(4a))$: shift, multiply
+  $h_i$ by $a^i$, spread to even powers, shift by $b\/(2a)$.
 - Composition $A(B(x))$ with $B(0) = 0$ substitutes a $B$-structure
   for every atom. Naive: Horner on truncated series,
   $O(n^2 log n)$ with NTT.
@@ -83,6 +93,16 @@ formulas.
   $n p_0 q_n = sum_(i = 1)^d ((N + 1) i - n) p_i q_(n - i)$ with
   $d = deg P$. That is $O(d)$ per coefficient with $1\/n$
   precomputed (indices $n < p$); no NTT, good for $N = 10^7$.
+- The same works whenever $A'\/A$ is rational. For
+  $A = e^(a x) product_i P_i^(N_i)$ with $P_i (0) = 1$: $Q A' = R A$
+  with $Q = product_i P_i$, $R = a Q + sum_i N_i P'_i Q\/P_i$, so
+  $(n + 1) a_(n + 1) = sum_j r_j a_(n - j) -
+  sum_(j >= 1) q_j (n + 1 - j) a_(n + 1 - j)$.
+- A recursion in a parameter, $F_(k + 1) = (a F_k + b)\/(c F_k + d)$
+  with series $a, b, c, d$: keep $F_k = S_k\/D_k$, then
+  $S_(k + 1) = a S_k + b D_k$, $D_(k + 1) = c S_k + d D_k$, a
+  $2 times 2$ matrix of series to the $k$-th power (products mod
+  $x^(n + 1)$), $O(n log n log k)$; divide once at the end.
 
 === Exponential formula
 #fact[Components][If every labelled structure is a set of
@@ -108,6 +128,10 @@ formulas.
   $n, k >= 1$: $[x^n] F^k = k/n [t^(n - k)] R(t)^n$, and
   $[x^n] H(F) = 1/n [t^(n - 1)] H'(t) R(t)^n$. If instead the
   compositional inverse $G$ of $F$ is known, $R(t) = t\/G(t)$.]
+#fact[Other forms][For $n >= 0$: $[x^n] H(F) = [t^n] H(t) R(t)^(n - 1)
+  (R(t) - t R'(t))$ (no derivative of $H$; for $R = e^t$ it is
+  $[t^n] H(t) e^(n t) (1 - t)$). All $n$ at once:
+  $sum_n x^n [t^n] H(t) R(t)^n = H(F) \/ (1 - x R'(F))$.]
 - Binary trees $B = x (1 + B)^2$: $[x^n] B = 1/n binom(2n, n - 1) =
   C_n$. Trees with child counts from $D$: $R(t) = sum_(d in D) t^d$;
   $k$-ary trees: $1/((k - 1) n + 1) binom(k n, n)$.
@@ -117,21 +141,26 @@ formulas.
   rotation whose proper prefix sums are all $>= 0$. Write a plane
   tree in preorder as (children $- 1$) per node: trees with a
   given multiset of child counts number (arrangements)$\/n$.
+- Dissections of an $N$-gon are plane trees: a $c$-gon is a node
+  with $c - 1$ children, the $N - 1$ sides other than the root side
+  are leaves. With $k$ diagonals and face sizes in $S$:
+  $1/(N + k) binom(N + k, k + 1) [x^(N - 2)] (sum_(s in S)
+  x^(s - 2))^(k + 1)$.
 - "For every $k$" ($[x^n] F^k$ for all $k$): one power $R^n$ gives
-  all of them.
+  all of them. Without a usable $R$ ($F'(0) = 0$) this is power
+  projection: $O(n log^2 n)$ by Kinoshita-Li, the transpose of
+  composition (no snippet here).
+- $G$ without a closed form: if $F$ satisfies a differential
+  equation in $u$, put $u = G(x)$ with $F(G) = x$ and
+  $F'(G) = 1\/G'$; the result determines $G$ coefficient by
+  coefficient (online convolution when it is quadratic in $G$).
 
-=== Toolbox
-- Products: `poly/ntt` ($O(n log n)$); many small factors: divide
-  and conquer, $O(n log^2 n)$.
-- $1\/A$, $ln A$, $exp A$, $A^k$ mod $x^n$: `poly/poly-ops`, Newton,
-  $O(n log n)$. $ln$ needs $a_0 = 1$, $exp$ needs $a_0 = 0$.
-- $n$-th term of a rational series: `poly/linear-rec`. Answer is a
-  polynomial in a parameter: `poly/lagrange`. OR, AND, XOR
-  convolutions: `poly/subset-transforms`.
-- $O(n^2)$ is fine up to $n approx 5000$: inverse
-  $b_n = -sum_(i = 1)^n a_i b_(n - i)$ ($a_0 = 1$); $E = exp A$ from
-  $n e_n = sum_(k = 1)^n k a_k e_(n - k)$; $L = ln A$ from
-  $n a_n = sum_(k = 1)^n k l_k a_(n - k)$.
+=== Without NTT
+$O(n^2)$ is fine up to $n approx 5000$: inverse
+$b_n = -sum_(i = 1)^n a_i b_(n - i)$ ($a_0 = 1$); $E = exp A$ from
+$n e_n = sum_(k = 1)^n k a_k e_(n - k)$ ($a_0 = 0$); $L = ln A$ from
+$n a_n = sum_(k = 1)^n k l_k a_(n - k)$ ($a_0 = 1$). With NTT:
+`poly/poly-ops` and Polynomial techniques.
 
 === Pitfalls
 - Labelled vs unlabelled gives plausible wrong numbers: check
@@ -140,11 +169,10 @@ formulas.
   ($R(0) = 0$) does not apply directly.
 - Constants: $a^(binom(n, 2))$ reduces the exponent mod $p - 1$, but
   $k dot ln A$ multiplies by $k$ mod $p$.
-- Truncate every product to the needed length; resize after each
-  multiplication.
 - Expected values are (sum over objects)$\/$(number of objects):
   extract both coefficients, divide once at the end.
 - Cues: "count objects of size $n$ mod 998244353" with a recursive
   shape; "for each $k$"; "connected"; "expected number of
-  components"; "prefix stays non-negative" (cycle lemma); $n$ near
+  components"; "prefix stays non-negative" (cycle lemma); a
+  recursion in a value bound $k$ (2 by 2 matrix power); $n$ near
   $10^7$ means an $O(n)$ recurrence, not NTT.
