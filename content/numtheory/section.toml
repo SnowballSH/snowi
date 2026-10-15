@@ -1,0 +1,41 @@
+title = "Number theory"
+
+[[entry]]
+item = "modpow"
+icpc = true
+
+[[entry]]
+item = "modint"
+langs = ["cpp"]
+
+[[entry]]
+item = "euclid"
+icpc = true
+
+[[entry]]
+item = "sieve"
+icpc = true
+
+[[entry]]
+item = "factor"
+icpc = true
+
+[[entry]]
+item = "discrete-log"
+
+[[entry]]
+item = "mod-sqrt"
+
+[[entry]]
+item = "primitive-root"
+
+[[entry]]
+item = "floor-sum"
+
+[[entry]]
+item = "prime-count"
+
+[[entry]]
+note = "theorems"
+title = "Number theory facts"
+icpc = true

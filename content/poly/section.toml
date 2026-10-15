@@ -1,0 +1,32 @@
+title = "Polynomials and transforms"
+
+[[entry]]
+item = "ntt"
+icpc = true
+
+[[entry]]
+item = "fft"
+icpc = true
+
+[[entry]]
+item = "fft-mod"
+icpc = true
+
+[[entry]]
+item = "poly-ops"
+
+[[entry]]
+item = "linear-rec"
+icpc = true
+
+[[entry]]
+item = "lagrange"
+icpc = true
+
+[[entry]]
+item = "subset-transforms"
+icpc = true
+
+[[entry]]
+note = "techniques"
+title = "Polynomial techniques"

@@ -1,0 +1,35 @@
+title = "Geometry"
+
+[[entry]]
+item = "point"
+icpc = true
+
+[[entry]]
+item = "lines"
+icpc = true
+
+[[entry]]
+item = "polygon"
+icpc = true
+
+[[entry]]
+item = "convex-hull"
+icpc = true
+
+[[entry]]
+item = "circles"
+icpc = true
+
+[[entry]]
+item = "closest-pair"
+
+[[entry]]
+item = "half-plane"
+
+[[entry]]
+item = "minkowski"
+
+[[entry]]
+note = "formulas"
+title = "Geometry facts"
+icpc = true

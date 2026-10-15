@@ -1,0 +1,40 @@
+title = "Strings"
+
+[[entry]]
+item = "prefix-function"
+icpc = true
+
+[[entry]]
+item = "z-function"
+icpc = true
+
+[[entry]]
+item = "manacher"
+icpc = true
+
+[[entry]]
+item = "string-hash"
+icpc = true
+
+[[entry]]
+item = "suffix-array"
+icpc = true
+
+[[entry]]
+item = "suffix-automaton"
+icpc = true
+
+[[entry]]
+item = "aho-corasick"
+icpc = true
+
+[[entry]]
+item = "lyndon"
+
+[[entry]]
+item = "eertree"
+
+[[entry]]
+note = "facts"
+title = "String facts"
+icpc = true

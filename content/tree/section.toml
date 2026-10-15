@@ -1,0 +1,35 @@
+title = "Trees"
+
+[[entry]]
+item = "lca"
+icpc = true
+
+[[entry]]
+item = "lca-rmq"
+
+[[entry]]
+item = "hld"
+icpc = true
+
+[[entry]]
+item = "centroid"
+icpc = true
+
+[[entry]]
+item = "virtual-tree"
+icpc = true
+
+[[entry]]
+item = "rerooting"
+icpc = true
+
+[[entry]]
+item = "link-cut"
+
+[[entry]]
+item = "tree-hash"
+
+[[entry]]
+note = "techniques"
+title = "Tree techniques"
+icpc = true

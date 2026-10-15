@@ -1,0 +1,11 @@
+title = "Mathematics"
+
+[[entry]]
+note = "formulas"
+title = "Formulas"
+icpc = true
+
+[[entry]]
+note = "probability"
+title = "Probability and expectation"
+icpc = true

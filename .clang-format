@@ -1,0 +1,33 @@
+# Compact style for 64-column packet columns.
+BasedOnStyle: LLVM
+ColumnLimit: 64
+IndentWidth: 2
+ContinuationIndentWidth: 4
+AccessModifierOffset: -2
+AllowShortBlocksOnASingleLine: Always
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLambdasOnASingleLine: All
+AllowShortLoopsOnASingleLine: true
+AllowShortCompoundRequirementOnASingleLine: true
+AlwaysBreakTemplateDeclarations: No
+BreakBeforeBraces: Attach
+Cpp11BracedListStyle: true
+ForEachMacros: [rep]
+IncludeBlocks: Preserve
+KeepEmptyLines:
+  AtEndOfFile: false
+  AtStartOfBlock: false
+  AtStartOfFile: false
+MaxEmptyLinesToKeep: 1
+PointerAlignment: Left
+ReflowComments: false
+SortIncludes: Never
+SpaceAfterTemplateKeyword: false
+SpaceBeforeParens: Custom
+SpaceBeforeParensOptions:
+  AfterControlStatements: true
+  AfterForeachMacros: false
+Standard: c++20

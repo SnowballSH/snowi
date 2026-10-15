@@ -1,0 +1,11 @@
+# Snippets: PyPy 3.9, 64 columns, 2-space indent (packet layout).
+extend = "../ruff.toml"
+line-length = 64
+indent-width = 2
+target-version = "py39"
+
+[lint]
+select = ["E4", "E7", "E9", "F", "B"]
+# Names from `Uses:` dependencies are defined in another snippet;
+# the stress tests catch genuinely undefined names at run time.
+ignore = ["E741", "E731", "F821", "B008"]

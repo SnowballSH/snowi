@@ -1,0 +1,47 @@
+title = "Graphs"
+
+[[entry]]
+item = "dijkstra"
+icpc = true
+
+[[entry]]
+item = "bellman-ford"
+icpc = true
+
+[[entry]]
+item = "floyd-warshall"
+icpc = true
+
+[[entry]]
+item = "topo-sort"
+icpc = true
+
+[[entry]]
+item = "scc"
+icpc = true
+
+[[entry]]
+item = "two-sat"
+icpc = true
+
+[[entry]]
+item = "bcc"
+icpc = true
+
+[[entry]]
+item = "euler-path"
+icpc = true
+
+[[entry]]
+item = "directed-mst"
+
+[[entry]]
+item = "dominator-tree"
+
+[[entry]]
+item = "max-clique"
+
+[[entry]]
+note = "theory"
+title = "Graph theory facts"
+icpc = true
