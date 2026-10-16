@@ -5,7 +5,7 @@
  *   `LLONG_MIN` if paths to `v` can be arbitrarily short (`v` is
  *   reachable from a negative cycle that `s` reaches). For finite
  *   `dist[v]`, `par[v]` is the vertex before `v` on a shortest path
- *   (-1 for `s`): follow it back to `s` to get the path.
+ *   (-1 for `s`).
  * Precondition: Edges `(a, b, w)` are directed `a -> b`; vertices
  *   0-indexed. `ll` must hold $W n m$, where $W$ is the largest
  *   $|w|$.
@@ -14,12 +14,13 @@
  *   vector<tuple<int, int, ll>> edges; // a -> b, weight w
  *   BellmanFord bf(n, edges, s);
  *   if (bf.dist[v] == LLONG_MIN) ... // no shortest path
- * Tweak: Any negative cycle at all (not only reachable from `s`):
- *   add a vertex `n` with 0-weight edges to every vertex and use it
- *   as `s`. Longest paths: negate the weights. Real weights
- *   (arbitrage): `double` for `ll` in `dist` and `edges` (the
- *   sentinels still work), and relax only if
- *   `da + w < dist[b] - 1e-9`, or rounding fakes negative cycles.
+ * Tweak: Print a negative cycle (any one if `dist` starts all 0):
+ *   relax plainly for $n$ rounds (no `LLONG_MIN` marking); if round
+ *   $n$ still relaxes some `b`, follow `par` from `b` $n$ times,
+ *   then once around. Real weights (arbitrage): `double` for `ll`
+ *   in `dist` and `edges` (the sentinels still work), and relax
+ *   only if `da + w < dist[b] - 1e-9`, or rounding fakes negative
+ *   cycles.
  * Example:
  *   // Difference constraints x[b] - x[a] <= w: edge a -> b
  *   // with weight w, plus the source n. Feasible iff no -inf;
@@ -32,10 +33,7 @@
  *   (Example), "is there a cycle that gains money", or potentials
  *   for Johnson's all-pairs algorithm (then Dijkstra on $w(u, v) +
  *   d(u) - d(v) >= 0$). An undirected negative edge is already a
- *   negative cycle. To print a negative cycle, relax plainly for
- *   $n$ rounds (no `LLONG_MIN` marking); if round $n$ still
- *   relaxes some `x`, follow `par` from `x` $n$ times to land on a
- *   negative cycle, then once around it. SPFA (queue-based) has
+ *   negative cycle. SPFA (queue-based) has
  *   the same worst case and is often targeted by anti-tests.
  * Source: kactl BellmanFord (CC0), simplified (no edge sorting).
  * Status: stress-tested against walk-length dynamic programming

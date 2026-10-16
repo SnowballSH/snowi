@@ -5,22 +5,14 @@
  *   reached; `par[v]` is the vertex before `v` on a shortest path
  *   (-1 for sources and unreachable vertices). `path(t)` lists a
  *   shortest path from a source to `t`, empty if unreachable.
- * Precondition: `adj[u]` holds pairs `(v, w)` for edges `u -> v`
- *   (add both directions for an undirected graph). Vertices are
- *   0-indexed, `w >= 0`, and the sum of all weights fits in `ll`
- *   (else `d + w` can overflow).
+ * Precondition: `adj[u]` holds pairs `(v, w)` for edges `u -> v`;
+ *   0-indexed, `w >= 0`, the sum of all weights fits in `ll`.
  * Time: $O((n + m) log m)$.
  * Usage:
  *   vector<vector<pair<int, ll>>> adj(n);
  *   adj[u].push_back({v, w});
  *   Dijkstra dj(adj, {s}); // or several sources
  *   ll d = dj.dist[t]; vi p = dj.path(t);
- * Tweak: Dense graphs ($m approx n^2$): an $O(n^2)$ loop that
- *   picks the closest unfinished vertex beats the heap. Bottleneck
- *   paths (maximize the smallest edge): `dist` starts at -1 and
- *   sources at `LLONG_MAX`; use a max-heap, skip if `d < dist[u]`,
- *   relax if `min(d, w) > dist[v]`, and test `dist[t] >= 0` in
- *   `path`.
  * Example:
  *   // Dijkstra on states (vertex, coupons used): a coupon halves
  *   // one edge, at most k coupons in total.

@@ -5,10 +5,7 @@
  *   `k`-th smallest value (0-indexed) of `a[l, r)`,
  *   `count_less(l, r, x)` counts its values `< x`,
  *   `count(l, r, lo, hi)` its values in `[lo, hi)`, and
- *   `rank(x, r)` the copies of `x` in `a[0, r)`. Level `h` stores
- *   bit `h` of every value as a bit vector with popcount prefix
- *   sums, then moves the values whose bit `h` is 0 to the front
- *   (stably): that is the order level `h - 1` sees.
+ *   `rank(x, r)` the copies of `x` in `a[0, r)`.
  * Precondition: 0-indexed, half-open ranges, $0 <= a_i < 2^62$.
  *   `kth` needs `0 <= k < r - l`; any `ll` `x` is fine elsewhere.
  * Time: $O(n log V)$ build and $O(log V)$ per query, where $V$ is

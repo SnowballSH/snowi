@@ -1,12 +1,6 @@
 /**
  * Title: Gaussian elimination (real)
- * Description: Gauss-Jordan elimination on doubles with partial
- *   pivoting. `gauss_real(a, m)` works like the mod p version: it
- *   reduces `a` using pivots in its first `m` columns and returns the
- *   pivot columns and, for square `a`, the determinant. `solve_real`
- *   classifies $A x = b$ as having no, one or infinitely many
- *   solutions and returns one of them. Only `gauss_real` changes its
- *   argument.
+ * Description: The mod p version in doubles, with partial pivoting.
  * Precondition: `a` is `n x m` with any `n`, `m`; size `x` to `m`
  *   before `solve_real`. Entries of moderate size: `eps` is an
  *   absolute threshold below which a pivot counts as zero.
@@ -17,10 +11,8 @@
  *   double d = det_real(a);
  *   // Last: gauss_real works in place, a becomes its RREF.
  *   vi piv = gauss_real(a, m).first; // rank sz(piv)
- * Tweak: Replace `double` by `long double` for more precision.
- *   Inverse: append the identity as in the mod p version.
- *   Ill-conditioned or badly scaled input: divide each row by its
- *   largest entry first, or pass a larger `eps` (all three
+ * Tweak: Ill-conditioned or badly scaled input: divide each row
+ *   by its largest entry first, or pass a larger `eps` (all three
  *   functions take one).
  * Example:
  *   // Expected steps to absorption: E_v = 1 + sum_w P_vw E_w,

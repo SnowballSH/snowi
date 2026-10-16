@@ -14,6 +14,7 @@ icpc = true
 
 [[entry]]
 item = "poly-ops"
+icpc = true
 
 [[entry]]
 item = "linear-rec"
@@ -30,3 +31,4 @@ icpc = true
 [[entry]]
 note = "techniques"
 title = "Polynomial techniques"
+icpc = true

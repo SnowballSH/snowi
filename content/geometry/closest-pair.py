@@ -1,17 +1,12 @@
 """
 Title: Closest pair of points
 Description: Returns two points of `pts` at the smallest distance.
-  Divide and conquer, bottom-up: with the points sorted by `x`,
-  merge sort them by `y` in blocks of doubling size; each merge
-  compares the points near the middle `x` with their next
-  neighbours by `y`.
 Precondition: At least two points, tuples `(x, y, ...)`; extra
   fields ride along, so `(x, y, i)` gives the indices. Equal points
   are allowed (distance 0). Exact for integers.
 Time: $O(n log n)$; under a second for $2 dot 10^5$ points.
 Usage:
   a, b = closest_pair(pts); d2 = dist2(a, b)
-Tweak: Floats work as is. For the indices pass `(x, y, i)`.
 Example:
   >>> pts = [(0, 0), (5, 1), (2, 3), (6, 3), (0, 5)]
   >>> a, b = closest_pair(pts); sorted([a, b]), dist2(a, b)

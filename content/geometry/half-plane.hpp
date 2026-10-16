@@ -2,8 +2,7 @@
  * Title: Half-plane intersection
  * Description: Intersects the half-planes left of the directed
  *   lines `s -> e` inside the box $[-"big", "big"]^2$ and returns
- *   the vertices of the result counter-clockwise. Sorts the lines
- *   by angle and keeps the useful ones in a deque.
+ *   the vertices of the result counter-clockwise.
  * Precondition: Floating `T`; `s != e` in each half-plane. Points
  *   within `eps` $= 10^(-9)$ of a line, plus $10^(-15) (|x| + |y|)$
  *   for rounding far out, count as on it: the result is empty when

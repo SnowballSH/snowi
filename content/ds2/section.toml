@@ -15,7 +15,6 @@ icpc = true
 
 [[entry]]
 item = "binary-trie"
-icpc = ["cpp"]
 
 [[entry]]
 item = "persistent-segtree"
@@ -27,7 +26,9 @@ icpc = ["cpp"]
 
 [[entry]]
 item = "wavelet-matrix"
+icpc = ["cpp"]
 
 [[entry]]
 note = "sqrt"
 title = "Sqrt decomposition and small tricks"
+icpc = true

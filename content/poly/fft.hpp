@@ -1,10 +1,9 @@
 /**
  * Title: Fast Fourier transform
  * Description: `fft_conv(a, b)` multiplies polynomials with real
- *   coefficients in doubles: `c[k]` is $sum_(i + j = k) a_i b_j$.
- *   `fft(a)` replaces `a` in place by its values at the powers of
- *   $omega = e^((2 pi i) / n)$: `a[k]` becomes
- *   $sum_j a_j omega^(j k)$.
+ *   coefficients in doubles. `fft(a)` replaces `a` in place by its
+ *   values at the powers of $omega = e^((2 pi i) / n)$: `a[k]`
+ *   becomes $sum_j a_j omega^(j k)$.
  * Precondition: `sz(a)` is a power of two. Results round exactly
  *   while $norm(a) norm(b) < 5 dot 10^14$ (Euclidean norms), which
  *   holds if $n dot max abs(a_i) dot max abs(b_j) < 5 dot 10^14$ for
@@ -16,8 +15,7 @@
  *   vd c = fft_conv(a, b); // sz(a) + sz(b) - 1 entries
  *   ll x = llround(c[k]);
  * Tweak: Inverse transform: `fft(a)`, then
- *   `reverse(a.begin() + 1, a.end())` and divide by `n`. Complex
- *   inputs: transform both, multiply pointwise, invert.
+ *   `reverse(a.begin() + 1, a.end())` and divide by `n`.
  * Notes: `fft_conv` packs `a` and $2^e b$ into one complex vector
  *   and squares it, so a product costs two transforms. The packed
  *   error grows with $norm(a)^2 + norm(b)^2$, so $2^e$ (exact in

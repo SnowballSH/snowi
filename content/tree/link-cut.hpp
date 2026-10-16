@@ -20,9 +20,9 @@
  *   lc.link(u, v); lc.cut(u, v); lc.connected(u, v);
  *   lc.query(u, v); lc.set(v, x); lc.lca(u, v);
  *   lc.access(v); ll s = lc.t[v].agg; // root path, same root
- * Tweak: Change only `T`, `e` and `op` (default: path sum). Max: `e
- *   = LLONG_MIN`, `op = max`. Edge values: add a node per edge
- *   holding its value (vertices hold `e`) and link `u - x - v`.
+ * Tweak: Change only `T`, `e` and `op` (default: path sum). Edge
+ *   values: add a node per edge holding its value (vertices hold
+ *   `e`) and link `u - x - v`.
  *   Non-commutative `op`: keep the reverse-order fold `ragg` next
  *   to `agg` everywhere (`pull` combines `c[1]`, `val`, `c[0]`)
  *   and swap a node's `agg` and `ragg` the moment its `flip` is

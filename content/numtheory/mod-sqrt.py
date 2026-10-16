@@ -8,8 +8,6 @@ Time: $O(log^2 p)$ worst case, when $2^k | p - 1$ for large $k$.
   PyPy: about 4 µs for $p = 998244353$.
 Usage:
   r = mod_sqrt(a, p)  # -1, or roots r and p - r
-Tweak: For $p equiv 3 thick (mod 4)$ the root is simply
-  $a^((p + 1)\/4)$ (check its square).
 Example:
   >>> mod_sqrt(2, 7), mod_sqrt(3, 7), mod_sqrt(-1, 13)
   (3, -1, 5)

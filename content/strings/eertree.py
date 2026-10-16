@@ -6,8 +6,7 @@ Description: Palindromic tree, built letter by letter. Its nodes are
   * v + c]` is the palindrome `c + v + c` (from node 0: just `c`), 0
   when absent, and `link[v]` the longest proper palindromic suffix
   of `v`. `suf[i]` is the node of the longest palindromic suffix of
-  the prefix ending at `s[i]`. After `count()`, `cnt[v]` is the
-  number of occurrences of `v` in `s`.
+  the prefix ending at `s[i]`.
 Precondition: Letters `'a'` to `'z'`.
 Time: $O(n)$ amortized; at most $n + 2$ nodes. PyPy: about 0.3 s for
   $n = 2 dot 10^5$.
@@ -16,7 +15,6 @@ Usage:
   distinct = len(et.len) - 2  # palindromic substrings
   longest = et.len[et.suf[i]]  # ending at s[i]
   et.count()  # then et.cnt[v]: occurrences of node v >= 2
-Tweak: Other alphabets: change every `26` and the offset 97.
 Example:
   >>> et = Eertree("abacaba")
   >>> m = len(et.len)

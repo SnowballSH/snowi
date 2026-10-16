@@ -14,10 +14,6 @@
  *   BCC b(n, edges); // vector<pii> edges
  *   b.comp[e]; b.bridge[e]; b.cut[v]; // nb blocks
  *   b.tree[n + b.comp[e]]; // the vertices of e's block
- * Tweak: 2-edge-connected components: join the endpoints of every
- *   non-bridge edge in a DSU. Vertex `v`'s blocks are its
- *   neighbours in `tree`; `v` is a cut vertex iff it has two or
- *   more.
  * Example:
  *   // 2-edge-connected components and the bridge tree.
  *   BCC b(n, edges);

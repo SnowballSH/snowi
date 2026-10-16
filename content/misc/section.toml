@@ -2,7 +2,6 @@ title = "Miscellaneous"
 
 [[entry]]
 item = "ternary-search"
-icpc = true
 
 [[entry]]
 item = "interactive"
@@ -30,3 +29,4 @@ title = "Constructive problems and invariants"
 [[entry]]
 note = "matroids"
 title = "Matroids"
+icpc = true

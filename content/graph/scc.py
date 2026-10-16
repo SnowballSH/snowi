@@ -1,18 +1,18 @@
 """
 Title: Strongly connected components
 Description: Tarjan's algorithm, iterative. Returns `comp` and the
-  number of components `k`: `comp[u] == comp[v]` iff `u` and `v`
-  reach each other. Components are numbered in reverse topological
-  order: an edge `u -> v` between different components has
-  `comp[u] > comp[v]`, so component 0 is a sink and
+  number of components `k`. Components are numbered in reverse
+  topological order: an edge `u -> v` between different components
+  has `comp[u] > comp[v]`, so component 0 is a sink and
   `k - 1, ..., 0` is a topological order of the condensation.
+  Edges needed to make the graph strongly connected: $max(s, t)$
+  for $s$ sources and $t$ sinks of the condensation, 0 if $k = 1$.
 Precondition: `adj[u]` lists the heads of the edges leaving `u`;
   vertices 0-indexed. Self-loops and parallel edges are fine.
 Time: $O(n + m)$, no recursion; PyPy needs about 1 s for
   $n = m = 5 dot 10^5$.
 Usage:
   comp, k = scc(adj)
-Tweak: Topological numbering (sources first): `k - 1 - comp[v]`.
 Example:
   >>> adj = [[1], [2], [0, 3], [4], [5], [3], []]
   >>> comp, k = scc(adj); comp, k
@@ -27,10 +27,8 @@ Example:
 Notes: Think SCC when the statement says "mutually reachable", "can
   return to", "cycles can be traversed many times" (collapse each
   component, then DP on the DAG: e.g. maximum total value collected
-  on a walk), or for 2-SAT. Minimum number of edges to add to make
-  the graph strongly connected: $max(s, t)$ for $s$ sources and $t$
-  sinks of the condensation, 0 if $k = 1$. A vertex reachable from
-  all others exists iff the condensation has exactly one sink. In
+  on a walk), or for 2-SAT. A vertex reachable from all others
+  exists iff the condensation has exactly one sink. In
   the DP, process components in increasing id for "what can be
   reached from here" and in decreasing id for "what reaches here".
 Source: kactl SCC (CC0), made iterative.

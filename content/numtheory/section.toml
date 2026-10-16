@@ -30,15 +30,15 @@ icpc = true
 
 [[entry]]
 item = "primitive-root"
-icpc = ["cpp"]
+icpc = true
 
 [[entry]]
 item = "floor-sum"
-icpc = ["cpp"]
+icpc = true
 
 [[entry]]
 item = "prime-count"
-icpc = ["cpp"]
+icpc = true
 
 [[entry]]
 note = "theorems"

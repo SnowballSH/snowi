@@ -16,8 +16,7 @@
  *   ll x = ternary(0, n - 1, [&](ll i) { return cost(i); });
  *   double t = golden(0, 1e9, [&](double x) { return g(x); });
  * Tweak: In both, `f` may return any type with `<` and `<=` (`ll`,
- *   `double`, `pair`). Maximum: negate `f`. Use `long double` for
- *   more digits, fewer iterations when `f` is slow.
+ *   `double`, `pair`).
  * Example:
  *   // Points move along a line, x_i(t) = p[i] + v[i] t. The
  *   // spread max - min is convex in t (a max of lines minus a

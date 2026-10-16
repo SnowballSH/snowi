@@ -1,14 +1,11 @@
 """
 Title: Tree isomorphism
-Description: Canonical ids for rooted trees (AHU): a vertex's id
-  names the sorted tuple of its children's ids, so two rooted
-  trees get the same id iff they are isomorphic. `rooted(adj, r)`
-  returns the id of every subtree, rooted at `r` (equal ids mean
-  isomorphic subtrees). `unrooted(adj)` is the smallest id over
-  the one or two centers, equal for two trees iff they are
-  isomorphic. `centers(adj)` gives the middle one or two vertices
-  of every longest path. `par` holds the parents from the last
-  `rooted` call. Ids are 1, 2, ... in order of first appearance.
+Description: Canonical ids (AHU), equal iff isomorphic.
+  `rooted(adj, r)`: the id of every subtree, rooted at `r`.
+  `unrooted(adj)`: the smallest id over the one or two
+  `centers(adj)`, the middle vertices of every longest path. `par`
+  holds the parents from the last `rooted` call. Ids are 1, 2, ...
+  in order of first appearance.
 Precondition: `adj` holds both directions of the $n - 1$ edges of
   a tree on vertices `0..n-1`, $n >= 1$. Compare only ids from the
   same `TreeHash` object.

@@ -1,12 +1,9 @@
 """
 Title: Gaussian elimination mod p
-Description: `gauss(a, m)` brings `a` to reduced row echelon form
-  with pivots taken from its first `m` columns; later columns
-  (right-hand sides) are transformed along. It returns the pivot
-  column of each nonzero row, so the rank is their number, and the
-  determinant when `a` is square and `m = n`. `solve_linear` finds
-  one solution of $A x = b$ and `mat_inv` returns the inverse of a
-  square matrix. Only `gauss` changes its argument.
+Description: `gauss(a, m)`: reduced row echelon form in place,
+  pivots from the first `m` columns (later columns ride along);
+  returns the pivot columns and, if `a` is square and `m = n`, the
+  determinant.
 Precondition: `MOD` prime, entries in $[0, "MOD")$. `a` is
   `n x m` with any `n`, `m`.
 Time: $O(n m min(n, m))$. In PyPy `solve_linear` takes about
@@ -17,11 +14,9 @@ Usage:
   d = det(a)
   inv = mat_inv(a)  # None if singular
   piv = gauss(a, m)[0]  # last: in place, a becomes its RREF
-Tweak: Another prime: change `MOD`. Several right-hand sides:
-  append them all as columns, then call `gauss(a, m)` once. Over
-  $FF_2$ store each row as one int (bit `j` = column `j`), test
-  `a[i] >> c & 1` and eliminate with `a[i] ^= a[r]`: $2000 times
-  2000$ takes about 1.2 s.
+Tweak: Over $FF_2$ store each row as one int (bit `j` = column
+  `j`), test `a[i] >> c & 1` and eliminate with `a[i] ^= a[r]`:
+  $2000 times 2000$ takes about 1.2 s.
 Uses: numtheory/modpow
 Example:
   >>> a = [[1, 2, 3], [2, 4, 6]]  # rank 1

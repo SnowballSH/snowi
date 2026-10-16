@@ -14,7 +14,9 @@ icpc = true
 
 [[entry]]
 item = "parallel-binary-search"
+icpc = true
 
 [[entry]]
 note = "techniques"
 title = "Offline techniques"
+icpc = true

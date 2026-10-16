@@ -6,8 +6,7 @@
  *   `next[v][c]` is the palindrome `c + v + c` (from node 0: just
  *   `c`) and `link[v]` the longest proper palindromic suffix of
  *   `v`. `suf[i]` is the node of the longest palindromic suffix of
- *   the prefix ending at `s[i]`. After `count()`, `cnt[v]` is the
- *   number of occurrences of `v` in `s`.
+ *   the prefix ending at `s[i]`.
  * Precondition: Letters `'a'` to `'z'`.
  * Time: $O(n)$ amortized; at most $n + 2$ nodes.
  * Usage:
@@ -15,8 +14,6 @@
  *   int distinct = sz(et.len) - 2; // palindromic substrings
  *   int longest = et.len[et.suf[i]]; // ending at s[i]
  *   et.count(); // then et.cnt[v]: occurrences of node v >= 2
- * Tweak: Other alphabets: change `26` and the offset `'a'`; for a
- *   large one use `map<int, int>` edges.
  * Example:
  *   // Palindromic substrings with repeats: dep[v] is the number
  *   // of palindromic suffixes of v, the nodes >= 2 on its link

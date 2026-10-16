@@ -6,23 +6,16 @@ Description: Shortest paths from a set of sources in a graph with
   (-1 for sources and unreachable vertices). `path(t)` lists a
   shortest path from a source to `t`, empty if unreachable.
 Precondition: `adj[u]` is a list of pairs `(v, w)` for edges
-  `u -> v` (add both directions for an undirected graph). Vertices
-  are 0-indexed, weights are integers `w >= 0`, and distances stay
-  below `Dijkstra.INF` $= 2^62$.
+  `u -> v`; 0-indexed, integers `w >= 0`, distances below
+  `Dijkstra.INF` $= 2^62$.
 Time: $O((n + m) log m)$.
 Usage:
   adj = [[] for _ in range(n)]
   adj[u].append((v, w))
   dj = Dijkstra(adj, [s])  # or several sources
   d = dj.dist[t]; p = dj.path(t)
-Tweak: The heap holds ints `d * n + v`, about 1.5 times faster than
-  tuples while the largest distance times `n` is below $2^63$.
-  Beyond that PyPy falls back to big ints (still correct, about 2
-  times slower). Float weights need tuples `(d, v)` in the heap.
-  Bottleneck paths (maximize the smallest edge): `dist` starts at -1
-  and sources at `INF`; push `-(d * n + v)` and pop with
-  `divmod(-key, n)` (a max-heap), skip if `d < dist[u]`, relax if
-  `min(d, w) > dist[v]`, and test `dist[t] >= 0` in `path`.
+Tweak: Heap keys are ints `d * n + v` (1.5 times faster than
+  tuples; big ints past $2^63$). Float weights: tuples.
 Example:
   >>> adj = [[(1, 4), (2, 1)], [(3, 1)], [(1, 2), (3, 5)], [], []]
   >>> dj = Dijkstra(adj, [0])

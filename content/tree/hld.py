@@ -1,17 +1,14 @@
 """
 Title: Heavy-light decomposition
-Description: Lays the tree out in a list so that every path is
-  $O(log n)$ ranges of consecutive positions. `pos[v]` is a DFS
-  order that enters the heavy child (largest subtree) first, so
-  each chain from its top `head[v]` down is contiguous and the
-  subtree of `v` is `[pos[v], pos[v] + size[v])`. `path(u, v)`
-  returns half-open ranges covering the path, listed from `u` to
-  `v`; the ranges from `u` up to the LCA run against position
-  order (walk each right to left), the rest along it.
-  `edges=True` leaves out the LCA, for values on edges stored at
-  their lower endpoint. `climb(x, w, keep)` gives the (upward)
-  ranges from `x` to its ancestor `w` (`w` itself if `keep`).
-  Also `par` (-1 at the root), `depth`, `heavy` (-1 at leaves).
+Description: `pos[v]`: DFS order, heavy child (largest subtree)
+  first; chains (top `head[v]`) and subtrees
+  `[pos[v], pos[v] + size[v])` are contiguous. `path(u, v)`:
+  $O(log n)$ half-open ranges listed from `u` to `v`; those from
+  `u` up to the LCA run against position order (walk each right
+  to left). `edges=True` leaves out the LCA (edge values at their
+  lower endpoint). `climb(x, w, keep)`: the upward ranges from `x`
+  to its ancestor `w` (`w` itself if `keep`). Also `par` (-1 at
+  the root), `depth`, `heavy` (-1 at leaves).
 Precondition: `adj` holds both directions of the $n - 1$ edges of
   a tree on vertices `0..n-1`, $n >= 1$.
 Time: $O(n)$ build (iterative); `path` returns $O(log n)$ ranges
@@ -28,12 +25,10 @@ Usage:
   for l, r in h.path(u, v): lz.apply(l, r, x)
 Tweak: Edge values: put the value of edge `(par[v], v)` at
   `pos[v]` and pass `edges=True`; the subtree's edges are then
-  `[pos[v] + 1, pos[v] + size[v])`. Any monoid works: the ranges
-  go to whatever structure sits on the positions (Fenwick for
-  sums, segment tree for max, lazy segment tree for path updates).
-  Non-commutative `op`: with `w = lca(u, v)`, fold `path(u, w)`
-  in a second ds/segtree with `lambda f, g: op(g, f)`, then
-  `path(w, v, True)` in the normal one.
+  `[pos[v] + 1, pos[v] + size[v])`. Non-commutative `op`: with
+  `w = lca(u, v)`, fold `path(u, w)` in a second ds/segtree with
+  `lambda f, g: op(g, f)`, then `path(w, v, True)` in the normal
+  one.
 Example:
   >>> adj = [[1, 2], [0, 3, 4], [0], [1], [1, 5], [4]]
   >>> h = HLD(adj)  # edges 0-1 0-2 1-3 1-4 4-5

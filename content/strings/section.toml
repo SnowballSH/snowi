@@ -34,6 +34,7 @@ icpc = true
 
 [[entry]]
 item = "eertree"
+icpc = true
 
 [[entry]]
 note = "facts"

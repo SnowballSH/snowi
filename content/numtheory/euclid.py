@@ -15,8 +15,6 @@ Usage:
   inv = inv_mod(3, 10)  # 7
   r, l = crt(2, 4, 4, 6)  # (10, 12)
   r, l = crt_all([1, 2, 3], [2, 3, 5])  # (23, 30)
-Tweak: `pow(a, -1, m)` is the built-in inverse; it raises
-  `ValueError` instead of returning -1.
 Example:
   >>> euclid(240, 46)
   (2, -9, 47)

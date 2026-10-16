@@ -3,8 +3,7 @@ Title: Hopcroft-Karp matching
 Description: Maximum matching in a bipartite graph with `n` left
   and `m` right vertices. `ml[u]` is the right partner of left `u`
   and `mr[v]` the left partner of right `v` (-1 if free). `cover()`
-  then gives a minimum vertex cover (Kőnig): left and right
-  vertices touching every edge, as many as the matching.
+  then gives a minimum vertex cover (Kőnig).
 Precondition: Edges go from left `u` in `[0, n)` to right `v` in
   `[0, m)`; both sides are numbered from 0 separately.
 Time: $O(m' sqrt(n + m))$ for $m'$ edges.
@@ -13,9 +12,6 @@ Usage:
   hk.add_edge(u, v)
   k = hk.max_matching()  # then hk.ml, hk.mr
   cl, cr = hk.cover()  # after max_matching
-Tweak: Maximum independent set: the vertices not in `cover()`,
-  $n + m - k$ of them. Several units per left vertex (b-matching)
-  or weights: use Dinic or min-cost flow.
 Example:
   >>> hk = HopcroftKarp(3, 3)
   >>> for u, v in [(0, 0), (0, 1), (1, 0), (2, 0)]:

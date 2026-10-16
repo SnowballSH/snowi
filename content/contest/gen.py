@@ -1,13 +1,12 @@
 """
 Title: Random test generators
-Description: Seeded random inputs for stress tests. Trees and
-  graphs are 0-indexed edge lists, relabelled by a random
-  permutation, shuffled and randomly oriented (`mix(e, n)` does
-  this to any edge list); `dag` orients them along a random
-  topological order. A connected `graph` contains a
-  `tree(n, shape)`. Shapes: `UNIFORM` (all labelled trees
-  equally likely), `PARENT` (each vertex below a random earlier
-  one), `PATH`, `STAR`, `CATERPILLAR` (a path with leaves on it).
+Description: Seeded random inputs. Edge lists are 0-indexed,
+  randomly relabelled, shuffled and oriented (`mix(e, n)` does
+  this to any list); `dag` orients along a random order; a
+  connected `graph` contains `tree(n, shape)`. Shapes: `UNIFORM`
+  (Prüfer), `PARENT`, `PATH`, `STAR`, `CATERPILLAR`. `UNIFORM`
+  and `PARENT` trees are shallow (depth about 1100 and 40 at
+  $n = 2 dot 10^5$): also test `PATH` and `CATERPILLAR`.
 Precondition: `tree`, `graph`: `n >= 1`. `array(n, lo, hi,
   True)`: `hi - lo + 1 >= n`. `graph(n, m)`: `m <= n(n-1)/2`,
   and `m >= n - 1` if connected.
@@ -31,12 +30,13 @@ Example:
   e = [(i, (i - 1) // 2) for i in range(1, n)]  # own shape,
   e = g.mix(e, n)  # e.g. a binary tree, then mix
   tests = g.rnd(1, 3)  # multi-test: print it, then the cases
-Notes: Rooted at vertex 0, `PARENT` and `UNIFORM` trees with
-  $n = 2 dot 10^5$ have depth only about 40 and 1100: they miss
+Notes: `UNIFORM` and `PARENT` trees (rooted at vertex 0) miss
   deep-recursion crashes and the worst cases of HLD and
-  small-to-large merging. Test `PATH` and `CATERPILLAR` too,
-  also as spanning trees of `graph`. Small value ranges and
-  alphabets force ties, hash collisions and periodic strings.
+  small-to-large merging: use `PATH` and `CATERPILLAR` also as
+  spanning trees of `graph`. `PARENT` hangs each vertex below a
+  random earlier one; `CATERPILLAR` is a path with leaves on it.
+  Small value ranges and alphabets force ties, hash collisions
+  and periodic strings.
   Keep `n` tiny (about 8) so the brute force is fast and a
   failing input is short to read. Multi-test input: print `T`,
   then each case from the same `g`, keeping the sum of sizes

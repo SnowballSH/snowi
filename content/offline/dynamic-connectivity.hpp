@@ -4,10 +4,7 @@
  *   `query()` marks a moment to ask about the graph. `solve` then
  *   calls `answer(i)` for the queries `i = 0, 1, ...` in order,
  *   each time with the rollback DSU `d` holding exactly the edges
- *   present at query `i`. An edge present during queries `[l, r)`
- *   is stored in $O(log q)$ nodes of a segment tree over query
- *   times; a DFS joins a node's edges on entry and rolls them back
- *   on exit.
+ *   present at query `i`.
  * Precondition: Vertices `0..n-1`. `remove(u, v)` only while that
  *   edge is present; parallel edges and loops are fine. Call
  *   `solve` once, after all operations.
@@ -21,13 +18,14 @@
  *     same[i] = dc.d.find(a[i]) == dc.d.find(b[i]);
  *     comps[i] = n - dc.d.time() / 2;
  *   });
- * Tweak: Component size: `dc.d.size(v)`. Bipartiteness, sums or
- *   counts per component: give the DSU that state, record it in
+ * Tweak: Bipartiteness, sums or counts per component: give the
+ *   DSU that state, record it in
  *   `join` and restore it in `rollback`. Any structure with
  *   "insert" and "undo the last inserts" works instead of the DSU
- *   (XOR basis, knapsack array: save a copy per node). Prune: once
- *   a node's edges decide all queries below it (an odd cycle),
- *   answer them there and do not descend.
+ *   (XOR basis, knapsack array: save a copy per node of the segment
+ *   tree over query times). Prune: once a node's edges decide all
+ *   queries below it (an odd cycle), answer them there and do not
+ *   descend.
  * Example:
  *   // Ops "+ u v", "- u v" (1-indexed) and "?": print the number
  *   // of components at each "?".

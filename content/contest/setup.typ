@@ -6,17 +6,12 @@ d() { {cxx} -std={std} -g -Wall -Wextra -Wshadow \\
   -D_GLIBCXX_DEBUG -fsanitize=address,undefined \\
   -fno-sanitize-recover $1.cpp -o $1; }
 o() { {cxx} -std={std} -O2 $1.cpp -o $1; }
-d {source} && ./{source} < in   # o {source} && time ./{source} < big > /dev/null")
-Deep recursion needs a bigger local stack: `ulimit -s unlimited`.]
+d {source} && ./{source} < in   # o {source} && time ./{source} < big > /dev/null")]
 #py[#cmd("sh", "{pypy} {source}.py < in
-time {pypy} {source}.py < big > /dev/null")
-A crash in deep recursion can be a silent segmentation fault
-(exit code 139) rather than a `RecursionError`.]
+time {pypy} {source}.py < big > /dev/null")]
 
 === Stress testing
-A generator takes a seed, so a failing case can be reproduced: see
-Random test generators. Run until the first difference or crash,
-then print the input:
+Until the first difference or crash:
 #cpp[#cmd("sh", "for i in $(seq 1000); do
   ./{gen} $i > in && ./{brute} < in > want && ./{source} < in > got &&
     diff -b want got > /dev/null ||
@@ -27,17 +22,16 @@ done")]
     {pypy} {source}.py < in > got && diff -b want got > /dev/null ||
     { echo seed $i; cat in; break; }
 done")]
+To read a residue $r$ mod $M$ as a fraction, find a small $q$ with
+$r q mod M$ small.
 Interactive problems: connect a local judge with a named pipe,
 #cpp[#cmd-inline("mkfifo io; ./{judge} < io | ./{source} > io")]#py[#cmd-inline("mkfifo io; ./{judge} < io | {pypy} {source}.py > io")]
 (`misc/interactive`).
 
 === Typing hash
-Each item shows the first 6 hex digits of its typing hash, which
-ignores whitespace and comments#py[ but keeps the indentation
-structure]: retyped code gets the same hash. Check a file with
-#cpp[#cmd-inline("sh hash.sh < {source}.cpp")]#py[#cmd-inline("{python} hash.py < {source}.py")], or in vim
-select the lines and type
-#cpp[#cmd-inline(":w !sh hash.sh")]#py[#cmd-inline(":w !{python} hash.py")].
+The hash ignores whitespace and comments#py[ (not indentation)].
+Check: #cpp[#cmd-inline("sh hash.sh < {source}.cpp")]#py[#cmd-inline("{python} hash.py < {source}.py")], or in vim
+select the lines, #cpp[#cmd-inline(":w !sh hash.sh")]#py[#cmd-inline(":w !{python} hash.py")].
 #cpp[#cmd("sh", "# hash.sh
 {cpp} -dD -P -fpreprocessed | tr -d '[:space:]' \\
   | md5sum | cut -c-6")]

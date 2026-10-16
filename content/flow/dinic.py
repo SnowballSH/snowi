@@ -18,9 +18,7 @@ Usage:
   d.flow(i); d.source_side(v)
 Tweak: A second `max_flow` call keeps the flow already sent and
   adds to it. To start over on the same graph, copy `orig` into
-  `cap`. Edges are stored flat: edge `i` goes to `to[i]`, `i ^ 1`
-  is its reverse, and `nxt[i]` is the next edge out of the same
-  vertex, starting from `head[u]`.
+  `cap`.
 Example:
   >>> d = Dinic(4)
   >>> a = d.add_edge(0, 1, 3); b = d.add_edge(0, 2, 2)

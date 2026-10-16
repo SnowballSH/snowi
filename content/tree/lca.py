@@ -3,8 +3,7 @@ Title: LCA by binary lifting
 Description: Lowest common ancestor, distance in edges, k-th
   ancestor, and `jump(u, v, k)`: the vertex `k` edges from `u` on
   the path to `v`. Also gives `depth`, the parent `up[0][v]` (the
-  root's is itself) and a DFS preorder: `order[tin[v]] = v`, and
-  every subtree is a contiguous block of `tin` values.
+  root's is itself) and a DFS preorder: `order[tin[v]] = v`.
 Precondition: `adj` holds both directions of the $n - 1$ edges of
   a tree on vertices `0..n-1`, $n >= 1$. `k >= 0`.
 Time: $O(n log n)$ time and memory to build (iterative), then
@@ -15,11 +14,6 @@ Usage:
   lc.lca(u, v); lc.dist(u, v); lc.depth[v]
   lc.kth_ancestor(u, k)  # -1 if k > depth[u]
   lc.jump(u, v, k)  # -1 if k > dist(u, v); k = 0 gives u
-Tweak: Weighted distance: also keep `wd[v]`, the weighted depth
-  (set `wd[v] = wd[u] + w` next to `depth`), and return `wd[u] +
-  wd[v] - 2 * wd[lca(u, v)]`. Path aggregates (max edge on a
-  path): lift a second table `mx[k][v]` beside `up` and fold it
-  in during the same jumps.
 Example:
   >>> adj = [[1, 2], [0, 3, 4], [0], [1], [1, 5], [4]]
   >>> lc = LCA(adj)  # edges 0-1 0-2 1-3 1-4 4-5

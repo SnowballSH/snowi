@@ -9,17 +9,21 @@ Description: `circle_line` meets circle `(c, r)` with line `ab`: no
   tangents from point `c2` if `r2 = 0`. `circumcircle` returns the
   center and radius of the circle through three points, `mec` those
   of the smallest circle containing all points (Welzl, randomised).
-Precondition: Points are tuples, results are floats. Lengths within
-  `eps` $= 10^(-9)$ count as equal (fine for coordinates up to about
-  $10^4$). Concentric circles give no point and no tangent.
-  `circumcircle`: points not collinear. `mec`: at least one point.
-Time: $O(1)$; `mec` expected $O(n)$.
+  `circle_poly` is the signed area of the circle's intersection with
+  a simple polygon (positive if counter-clockwise).
+Precondition: Results are floats. Lengths within `eps` $= 10^(-9)$
+  count as equal (fine for coordinates up to about $10^4$).
+  Concentric circles give no point and no tangent. `circumcircle`:
+  points not collinear. `mec`: at least one point. `circle_poly`: no
+  two consecutive vertices equal.
+Time: $O(1)$; `mec` expected $O(n)$, `circle_poly` $O(n)$.
 Usage:
   v = circle_line(c, r, a, b)
   w = circle_inter(c1, r1, c2, r2)
   t = tangents(c1, r1, c2, r2)  # t[i][0] on circle 1
   o, rad = circumcircle(a, b, c)
   center, radius = mec(pts)
+  area = circle_poly(c, r, poly)
 Tweak: For larger coordinates scale `eps` (the noise is about
   $10^(-13)$ times the largest coordinate); `mec` has no `eps`.
 Example:
@@ -33,6 +37,9 @@ Example:
   ((2.0, 1.5), 2.5)
   >>> mec([(0, 0), (2, 0), (1, 1), (1, -1), (1, 0)])
   ((1.0, 0.0), 1.0)
+  >>> sq = [(0, 0), (2, 0), (2, 2), (0, 2)]
+  >>> round(circle_poly((0, 0), 1, sq), 9)  # a quarter circle
+  0.785398163
 Notes: `mec` works relative to its first point, so its precision
   follows the spread of the points, not their distance from the
   origin; it counts points up to `r * 1e-9` outside as inside. With
@@ -46,7 +53,8 @@ Notes: `mec` works relative to its first point, so its precision
   half-plane intersection is empty. Circumradius from side lengths
   $x, y, z$ and area $S$: $R = x y z / (4 S)$.
 Source: kactl CircleLine, CircleIntersection, CircleTangents,
-  Circumcircle, MinimumEnclosingCircle (CC0).
+  Circumcircle, MinimumEnclosingCircle, CirclePolygonIntersection
+  (CC0).
 Status: stress-tested against brute force
 """
 
@@ -133,3 +141,29 @@ def mec(ps):
         if hypot(pk[0] - ox, pk[1] - oy) > r * slack:
           (ox, oy), r = circumcircle(pi, pj, pk)
   return (bx + ox, by + oy), r
+
+
+def circle_poly(c, r, poly):
+  k, total = r * r / 2, 0.0
+
+  def arc(ax, ay, bx, by):  # sector of the turn a -> b
+    return math.atan2(ax * by - ay * bx, ax * bx + ay * by) * k
+
+  for i in range(len(poly)):
+    px, py = poly[i - 1][0] - c[0], poly[i - 1][1] - c[1]
+    qx, qy = poly[i][0] - c[0], poly[i][1] - c[1]
+    dx, dy = qx - px, qy - py
+    d2 = dx * dx + dy * dy
+    a, s, t = (dx * px + dy * py) / d2, 1, 0
+    h = a * a - (px * px + py * py - r * r) / d2
+    if h > 0:  # the chord p + d [s, t] lies inside
+      h = math.sqrt(h)
+      s, t = max(0.0, -a - h), min(1.0, -a + h)
+    if t < 0 or s >= 1:
+      total += arc(px, py, qx, qy)
+    else:
+      ux, uy = px + dx * s, py + dy * s
+      wx, wy = px + dx * t, py + dy * t
+      total += arc(px, py, ux, uy) + arc(wx, wy, qx, qy)
+      total += (ux * wy - uy * wx) / 2
+  return total

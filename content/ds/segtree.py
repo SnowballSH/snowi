@@ -1,13 +1,13 @@
 """
 Title: Segment tree
-Description: Point assign and range fold over a monoid, bottom-up.
-  `max_right(l, pred)` returns the largest `r` such that
-  `pred(query(l, r))` is true; `min_left(r, pred)` returns the
-  smallest `l` such that `pred(query(l, r))` is true.
-Precondition: 0-indexed, half-open ranges. `op` is associative and
-  `e` is its identity; `op` need not be commutative (left operand
-  is the left part). `pred(e)` is true and `pred` is monotone:
-  once false for a range, false for every range containing it.
+Description: Bottom-up point assign and range fold over a monoid.
+  The largest `r` with `pred(query(l, r))` true is
+  `max_right(l, pred)`, and the smallest such `l` is
+  `min_left(r, pred)`.
+Precondition: 0-indexed, half-open ranges. `op` need not be
+  commutative (left operand is the left part). `pred(e)` is true
+  and `pred` is monotone: once false for a range, false for
+  every range containing it.
 Time: $O(n)$ build, $O(log n)$ per operation.
 Usage:
   st = SegTree(a, add, 0)  # from operator import add
@@ -16,11 +16,9 @@ Usage:
   i = st.max_right(0, lambda s: s < k)
 Tweak: Max: `SegTree(a, max, -INF)`; then
   `max_right(l, lambda v: v < x)` is the first index `>= l` with
-  `a[i] >= x`. Min: `SegTree(a, min, INF)`. For speed, inline a
-  lambda `op` into `set` and `query` (about 30% faster in PyPy) and
-  keep nodes as ints: tuple nodes are about 3 times slower, so pack
-  a pair as `(x << 20) + y` when time is tight, if it stays below
-  $2^63$ (beyond that, big ints are slower than tuples).
+  `a[i] >= x`. Min: `SegTree(a, min, INF)`. Speed: inline `op` into
+  `set`/`query` (30%); pack pairs as `(x << 20) + y` below $2^63$
+  (tuple nodes are 3 times slower).
 Example:
   >>> st = SegTree([3, 1, 4, 1, 5], max, -1)
   >>> st.query(1, 4), st.query_all()

@@ -20,10 +20,7 @@
  *   d.flow(id); d.source_side(v);
  * Tweak: A second `max_flow` call keeps the flow already sent and
  *   adds to it. To start over on the same graph, set `x.cap =
- *   x.orig` for every edge `x` in `g`. Capacity scaling: run the
- *   phases with only edges of `cap >= 2^k` in `bfs`, for $k$ from
- *   $floor(log_2 U)$ down to 0; $O(n m log U)$ for capacities up to
- *   $U$.
+ *   x.orig` for every edge `x` in `g`.
  * Example:
  *   // Fewest undirected roads to block so that 0 cannot reach
  *   // n - 1, and which ones (CSES Police Chase).

@@ -1,21 +1,12 @@
 #import "/typst/notes.typ": *
 
 === Orders and paths
-#fact[Euler tour][With preorder `tin`, adding $x$ on the root path
-  of $v$ is a point add at `tin[v]`, read by subtree sums; changing
-  $a_v$ changes every root-path sum in the subtree of $v$ (range
-  add, point query). Among the vertices of one depth sorted by
-  `tin`, the descendants of $v$ form a range.]
-#fact[Light edges][An edge to a child other than the largest one
-  at least halves the subtree size, so a root path has at most
-  $log_2 n$ light edges: `tree/hld` cuts any path into $O(log n)$
-  ranges, and small-to-large moves each vertex $O(log n)$ times.]
-#fact[Binary lifting][Besides ancestors, it finds the highest
-  ancestor where a property monotone along the root path still
-  holds (jump while it holds, largest $k$ first). Jump pointers over levels: store the
-  ancestor $B$ levels up (downwards: the `tin` range $B$ levels
-  below) and split a shift $t = t_1 B + t_0$ into $t_1$ big jumps
-  and $t_0$ small ones.]
+#fact[Euler tour][Among the vertices of one depth sorted by `tin`,
+  the descendants of $v$ form a range.]
+#fact[Jump pointers][Over levels: store the ancestor $B$ levels
+  up (downwards: the `tin` range $B$ levels below) and split a
+  shift $t = t_1 B + t_0$ into $t_1$ big jumps and $t_0$ small
+  ones.]
 #fact[Upward sequences][To compare the values read upwards from
   $u$ and from $v$ (root paths, `nxt` chains), store $h_k (v)$, the
   polynomial hash of the $2^k$ values from $v$ up (while the chain
@@ -70,6 +61,13 @@ for i in range(n - 1, -1, -1):  # children before parents
     for j in range(i, i + h.size[v]):
       remove(at[j])",
 )
+#fact[Merging segment trees][Dynamic segment trees over one value
+  range (children made on demand, 0 = empty): `merge(a, b)` returns
+  the other if one is 0, combines two leaves, else merges the
+  children pairwise and pulls. Each step destroys a node, so all
+  merges of $n$ one-element trees cost $O(n log V)$ in total. For
+  subtrees, merge the children into the parent; answer a vertex's
+  queries before its tree is merged upwards (nodes are reused).]
 #fact[Long paths][For DP arrays indexed by the depth below $v$
   (length $h_v + 1$, $h_v$ the height): $v$ inherits the array of
   its tallest child by an index shift (one buffer per long chain,
@@ -84,19 +82,16 @@ for i in range(n - 1, -1, -1):  # children before parents
   and loop only over existing entries, never up to $n$ or $K$.]
 
 === Shape and covers
-#fact[Diameter][For a diameter $a - b$ (BFS twice; weights
+#fact[Diameter][#full[For a diameter $a - b$ (BFS twice; weights
   $>= 0$), the eccentricity of $v$ is $max(d(a, v), d(b, v))$, and
-  every diameter holds a center (a vertex of least eccentricity,
-  the radius $r$). Joining two trees by an edge of length $w$
-  between their centers gives the smallest diameter,
-  $max(D_1, D_2, r_1 + w + r_2)$. Unweighted: the centers are the
-  middle one or two vertices of every diameter and
-  $r = ceil(D \/ 2)$.]
-#fact[Centroid][One or two (adjacent); walk from any vertex into a
-  part larger than $n \/ 2$. With weights $w >= 0$ on the vertices,
-  a vertex whose removal leaves parts of weight at most $W \/ 2$
-  minimises $sum_x w_x d(x, v)$ (unit weights: the sum of
-  distances).]
+  every diameter holds a center. ]Joining two trees by an edge of
+  length $w$ between their centers (vertices of least eccentricity
+  $r$) gives the smallest diameter, $max(D_1, D_2, r_1 + w + r_2)$;
+  unweighted, $r = ceil(D \/ 2)$.#full[ The centers are the middle
+  one or two vertices of every diameter.]]
+#fact[Centroid][With weights $w >= 0$ on the vertices, a vertex
+  whose removal leaves parts of weight at most $W \/ 2$ minimises
+  $sum_x w_x d(x, v)$ (unit weights: the sum of distances).]
 #fact[Binary-tree split][At most two children per vertex and
   $W >= 2$ marked vertices, none an ancestor of another (say leaves,
   or one depth): some subtree holds between $W \/ 3$ and $2 W \/ 3$.
@@ -120,12 +115,10 @@ for i in range(n - 1, -1, -1):  # children before parents
   depth is even and on exit if it is odd: cyclically consecutive
   ones are at distance at most 3. So the cube of a connected graph
   has a Hamiltonian cycle (Sekanina; use a spanning tree).]
-#icpc[#fact[Isomorphism][Rooted: ids of sorted child-id lists
-  (AHU). Unrooted: root at the one or two centers.]]
 #fact[Joining components][Adding $k - 1$ edges to join components
   of sizes $s_1, dots, s_k$ ($n$ vertices) into one tree:
-  $n^(k - 2) product_i s_i$ ways. Cayley, degrees, Prüfer codes:
-  _Counting formulas_.]
+  $n^(k - 2) product_i s_i$ ways.#full[ Cayley, degrees, Prüfer
+  codes: _Counting formulas_.]]
 
 === Many queries
 #fact[Key sets][#icpc[For keys $v_1, dots, v_k$ sorted by `tin`,
@@ -143,12 +136,12 @@ for i in range(n - 1, -1, -1):  # children before parents
 #fact[Centroid queries][$min_x ("val"_x + d(v, x))$ over a changing
   set: each centroid $c$ keeps a multiset $M_c$ of
   $"val"_x + d(x, c)$ over its piece, and the answer is the minimum
-  of $d(v, c) + min M_c$ over the centroid ancestors $c$ of $v$.
-  Exact: every term is at least the truth, and the first centroid
-  removed on the path to the best $x$ attains it. Only $x$ with
-  `tin` in a range (one branch of $v$, or the rest): a segment tree
-  per centroid over its piece sorted by `tin`, $O(log^2 n)$ per
-  query or update.]
+  of $d(v, c) + min M_c$ over the centroid ancestors $c$ of
+  $v$.#full[ Exact: every term is at least the truth, and the first
+  centroid removed on the path to the best $x$ attains it.] Only
+  $x$ with `tin` in a range (one branch of $v$, or the rest): a
+  segment tree per centroid over its piece sorted by `tin`,
+  $O(log^2 n)$ per query or update.]
 #fact[Kruskal reconstruction tree][For "only edges of weight
   $<= x$": add edges by increasing weight; the union of roots $a$
   and $b$ creates a node $z$, parent of both, with $"val"(z) = w$.
@@ -194,14 +187,16 @@ for w, u, v in sorted(es):
   lifting on `nxt`. Build `nxt` top-down by lifting from the
   parent; walking the chain step by step is quadratic on trees.]
 
+#full[
 === Changing trees
 #fact[Edge, not vertices][When a subtree is cut and relinked
   elsewhere and all its vertices change alike (depth shift,
   subtree add), store the change once on the new edge or the
   subtree's root, and let root-path folds pick it up.]
-#fact[Growing trees][Leaves attached over time to parents named in
-  the input: build the final tree once (Euler tour, LCA, HLD) and
-  give vertices not created yet neutral values.]
+#fact[Growing trees][Leaves attached over time to parents
+  named in the input: build the final tree once (Euler tour, LCA,
+  HLD) and give vertices not created yet neutral values.]
+]
 
 #full[
 === More facts

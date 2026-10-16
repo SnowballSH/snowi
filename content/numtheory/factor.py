@@ -13,8 +13,6 @@ Time: `is_prime`: 7 modular powers. `factor`: $O(n^(1/4))$
 Usage:
   p = is_prime(10**9 + 7)
   f = factor(360)  # [2, 2, 2, 3, 3, 5]
-Tweak: Group into (prime, exponent) pairs with
-  `sorted(Counter(factor(n)).items())`.
 Example:
   >>> is_prime(2**61 - 1), is_prime(3825123056546413051)
   (True, False)

@@ -1,35 +1,35 @@
 #import "/typst/notes.typ": *
 
+#full[
 Tools: `poly/ntt` (products), `poly/poly-ops` (inverse, log, exp,
 power, division), `poly/lagrange`, `poly/linear-rec`,
 `poly/subset-transforms`. Modelling with series is in the
 generating functions note; this note is about computing them.
+]
 
 === NTT primes and sizes
 #table(
   columns: 4,
-  [prime $p$], [$p - 1$], [longest NTT], [root],
+  table.header[prime $p$][$p - 1$][longest NTT][root],
   [998244353], [$119 dot 2^23$], [$2^23$], [3],
   [167772161], [$5 dot 2^25$], [$2^25$], [3],
   [469762049], [$7 dot 2^26$], [$2^26$], [3],
   [754974721], [$45 dot 2^24$], [$2^24$], [11],
   [1004535809], [$479 dot 2^21$], [$2^21$], [3],
 )
+#full[
 - A primitive $2^k$-th root of unity is $g^((p - 1) \/ 2^k)$ for
   the root $g$ above. The modulus 998244353 in a statement is the
   setter's hint that NTT is welcome.
+]
 - Any other modulus ($10^9 + 7$): `poly/fft-mod`, or three primes
   from the table and CRT, exact while $n m^2 < 2^85$ (product of
   the 2nd to 4th primes).
+#full[
 - The length must be a power of two $>= |a| + |b| - 1$; shorter
   wraps around (cyclic). Reduce negative values first.
-- Budget: $n <= 5000$: the $O(n^2)$ recurrences of the generating
-  functions note. $n$ up to $5 dot 10^5$: NTT; a `conv` of two
-  $2^19$-term inputs (NTT size $2^20$) takes 0.25 s in C++ and
-  0.4 s in PyPy, an inverse about 1.5 times that, log 2.5, exp 3.
-  Sizes round up to powers of two, so $n = 2^18 + 1$ costs as
-  much as $n = 2^19$. $n approx 10^7$: an $O(n)$ recurrence, never
-  NTT.
+]
+#full[
 
 === Divide-and-conquer products
 #fact[Many factors][For $P_1 P_2 dots P_m$ of total degree $D$
@@ -60,13 +60,15 @@ while len(q) > 1:
   merge $F = F_L F_R$, $H = H_L + F_L H_R$. $O(D log^2 D)$ for
   total degree $D$.
 
+]
+
 === Online (relaxed) convolution
 When $f_t$ needs $"acc"_t = sum_(0 < i <= t) g_i f_(t - i)$ and then
 a non-linear step (a min, a per-index fix-up), $f$ cannot be
 multiplied in one go. Split $[l, r)$ at $m$: finish $[l, m)$, add
 $f[l, m) times g[0, r - l)$ into $"acc"$ on $[m, r)$, then do
 $[m, r)$. Each pair $(i, t)$ meets once, where they are split:
-$O(n log^2 n)$. Depth $log n$, so recursion is fine in PyPy.
+$O(n log^2 n)$.#py[ Depth $log n$, so recursion is fine in PyPy.]
 #lang-code(
   cpp: "void cdq(int l, int r) { // f, g, acc: vl of length n
   if (r - l == 1) return void(f[l] = finish(l, acc[l]));
@@ -96,6 +98,7 @@ $O(n log^2 n)$. Depth $log n$, so recursion is fine in PyPy.
   $f[l, m)$ by $f[0, r - l)$ and add twice. Pad $n$ to a power of
   two so that $r - l <= l$ there.
 
+#full[
 === Answer polynomial in a parameter
 `poly/lagrange` (Notes) covers a DP over values $0, dots, K$ whose
 answer is a polynomial in $K$, its degree, and a DP dimension that
@@ -146,7 +149,7 @@ only adds under merges replaced by a variable $z$. Further:
 === Transforms on bit masks
 #table(
   columns: 3,
-  [condition], [per bit], [tool],
+  table.header[condition][per bit][tool],
   [sum over $T subset.eq S$], [$(u, v) -> (u, u + v)$],
   [`'|'` zeta],
   [sum over $T supset.eq S$], [$(u, v) -> (u + v, v)$],
@@ -179,3 +182,4 @@ only adds under merges replaced by a variable $z$. Further:
   the $n + 1$ weights in $O(n^2)$: the number of ways to get from
   0 to a fixed $y$ of weight $r$ with moves $a_1, a_2, dots$ is
   $2^(-n) sum_j K_j (r) product_i K_(a_i) (j)$.
+]

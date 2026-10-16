@@ -7,9 +7,6 @@
  *   vi z = z_function(s);
  *   // pat occurs at i in s iff zt[m + 1 + i] == m, m = sz(pat):
  *   vi zt = z_function(pat + '#' + s); // '#' in neither
- * Tweak: Works on any sequence with `==`; for `vector<int>` use a
- *   separator value that occurs nowhere, like -1. Many
- *   implementations use `z[0] = 0`; check before reusing a formula.
  * Example:
  *   // p is a period of s iff p == n or z[p] == n - p:
  *   vi per;

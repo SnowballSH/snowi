@@ -1,9 +1,7 @@
 /**
  * Title: Directed MST
  * Description: Minimum arborescence rooted at `root`
- *   (Chu-Liu/Edmonds): every vertex except `root` takes one incoming
- *   edge `par[v] -> v` and all vertices are reached from `root`, at
- *   the smallest total weight. Returns the cost and `par`
+ *   (Chu-Liu/Edmonds). Returns the cost and `par`
  *   (`par[root] = -1`), or `{-1, {}}` if some vertex cannot be
  *   reached from `root`.
  * Precondition: Vertices are 0-indexed, edges `a -> b`. Weights
@@ -16,12 +14,12 @@
  *   DirectedMST g(n);
  *   g.add_edge(a, b, w); // a -> b
  *   auto [cost, par] = g.solve(root);
- * Tweak: Maximum arborescence: negate the weights. Free root: add
- *   a vertex `n` with edges `n -> v` of weight $B = 1 + sum |w|$
- *   and solve `DirectedMST(n + 1)` from `n`. One root suffices iff
- *   exactly one `v` has `par[v] == n`; that `v` is the best root
- *   and the cost is `cost - B`. Each extra root adds `B` to the
- *   cost, so the Precondition becomes $(n + 1) B <= 4 dot 10^18$.
+ * Tweak: Free root: add a vertex `n` with edges `n -> v` of
+ *   weight $B = 1 + sum |w|$ and solve `DirectedMST(n + 1)` from
+ *   `n`. One root suffices iff exactly one `v` has `par[v] == n`;
+ *   that `v` is the best root and the cost is `cost - B`. Each
+ *   extra root adds `B` to the cost, so the Precondition becomes
+ *   $(n + 1) B <= 4 dot 10^18$.
  * Example:
  *   // Each house builds a well for c[v] or gets a one-way pipe
  *   // u -> v for w. Vertex n is a super root.

@@ -3,8 +3,7 @@ Title: Lazy segment tree
 Description: Range apply and range fold. Nodes form a monoid under
   `op` with identity `e`; tags act on nodes through `mapping(f, s)`
   and compose by `composition(f, g)` = "`g`, then `f`", with
-  identity `id`. `max_right` and `min_left` work as in the segment
-  tree. Typical instance: range add, range min.
+  identity `id`.
 Precondition: 0-indexed, half-open ranges. `mapping(f, op(a, b))
   = op(mapping(f, a), mapping(f, b))` and `mapping(id, s) = s`.
   `pred(e)` is true and `pred` is monotone.
@@ -15,15 +14,12 @@ Usage:
   st.apply(l, r, 5); st.query(l, r); st.query_all()
   st.set(i, 7); st.get(i)
   r = st.max_right(l, lambda v: v > x)
-Tweak: Max: `max` and `-INF`. Range sum needs the length: nodes
-  `(sum, len)`, leaves `(a_i, 1)`, `mapping` returns
-  `(s[0] + f * s[1], s[1])`. Assign: `id = None`, `mapping` returns
-  `s if f is None else f`, `composition` `g if f is None else f`.
-  Tuple nodes are slow in PyPy: if all sums stay below $2^43$ in
-  absolute value, pack `(sum, len)` as `(sum << 20) + len`, so `op`
-  is `add` and `mapping(f, s) = s + (f * (s & M) << 20)` with
-  `M = 2**20 - 1`. Larger sums make big ints, 3 times slower than
-  tuples.
+Tweak: Range sum needs the length: nodes `(sum, len)`, leaves
+  `(a_i, 1)`, `mapping` returns `(s[0] + f * s[1], s[1])`. Assign:
+  `id = None`, `mapping` returns `s if f is None else f`,
+  `composition` `g if f is None else f`. Pack `(sum, len)` as
+  `(sum << 20) + len` while $|"sum"| < 2^43$: `op = add`,
+  `mapping(f, s) = s + (f * (s & M) << 20)`, `M = 2**20 - 1`.
 Example:
   >>> MOD = 998244353  # range affine a_i = b a_i + c, range sum
   >>> def op(x, y):  # node: (sum, len)

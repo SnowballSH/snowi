@@ -1,12 +1,6 @@
 """
 Title: Gaussian elimination (real)
-Description: Gauss-Jordan elimination on floats with partial
-  pivoting. `gauss_real(a, m)` works like the mod p version: it
-  reduces `a` using pivots in its first `m` columns and returns the
-  pivot columns and, for square `a`, the determinant. `solve_real`
-  classifies $A x = b$ as having no, one or infinitely many
-  solutions and returns one of them. Only `gauss_real` changes its
-  argument.
+Description: The mod p version in floats, with partial pivoting.
 Precondition: `a` is `n x m` with any `n`, `m`, entries of moderate
   size: `eps` is an absolute threshold below which a pivot counts as
   zero.
@@ -16,8 +10,7 @@ Usage:
   k, x = solve_real(a, b, m)  # k: 0 none, 1 unique, 2 many
   d = det_real(a)
   piv = gauss_real(a, m)[0]  # last: in place, a becomes its RREF
-Tweak: Inverse: append the identity as in the mod p version.
-  Exact answers on small inputs: pass `Fraction` entries and
+Tweak: Exact answers on small inputs: pass `Fraction` entries and
   `eps=0` to any of the three functions (free variables come back
   as `0.0`). Badly scaled input: divide each row by its largest
   entry first, or pass a larger `eps`.

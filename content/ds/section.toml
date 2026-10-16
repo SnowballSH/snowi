@@ -2,7 +2,7 @@ title = "Data structures"
 
 [[entry]]
 item = "fenwick"
-icpc = true
+icpc = ["cpp"]
 
 [[entry]]
 item = "fenwick-2d"
@@ -22,11 +22,9 @@ icpc = true
 
 [[entry]]
 item = "sparse-table"
-icpc = true
 
 [[entry]]
 item = "dsu"
-icpc = true
 
 [[entry]]
 item = "dsu-rollback"

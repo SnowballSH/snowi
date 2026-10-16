@@ -1,12 +1,9 @@
 /**
  * Title: Gaussian elimination mod p
- * Description: `gauss(a, m)` brings `a` to reduced row echelon form
- *   with pivots taken from its first `m` columns; later columns
- *   (right-hand sides) are transformed along. It returns the pivot
- *   column of each nonzero row, so the rank is their number, and the
- *   determinant when `a` is square and `m = n`. `solve_linear` finds
- *   one solution of $A x = b$ and `mat_inv` returns the inverse of a
- *   square matrix. Only `gauss` changes its argument.
+ * Description: `gauss(a, m)`: reduced row echelon form in place,
+ *   pivots from the first `m` columns (later columns ride along);
+ *   returns the pivot columns and, if `a` is square and `m = n`, the
+ *   determinant.
  * Precondition: `MOD` prime, entries in $[0, "MOD")$. `a` is
  *   `n x m` with any `n`, `m`; size `x` to `m` before
  *   `solve_linear`.
@@ -19,11 +16,9 @@
  *   auto inv = mat_inv(a); // {} if singular
  *   // Last: gauss works in place, a becomes its RREF.
  *   vi piv = gauss(a, m).first; // rank sz(piv)
- * Tweak: Another prime: change `MOD`. Several right-hand sides:
- *   append them all as columns, then call `gauss(a, m)` once. Over
- *   $FF_2$ with many columns use rows of `bitset<2048>`: drop the
- *   scaling and eliminate with `a[i] ^= a[r]`, so a row update
- *   costs $m\/64$ word operations.
+ * Tweak: Over $FF_2$ with many columns use rows of
+ *   `bitset<2048>`: drop the scaling and eliminate with
+ *   `a[i] ^= a[r]`, so a row update costs $m\/64$ word operations.
  * Example:
  *   // Kernel basis of an n x m matrix: one vector per free
  *   // column f, with x_f = 1 and x_c = -a[i][f] for pivot c.

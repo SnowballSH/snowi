@@ -9,8 +9,6 @@
  *   DSU d(n);
  *   d.join(a, b); // false if already in the same set
  *   d.same(a, b); d.find(a); d.size(a);
- * Tweak: For per-set data (sum, min, edge count), keep arrays
- *   indexed by root and merge them into `a` inside `join`.
  * Example:
  *   // Kruskal: edges sorted by weight
  *   ll mst = 0;

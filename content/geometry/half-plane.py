@@ -2,15 +2,14 @@
 Title: Half-plane intersection
 Description: Intersects the half-planes left of the directed lines
   `(s, e)` inside the box $[-"big", "big"]^2$ and returns the
-  vertices of the result counter-clockwise. Sorts the lines by
-  angle and keeps the useful ones in a deque.
-Precondition: Points are tuples, `s != e` in each half-plane;
-  results are floats. Points within `eps` $= 10^(-9)$ of a line,
-  plus $10^(-15) (|x| + |y|)$ for rounding far out, count as on
-  it: the result is empty when the intersection is empty or has no
-  interior (a point or a segment), and has no repeated or collinear
-  vertices. Directions closer than `eps` count as parallel. Fine
-  for coordinates up to about $10^4$.
+  vertices of the result counter-clockwise.
+Precondition: `s != e` in each half-plane; results are floats.
+  Points within `eps` $= 10^(-9)$ of a line, plus $10^(-15) (|x| +
+  |y|)$ for rounding far out, count as on it: the result is empty
+  when the intersection is empty or has no interior (a point or a
+  segment), and has no repeated or collinear vertices. Directions
+  closer than `eps` count as parallel. Fine for coordinates up to
+  about $10^4$.
 Time: $O(n log n)$; about a second for $2 dot 10^5$ half-planes.
 Usage:
   hs = [(s, e), ...]  # keep left of s -> e

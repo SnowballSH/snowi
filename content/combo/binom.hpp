@@ -16,11 +16,8 @@
  *   bc.multinom({2, 1, 1}), bc.inv(4);         // 12, 1/4
  *   Lucas lu(10007);
  *   lu.C(ll(1e18), 12345);
- * Tweak: Change `MOD` for another prime. `Binom<int> bc(n)` halves
- *   the memory: 80 MB instead of 160 MB for $n = 10^7$ (products
- *   stay `ll`). A prime power or composite modulus has no inverse
- *   factorials: use Pascal's triangle in $O(n^2)$, or CRT over prime
- *   moduli.
+ * Tweak: `Binom<int> bc(n)` halves the memory: 80 MB instead of
+ *   160 MB for $n = 10^7$ (products stay `ll`).
  * Example:
  *   // Monotone paths (0, 0) -> (h, w) avoiding blocked cells,
  *   // sorted by (row, col); the target is the last cell.
@@ -62,6 +59,7 @@ template<class T = ll> struct Binom {
     for (int i = n; i; i--)
       ifact[i - 1] = 1LL * ifact[i] * i % MOD;
   }
+
   ll C(int n, int k) {
     if (k < 0 || k > n) return 0;
     return 1LL * fact[n] * ifact[k] % MOD * ifact[n - k] % MOD;
@@ -70,6 +68,7 @@ template<class T = ll> struct Binom {
     if (k < 0 || k > n) return 0;
     return 1LL * fact[n] * ifact[n - k] % MOD;
   }
+
   ll multinom(const vi& ks) { // (sum k)! / prod k!
     ll r = 1;
     int s = 0;
@@ -90,6 +89,7 @@ struct Lucas {
     rep(i, 1, p) fact[i] = fact[i - 1] * i % p;
     for (ll i = p - 1; i; i--) ifact[i - 1] = ifact[i] * i % p;
   }
+
   ll C(ll n, ll k) {
     if (k < 0 || k > n) return 0;
     ll r = 1;

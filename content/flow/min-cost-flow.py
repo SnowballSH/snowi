@@ -3,8 +3,6 @@ Title: Min-cost max flow
 Description: Sends as much flow as possible from `s` to `t` (at
   most `limit`), and among maximum flows one of minimum total cost.
   Returns `(flow, cost)`. `flow(i)` is the flow on an edge.
-  Successive shortest paths: Bellman-Ford once for the potentials,
-  then Dijkstra on reduced costs, stopping at `t`.
 Precondition: Vertices 0-indexed, `s != t`, `cap >= 0`. Costs may
   be negative but no cycle of positive capacity may have negative
   total cost, and $8 n max|"cost"| < 2^62$.
@@ -15,13 +13,14 @@ Usage:
   i = mcf.add_edge(u, v, cap, cost)
   f, c = mcf.max_flow(s, t)  # or max_flow(s, t, k)
   mcf.flow(i)
-Tweak: Maximum cost: negate costs (no positive cycles then).
-  Cheapest flow of any size: put
+Tweak: Cheapest flow of any size: put
   `if pot[t] - pot[s] >= 0: break` right after the `pot` update.
   That difference is the cost of the path about to be used (in
-  the loop condition it would be stale). Exactly `k` units: pass
-  `limit = k` and check that `f == k`. The heap holds ints
-  `d * n + v`; past $2^63$ PyPy switches to slower big ints.
+  the loop condition it would be stale). Cheapest circulation with
+  negative cycles: saturate every negative edge first (its
+  residual reverse costs $> 0$), then route the excesses from a
+  super source to a super sink. The heap holds ints `d * n + v`;
+  past $2^63$ PyPy switches to slower big ints.
 Example:
   >>> mcf = MinCostFlow(4)
   >>> a = mcf.add_edge(0, 1, 2, 1); b = mcf.add_edge(0, 2, 1, 5)
@@ -45,11 +44,7 @@ Notes: Model: capacities say how often something can be used,
   $F = 1000$ paths over $2.4 dot 10^4$ arcs take about 0.4 s in
   C++ (1 to 2 s in PyPy), growing like $F m log m$. Dijkstra
   stops once `t` is settled; unsettled vertices gain only $d_t$
-  in potential, which keeps reduced costs $>= 0$. Negative
-  cycles are not supported. For a cheapest circulation with
-  them, saturate every negative edge first (its residual reverse
-  costs $> 0$) and route the resulting excesses from a super
-  source to a super sink. On a path or tree the transport cost
+  in potential, which keeps reduced costs $>= 0$. On a path or tree the transport cost
   has a closed form: every edge carries $|$imbalance of one
   side$|$.
 Source: Classic successive shortest paths with Johnson potentials;

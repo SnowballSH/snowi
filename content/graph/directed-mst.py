@@ -1,11 +1,8 @@
 """
 Title: Directed MST
 Description: Minimum arborescence rooted at `root`
-  (Chu-Liu/Edmonds): every vertex except `root` takes one incoming
-  edge `par[v] -> v` and all vertices are reached from `root`, at
-  the smallest total weight. Returns the cost and `par`
-  (`par[root] = -1`), or `(-1, [])` if some vertex cannot be reached
-  from `root`.
+  (Chu-Liu/Edmonds). Returns the cost and `par` (`par[root] = -1`),
+  or `(-1, [])` if some vertex cannot be reached from `root`.
 Precondition: Vertices are 0-indexed, edges `a -> b` with integer
   weights. With negative weights a cost of -1 is possible, so test
   `not par`. Self-loops and parallel edges are fine.
@@ -15,11 +12,10 @@ Usage:
   g = DirectedMST(n)
   g.add_edge(a, b, w)  # a -> b
   cost, par = g.solve(root)
-Tweak: Maximum arborescence: negate the weights. Free root: add a
-  vertex `n` with edges `n -> v` of weight $B = 1 + sum |w|$ and
-  solve `DirectedMST(n + 1)` from `n`. One root suffices iff exactly
-  one `v` has `par[v] == n`; that `v` is the best root and the cost
-  is `cost - B`.
+Tweak: Free root: add a vertex `n` with edges `n -> v` of weight
+  $B = 1 + sum |w|$ and solve `DirectedMST(n + 1)` from `n`. One
+  root suffices iff exactly one `v` has `par[v] == n`; that `v` is
+  the best root and the cost is `cost - B`.
 Uses: ds/dsu-rollback
 Example:
   >>> g = DirectedMST(4)

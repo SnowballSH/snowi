@@ -1,19 +1,18 @@
 /**
  * Title: Strongly connected components
  * Description: Tarjan's algorithm, iterative. Returns `comp` and
- *   the number of components `k`: `comp[u] == comp[v]` iff `u` and
- *   `v` reach each other. Components are numbered in reverse
- *   topological order: an edge `u -> v` between different
+ *   the number of components `k`. Components are numbered in
+ *   reverse topological order: an edge `u -> v` between different
  *   components has `comp[u] > comp[v]`, so component 0 is a sink and
  *   `k - 1, ..., 0` is a topological order of the condensation.
+ *   Edges needed to make the graph strongly connected:
+ *   $max(s, t)$ for $s$ sources and $t$ sinks of the
+ *   condensation, 0 if $k = 1$.
  * Precondition: `adj[u]` lists the heads of the edges leaving `u`;
  *   vertices 0-indexed. Self-loops and parallel edges are fine.
  * Time: $O(n + m)$; no recursion, fine for $n = 10^6$.
  * Usage:
  *   auto [comp, k] = scc(adj);
- * Tweak: Topological numbering (sources first): `k - 1 - comp[v]`.
- *   Vertex lists: push each `v` into `g[comp[v]]` of a
- *   `vector<vi> g(k)`.
  * Example:
  *   // Condensation DAG, edges deduplicated.
  *   auto [comp, k] = scc(adj);
@@ -28,11 +27,8 @@
  * Notes: Think SCC when the statement says "mutually reachable",
  *   "can return to", "cycles can be traversed many times" (collapse
  *   each component, then DP on the DAG: e.g. maximum total value
- *   collected on a walk), or for 2-SAT. Minimum number of edges to
- *   add to make the graph strongly connected: $max(s, t)$ for $s$
- *   sources and $t$ sinks of the condensation, 0 if $k = 1$. A
- *   vertex reachable from all others exists iff the condensation
- *   has exactly one sink. In the DP, process components in
+ *   collected on a walk), or for 2-SAT. A vertex reachable from
+ *   all others exists iff the condensation has exactly one sink. In the DP, process components in
  *   increasing id for "what can be reached from here" and in
  *   decreasing id for "what reaches here".
  * Source: kactl SCC (CC0), made iterative.

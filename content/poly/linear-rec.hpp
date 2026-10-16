@@ -4,31 +4,31 @@
  *   $s_i = sum_(j = 1)^L c_j s_(i - j)$ for every $i >= L$, as
  *   `c[j - 1]` $= c_j$. `linear_rec(s, c, k)` returns $s_k$ from the
  *   first $L$ terms, via $x^k$ modulo the characteristic polynomial.
- * Precondition: Arithmetic modulo the prime `MOD`. Entries of `s`
- *   and `c` are below `MOD` in absolute value, so a hand-written
- *   `c = {2, -1}` is fine. A recurrence of order $L$ is found from
- *   $2L$ terms; give a margin, as fewer terms give a shorter wrong
- *   answer. $k >= 0$.
+ * Precondition: Arithmetic modulo the prime `MOD`; `linear_rec`:
+ *   $k >= 0$. Entries of `s` and `c` are below `MOD` in absolute
+ *   value, so a hand-written `c = {2, -1}` is fine. A recurrence of
+ *   order $L$ is found from $2L$ terms; give a margin, as fewer
+ *   terms give a shorter wrong answer.
  * Time: $O(n^2)$ for $n$ terms; $O(L^2 log k)$ for `linear_rec`.
  *   About 0.4 s for $L = 1000$ and $k = 10^18$, 0.3 s for $n = 10^4$.
  * Usage:
  *   vl c = berlekamp_massey({1, 1, 3, 5, 11, 21}); // {1, 2}
  *   ll x = linear_rec({1, 1}, c, k); // s_k, 0-indexed
- * Tweak: Squarefree composite modulus: make `MOD` a variable, run
- *   modulo each prime factor and combine with CRT. A modulus with a
- *   square factor ($2^32$, $10^9$) needs a matrix power instead. For
- *   $L$ in the thousands with huge $k$ replace `mul` by NTT
+ * Tweak: Orders: of a sum, at most the sum of the orders; of a
+ *   termwise product, their product; of a prefix sum, one more; of
+ *   $k^d r^k$, $d + 1$. `berlekamp_massey` needs a prime: for a squarefree
+ *   modulus run both functions modulo each prime factor and combine
+ *   with CRT. `linear_rec` never divides, so with a known
+ *   recurrence it works modulo any `MOD` up to $3 dot 10^9$. For $L$
+ *   in the thousands with huge $k$ replace `mul` by NTT
  *   multiplication and division (or use Bostan-Mori).
  * Example:
  *   // Walks of length k in a graph with V vertices satisfy a
  *   // recurrence of order <= V: get 2V + 10 terms by DP, then
  *   vl s = first_terms(2 * V + 10);
  *   ll ans = linear_rec(s, berlekamp_massey(s), k);
- * Notes: Any sequence $s_k = u^T A^k v$ for a fixed $m times m$
- *   matrix has order at most $m$ (Cayley-Hamilton). The order of a
- *   sum is at most the sum of the orders, of a termwise product at
- *   most their product, and a prefix sum adds one; a polynomial of
- *   degree $d$ in $k$, or $k^d r^k$, has order $d + 1$. Cues: "a
+ * Notes: The order bounds follow from Cayley-Hamilton; a
+ *   polynomial of degree $d$ in $k$ has order $d + 1$. Cues: "a
  *   fixed transition repeated $k <= 10^18$ times", a DP over a small
  *   automaton, "the answer modulo a prime for huge $n$" where a
  *   matrix is awkward to write. Bound the hidden state size $m$,

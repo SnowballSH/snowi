@@ -13,10 +13,9 @@
  *   LiChao lc(xs); // vector<ll>, the query points
  *   lc.add_line(k, m); lc.add_segment(k, m, l, r);
  *   ll y = lc.query(x);
- * Tweak: Maximum: add `(-k, -m)` and negate the answer. Online `x`
- *   in a large range: create children on demand over the integers
- *   `[lo, hi)` and use `mid` itself instead of `xs[mid]`. Any
- *   functions where two of them cross at most once work too.
+ * Tweak: Online `x` in a large range: create children on demand
+ *   over the integers `[lo, hi)` and use `mid` itself instead of
+ *   `xs[mid]`.
  * Example:
  *   // dp[j] = min over i < j of dp[i] + (h[j] - h[i])^2 + C
  *   LiChao lc(sorted_unique_h);

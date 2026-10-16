@@ -1,12 +1,8 @@
 """
 Title: Contest template
-Description: PyPy template. Reads all input at once (much faster than
-  `input()`), works on tokens, and writes output in one call. Wrapping
-  the solution in `main()` makes PyPy compile locals faster. Run
-  commands: Contest setup.
+Description: `main()` makes locals fast in PyPy.
 Usage:
-  n = nxt()
-  a = [nxt() for _ in range(n)]
+  x = nxt()  # next int token
 Status: run on sample input by tests/contest/test_template.py
 """
 

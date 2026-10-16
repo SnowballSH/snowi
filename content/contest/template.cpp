@@ -1,13 +1,9 @@
 /**
  * Title: Contest template
- * Description: Base template (from kactl). Every C++ snippet assumes
- *   these macros and typedefs. `cin.exceptions` turns a failed read
- *   into a crash instead of silently wrong answers. Compile and
- *   run commands: Contest setup.
+ * Description: `cin.exceptions`: a failed read crashes instead of
+ *   silently giving wrong answers.
  * Usage:
- *   int n; cin >> n; vi a(n);
- *   rep(i, 0, n) cin >> a[i];
- *   sort(all(a)); ll s = accumulate(all(a), 0LL);
+ *   int n; cin >> n; vi a(n); for (int& x : a) cin >> x;
  * Source: kactl (CC0).
  * Status: compiled and run by tests/contest/template.test.cpp
  */

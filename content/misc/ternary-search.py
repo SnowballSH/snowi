@@ -16,7 +16,6 @@ Usage:
   x = ternary(0, n - 1, cost)
   t = golden(0, 1e9, g)
 Tweak: `f` may return anything comparable (ints, floats, tuples).
-  Maximum: negate `f`. Fewer iterations when `f` is slow.
 Example:
   >>> ternary(-10, 10, lambda x: (x - 3) ** 2)
   3

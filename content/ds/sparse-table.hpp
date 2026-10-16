@@ -1,17 +1,12 @@
 /**
  * Title: Sparse table
- * Description: Static range minimum in $O(1)$: `t[j][i]` is the
- *   minimum of `[i, i + 2^j)`, and a query covers `[l, r)` with two
- *   overlapping blocks of length $2^k$, $k = floor(log_2(r - l))$.
+ * Description: Static range minimum.
  * Precondition: 0-indexed, `l < r`. `op` is idempotent
  *   (`op(x, x) = x`), associative and commutative.
  * Time: $O(n log n)$ time and memory to build, $O(1)$ per query.
  * Usage:
  *   SparseTable st(a); // vector<ll> a
  *   ll m = st.query(l, r); // min of [l, r)
- * Tweak: Change `op`: `max(a, b)` or `gcd(a, b)`. Index of the
- *   minimum: build from pairs `{a[i], i}` (ties go to the smallest
- *   index), or `{-a[i], i}` for the maximum.
  * Example:
  *   // Leftmost position of the maximum of [l, r):
  *   vector<pair<ll, int>> b;

@@ -1,12 +1,9 @@
 /**
  * Title: XOR basis
- * Description: Linear basis over $FF_2$ of the inserted numbers: the
- *   set of all subset XORs (the span) is exactly the set of XORs of
- *   basis vectors. `insert` returns whether `x` was independent,
- *   `max_xor(x)` / `min_xor(x)` give the largest / smallest `x ^ v`
- *   over `v` in the span, and `kth(k)` the `k`-th smallest span
- *   element. `PrefixXorBasis` answers "max subset XOR of
- *   `a[l..r]`" while `a` is inserted left to right.
+ * Description: `max_xor(x)` / `min_xor(x)`: the largest / smallest
+ *   `x ^ v` over the span of the inserted numbers; `kth(k)`: the
+ *   `k`-th smallest span element. `PrefixXorBasis`: max subset XOR
+ *   of `a[l..r]` as `a` is inserted left to right.
  * Precondition: $0 <= x < 2^60$. `kth`: $0 <= k < 2^"rank"$ (`k = 0`
  *   gives 0). `PrefixXorBasis`: insert `a[r]` with `i = r` for
  *   `r = 0, 1, ...`; `max_xor(l)` then covers `a[l..r]`, inclusive.

@@ -33,6 +33,14 @@ item = "minkowski"
 icpc = true
 
 [[entry]]
+item = "manhattan-mst"
+icpc = ["cpp"]
+
+[[entry]]
+item = "hull3d"
+icpc = ["cpp"]
+
+[[entry]]
 note = "formulas"
 title = "Geometry facts"
 icpc = true

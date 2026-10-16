@@ -12,8 +12,7 @@ Time: Exponential in the worst case, fast in practice: a random
 Usage:
   best, x = LPSolver(A, b, c).solve()  # best = inf or -inf: no x
 Tweak: Exact answers on small inputs: pass `Fraction` data and
-  `eps=0`. Minimize: negate `c` and the answer. Equality: two
-  inequalities. Free variable: $x = x' - x''$ with both $>= 0$.
+  `eps=0`.
 Example:
   >>> # max 3x + 2y with x + y <= 4, x + 3y <= 7, x <= 3
   >>> lp = LPSolver([[1, 1], [1, 3], [1, 0]], [4, 7, 3], [3, 2])

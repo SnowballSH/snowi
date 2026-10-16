@@ -2,13 +2,12 @@
 Title: Convex hull
 Description: `convex_hull` returns the vertices of the convex hull
   counter-clockwise, starting from the smallest point (by `x`, then
-  `y`), without collinear points (Andrew's monotone chain).
-  `in_hull` returns 1 if `p` is strictly inside such a hull, 0 if
-  on its boundary and -1 if outside. `hull_diameter` returns the
-  farthest pair of points (rotating calipers).
-Precondition: Points are tuples `(x, y)`. `in_hull` and
-  `hull_diameter` take a hull as returned by `convex_hull`
-  (non-empty for `hull_diameter`). Exact for integers.
+  `y`), without collinear points. `in_hull` returns 1 if `p` is
+  strictly inside such a hull, 0 if on its boundary and -1 if
+  outside. `hull_diameter` returns the farthest pair of points.
+Precondition: `in_hull` and `hull_diameter` take a hull as returned
+  by `convex_hull` (non-empty for `hull_diameter`). Exact for
+  integers.
 Time: $O(n log n)$ for the hull, $O(log n)$ per `in_hull` query,
   $O(n)$ for `hull_diameter`.
 Usage:

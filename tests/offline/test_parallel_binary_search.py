@@ -156,27 +156,46 @@ for _ in range(iters(1500)):
 for _ in range(iters(100)):
   stress_dsu(30, 200, 50)
 
-# Large: the Usage, T = Q = 2e5 point adds and prefix checks.
-n = T = Q = 200_000
-p = [rnd(0, n - 1) for _ in range(T)]
-w = [rnd(0, 10**9) for _ in range(T)]
-r = [rnd(0, n) for _ in range(Q)]
-need = [rnd(0, 10**14) for _ in range(Q)]
-fw = lib.Fenwick(n)
 
+def usage(n, T, Q, p, w, r, need):
+  """The Usage verbatim, inside a function as in main()."""
+  Fenwick, parallel_bs = lib.Fenwick, lib.parallel_bs
+  fw = Fenwick(n)
 
-def reset():
-  fw.t = [0] * n
+  def reset():
+    nonlocal fw
+    fw = Fenwick(n)
 
-
-with Timer("T = Q = 2e5, Usage"):
-  res = lib.parallel_bs(
+  return parallel_bs(
     T,
     Q,
     reset,
     lambda t: fw.add(p[t], w[t]),
     lambda i: fw.query(r[i]) >= need[i],
   )
+
+
+for _ in range(iters(300)):  # small: against a direct simulation
+  n, T, Q = rnd(1, 8), rnd(0, 10), rnd(0, 8)
+  p, w = [rnd(0, n - 1) for _ in range(T)], [rnd(0, 3) for _ in range(T)]
+  r, need = [rnd(0, n) for _ in range(Q)], [rnd(0, 8) for _ in range(Q)]
+  want = []
+  for i in range(Q):
+    s, t = 0, 0
+    while t < T and s < need[i]:
+      s += w[t] if p[t] < r[i] else 0
+      t += 1
+    want.append(t if s >= need[i] else T + 1)
+  check_eq(usage(n, T, Q, p, w, r, need), want)
+
+# Large: the Usage, T = Q = 2e5 point adds and prefix checks.
+n = T = Q = 200_000
+p = [rnd(0, n - 1) for _ in range(T)]
+w = [rnd(0, 10**9) for _ in range(T)]
+r = [rnd(0, n) for _ in range(Q)]
+need = [rnd(0, 10**14) for _ in range(Q)]
+with Timer("T = Q = 2e5, Usage"):
+  res = usage(n, T, Q, p, w, r, need)
 for _ in range(50):
   i, s, t = rnd(0, Q - 1), 0, 0
   while t < T and s < need[i]:

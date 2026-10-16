@@ -6,6 +6,7 @@ icpc = true
 
 [[entry]]
 item = "gauss-real"
+icpc = true
 
 [[entry]]
 item = "xor-basis"
@@ -13,7 +14,6 @@ icpc = true
 
 [[entry]]
 item = "matrix"
-icpc = true
 
 [[entry]]
 item = "simplex"
@@ -22,3 +22,4 @@ icpc = true
 [[entry]]
 note = "facts"
 title = "Linear algebra facts"
+icpc = true

@@ -1,18 +1,14 @@
 /**
  * Title: Closest pair of points
  * Description: Returns two points of `v` at the smallest distance.
- *   Sweeps the points by `y`, keeping those less than the best
- *   distance below the sweep line in a set ordered by `x`.
  * Precondition: At least two points; equal points are allowed
  *   (distance 0). Exact for `P<ll>` with $|x|, |y| <= 10^9$:
  *   squared distances stay below $8 dot 10^18$.
  * Time: $O(n log n)$.
  * Usage:
  *   auto [a, b] = closest_pair(pts); ll d2 = (a - b).dist2();
- * Tweak: `P<double>` works as is. The window is `sqrt(best)`, plus
- *   1 for integer `T`, where truncation would make it too short.
- *   For indices, find `a` in the input, then `b` at another index
- *   (the two may be equal points).
+ * Tweak: For indices, find `a` in the input, then `b` at another
+ *   index (the two may be equal points).
  * Example:
  *   // Tricky function: min over i != j of (i - j)^2 + (S_i - S_j)^2
  *   // with prefix sums S is a closest pair of the points (i, S_i).

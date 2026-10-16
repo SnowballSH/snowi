@@ -3,13 +3,10 @@
  * Description: One layer of a DP,
  *   $"new"[i] = min_(j < i) "old"[j] + "cost"(j, i)$ for every
  *   `i`, when the smallest optimal `j` is non-decreasing in `i`.
- *   It solves the middle `i` by scanning, then each half with the
- *   `j` range cut at that optimum.
- * Precondition: `cost` satisfies the quadrangle inequality
- *   $c(a, c) + c(b, d) <= c(a, d) + c(b, c)$ for
- *   $a <= b <= c <= d$, or the smallest optimal `j` is known to
- *   be non-decreasing in `i` (a monotone choice among tied `j` is
- *   not enough). Unreachable states are `LLONG_MAX / 4`, also used
+ * Precondition: `cost` satisfies the quadrangle inequality (DP
+ *   techniques), or the smallest optimal `j` is known to be
+ *   non-decreasing in `i` (a monotone choice among tied `j` is not
+ *   enough). Unreachable states are `LLONG_MAX / 4`, also used
  *   for `new[0]` and as a cap; `old[j] + cost(j, i)` fits in `ll`.
  * Time: $O(n log n)$ calls to `cost` per layer.
  * Usage:
@@ -18,9 +15,13 @@
  *   vector<ll> dp(n + 1, LLONG_MAX / 4);
  *   dp[0] = 0;
  *   rep(k, 0, K) dp = dc_layer(dp, cost); // dp[n]: K groups
- * Tweak: Maximum: negate `old` and `cost` (then the reverse
- *   inequality must hold). Only some `i` needed, or `j <= i`
- *   allowed: change the root call and the scan bound `m`.
+ * Tweak: Only some `i` needed, or `j <= i` allowed: change the
+ *   root call and the scan bound `m`. A cost without an $O(1)$
+ *   formula (equal pairs in `[j, i)`): move a Mo-style window to
+ *   `[j, i)` inside `cost`, $O(n log n)$ moves per layer. All `K`
+ *   layers in $O(n^2)$: Knuth's bound
+ *   $"opt"_(k - 1)[i] <= "opt"_k [i] <= "opt"_k [i + 1]$, `i`
+ *   filled downwards.
  * Example:
  *   // Split a into K groups, minimising the sum of the squared
  *   // group sums; pre[i] = a[0] + ... + a[i - 1], a[i] >= 0.
@@ -37,20 +38,14 @@
  *   convex and $S$ non-decreasing (squared sums), for "pairs
  *   inside the group" counts such as inversions or equal pairs,
  *   and for sums of such costs. When unsure, brute-force `opt` on
- *   small cases and check that it never decreases. Costs that are
- *   not $O(1)$ (equal pairs in `[j, i)` for a minimum, distinct
- *   values for a maximum): keep a window with add/remove like Mo's
- *   algorithm and move it to `[j, i)` inside `cost`; the scans
- *   move it $O(n log n)$ per layer. If the cost has the
- *   quadrangle inequality, the answer for exactly `K` groups is
- *   convex in `K`, so the Aliens trick (`dp/wqs`) with a fast
- *   inner DP avoids the factor `K`. Knuth on layers also works:
- *   $"opt"_(k - 1)[i] <= "opt"_k [i] <= "opt"_k [i + 1]$, with `i`
- *   filled downwards, costs $O(n^2)$ over all layers. This does
- *   not apply to $"dp"[i] = min_(j < i) "dp"[j] + "cost"(j, i)$ on
- *   a single array, where `dp[j]` is still unknown: use CDQ divide
- *   and conquer on `i`, or a deque of candidates with binary
- *   search.
+ *   small cases and check that it never decreases. Window costs
+ *   (Tweak) also fit distinct values for a maximum. If the cost
+ *   has the quadrangle inequality, the answer for exactly `K`
+ *   groups is convex in `K`, so the Aliens trick (`dp/wqs`) with a
+ *   fast inner DP avoids the factor `K`. This does not apply to
+ *   $"dp"[i] = min_(j < i) "dp"[j] + "cost"(j, i)$ on a single
+ *   array, where `dp[j]` is still unknown: use CDQ divide and
+ *   conquer on `i`, or a deque of candidates with binary search.
  * Source: Classic; cp-algorithms "Divide and Conquer DP".
  * Status: stress-tested against an $O(n^2)$ DP
  */

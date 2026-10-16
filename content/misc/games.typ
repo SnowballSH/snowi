@@ -6,13 +6,12 @@
   terminal positions. A position becomes winning once one
   successor is losing, and losing once all its successors are
   winning (count them down). Positions never decided are draws.
-- Scoring games: with $f(s)$ = (my score) $-$ (opponent's score)
-  from $s$ on, $f(s) = max_(s -> s') ("gain" - f(s'))$.
 - A number that one player maximises and the other minimises:
   binary search the threshold $L$ and solve the win/lose game
   "can the maximiser force at least $L$?".
 
 === Sprague-Grundy
+#full[
 #fact[Theorem][In an impartial game (both players have the same
   moves; whoever cannot move loses),
   $g(x) = "mex" {g(y) : x -> y}$. A sum of games, where a move
@@ -21,10 +20,9 @@
   with $g_i xor g < g_i$ to a position of value $g_i xor g$.]
 - A move that splits a component into independent parts leads to
   the XOR of their values.
-- $g(x)$ is at most the number of moves from $x$: size mex arrays
-  by that.
 - Different moves for the two players (partizan games): no
   Grundy values; solve win/lose on the whole state.
+]
 - Tree, each move claims a connected set of free vertices next to
   the claimed set (which stays connected): the position is the sum
   of the subtrees hanging off the claimed set. Memoise one value
@@ -36,13 +34,12 @@
 #fact[Misère Nim][Whoever makes the last move loses. If every pile
   has at most 1 stone, the mover wins iff the number of piles of
   size 1 is even; otherwise iff the XOR of the piles is nonzero.]
-#fact[Subtraction games][Take 1 to $k$: $g(n) = n mod thin (k + 1)$.
-  More generally, if every amount $1, dots, M - 1$ is allowed and
-  no multiple of $M$ is, then $g(n) = n mod M$. Amounts with at
-  most $m$ set bits: $M = 2^(m + 1) - 1$#full[ (Digit sums in
-  _Number theory facts_)]. For any finite set of allowed
-  amounts, $g$ is eventually periodic: tabulate it and find the
-  period.]
+#fact[Subtraction games][If every amount $1, dots, M - 1$ is
+  allowed and no multiple of $M$ is, then $g(n) = n mod M$; e.g.
+  amounts with at most $m$ set bits: $M = 2^(m + 1) - 1$#full[
+  (Digit sums in _Number theory facts_)]. For any finite set of
+  allowed amounts, $g$ is eventually periodic: tabulate it and
+  find the period.]
 #fact[Staircase Nim][Coins on steps $0, 1, dots$; a move shifts
   coins from step $i > 0$ to step $i - 1$. It is Nim on the odd
   steps: moves from even steps are undone by the opponent.]
@@ -58,9 +55,15 @@
 #fact[Green Hackenbush][On a rooted tree a move deletes an edge
   and everything no longer connected to the root.
   $g(v) = xor.big_c (g(c) + 1)$ over the children $c$ of $v$; a
-  path of $n$ edges is worth $n$.]
+  path of $n$ edges is worth $n$. With cycles, first contract each
+  2-edge-connected part to one vertex; its $E$ edges become loops,
+  together worth $E mod 2$ (fusion principle).]
+#fact[Lasker's Nim][Take any amount, or split a pile into two
+  nonempty piles: $g(4 i + 1) = 4 i + 1$, $g(4 i + 2) = 4 i + 2$,
+  $g(4 i + 3) = 4 i + 4$, $g(4 i + 4) = 4 i + 3$.]
 
 === Strategy arguments
+#full[
 - Mirror: on a symmetric position the second player copies the
   first through the centre (two equal piles, a symmetric board);
   if the centre is a legal move, the first player takes it and
@@ -69,6 +72,7 @@
   its partner.
 - Strategy stealing: if an extra move never hurts, the first
   player wins (Chomp, Hex). It shows who wins, not how.
+]
 - Fixed length: if every play has the same number of moves (the
   final state is forced, whatever the order), only that number
   matters. Writing $abs(x - y)$ for two numbers on the board until
@@ -81,12 +85,6 @@
 
 #full[
 === More
-- Lasker's Nim (take any, or split a pile into two nonempty
-  piles): $g(4 i + 1) = 4 i + 1$, $g(4 i + 2) = 4 i + 2$,
-  $g(4 i + 3) = 4 i + 4$, $g(4 i + 4) = 4 i + 3$.
-- Green Hackenbush with cycles: contract each 2-edge-connected
-  part into one vertex; its $E$ edges become loops, together worth
-  $E mod 2$ (fusion principle). Then apply the tree rule.
 - Games with chance: value of a chance node = probability-weighted
   average; a cycle in the states gives an equation (solve it) or
   value iteration until changes are below $10^(-12)$.

@@ -4,16 +4,13 @@ Description: All maximal palindromes. A palindrome `s[l, r)` has
   center `c = l + r - 1` in $[0, 2n - 1)$: even `c` is the
   character `c/2`, odd `c` the gap after character `(c-1)/2`.
   `plen[c]` is the length of the longest palindrome with center
-  `c`. So `s[l, r)` is a palindrome iff `plen[l + r - 1] >= r - l`.
-Precondition: `s` is a `str`, `bytes` or list.
+  `c`.
 Time: $O(n)$. PyPy: about 0.2 s for $n = 10^6$.
 Usage:
   plen = manacher(s)  # length 2n - 1
   pal = plen[l + r - 1] >= r - l  # s[l, r), l < r
   c = max(range(len(plen)), key=plen.__getitem__)  # n >= 1
   l = (c + 1 - plen[c]) // 2  # longest: s[l : l + plen[c]]
-Tweak: Odd lengths only: `plen[2 * i]`; even only:
-  `plen[2 * i + 1]`.
 Example:
   >>> s = "abaaba"; plen = manacher(s)
   >>> plen

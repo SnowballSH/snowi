@@ -1,21 +1,16 @@
 """
 Title: Number theoretic transform
-Description: `conv(a, b)` multiplies polynomials modulo `MOD`:
-  `c[k]` is $sum_(i + j = k) a_i b_j$. `ntt(a)` replaces `a` by its
-  values at the powers of a primitive `len(a)`-th root of unity, in
-  bit-reversed order, and `intt(a)` undoes it. Pointwise products in
-  between give the cyclic convolution of length `len(a)`.
+Description: `conv(a, b)` multiplies polynomials modulo `MOD`.
+  `ntt(a)` replaces `a` by its values at the powers of a primitive
+  `len(a)`-th root of unity, in bit-reversed order, and `intt(a)`
+  undoes it.
 Precondition: `MOD` $= 998244353 = 119 dot 2^23 + 1$ with primitive
   root 3. Entries in `[0, MOD)`. `len(a)` is a power of two, at most
   $2^23$, so `conv` needs `len(a) + len(b) - 1` $<= 2^23$.
 Time: $O(n log n)$. A $2^18 times 2^18$ product takes about 0.2 s.
 Usage:
   c = conv(a, b)  # len(a) + len(b) - 1 entries
-Tweak: Other NTT primes $c dot 2^k + 1$ with primitive root 3:
-  `167772161` $(2^25)$, `469762049` $(2^26)$. To square, transform
-  once. To reuse transforms (matrices of polynomials) pad all to one
-  power of two `n`, `ntt` each entry, combine pointwise, `intt` the
-  results.
+Tweak: Other primes: the table in Polynomial techniques.
 Uses: numtheory/modpow
 Example:
   >>> conv([1, 2], [3, 4])

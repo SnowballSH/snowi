@@ -9,19 +9,23 @@
  *   and the tangents from point `c2` if `r2 = 0`. `circumcircle`
  *   returns the center and radius of the circle through three
  *   points, `mec` those of the smallest circle containing all
- *   points (Welzl, randomised).
+ *   points (Welzl, randomised). `circle_poly` is the signed area of
+ *   the circle's intersection with a simple polygon (positive if
+ *   counter-clockwise).
  * Precondition: Floating `T`, radii of type `T` too (`5.0`, not
  *   `5`). Lengths within `eps` $= 10^(-9)$ count as equal (fine for
  *   coordinates up to about $10^4$). Concentric circles give no
  *   point and no tangent. `circumcircle`: points not collinear.
- *   `mec`: at least one point.
- * Time: $O(1)$; `mec` expected $O(n)$.
+ *   `mec`: at least one point. `circle_poly`: no two consecutive
+ *   vertices equal.
+ * Time: $O(1)$; `mec` expected $O(n)$, `circle_poly` $O(n)$.
  * Usage:
  *   vector<P<double>> v = circle_line(c, r, a, b);
  *   vector<P<double>> w = circle_inter(c1, r1, c2, r2);
  *   auto t = tangents(c1, r1, c2, r2); // t[i].first on circle 1
  *   auto [o, rad] = circumcircle(a, b, c);
  *   auto [center, radius] = mec(pts);
+ *   double area = circle_poly(c, r, poly);
  * Tweak: For larger coordinates scale `eps` (the noise is about
  *   $10^(-13)$ times the largest coordinate); `mec` has no `eps`.
  *   More precision: `P<long double>` with `long double` radii.
@@ -46,7 +50,8 @@
  *   whether the half-plane intersection is empty. Circumradius from
  *   side lengths $x, y, z$ and area $S$: $R = x y z / (4 S)$.
  * Source: kactl CircleLine, CircleIntersection, CircleTangents,
- *   Circumcircle, MinimumEnclosingCircle (CC0).
+ *   Circumcircle, MinimumEnclosingCircle, CirclePolygonIntersection
+ *   (CC0).
  * Status: stress-tested against brute force
  */
 #pragma once
@@ -113,4 +118,25 @@ template<class T> pair<P<T>, T> mec(vector<P<T>> ps) {
         }
     }
   return {base + o, r};
+}
+template<class T>
+T circle_poly(P<T> c, T r, const vector<P<T>>& poly) {
+  auto arc = [&](P<T> p, P<T> q) { // sector of the turn p -> q
+    return atan2(p.cross(q), p.dot(q)) * r * r / 2;
+  };
+  T sum = 0;
+  rep(i, 0, sz(poly)) {
+    P<T> p = poly[i] - c, q = poly[(i + 1) % sz(poly)] - c;
+    P<T> d = q - p;
+    T a = d.dot(p) / d.dist2(), s = 1, t = 0;
+    T h = a * a - (p.dist2() - r * r) / d.dist2();
+    if (h > 0) // the chord p + d [s, t] lies inside
+      h = sqrt(h), s = max<T>(0, -a - h), t = min<T>(1, -a + h);
+    if (t < 0 || s >= 1) sum += arc(p, q);
+    else {
+      P<T> u = p + d * s, w = p + d * t;
+      sum += arc(p, u) + u.cross(w) / 2 + arc(w, q);
+    }
+  }
+  return sum;
 }

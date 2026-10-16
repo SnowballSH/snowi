@@ -1,11 +1,9 @@
 """
 Title: Prefix function (KMP)
 Description: `pi[i]` is the length of the longest proper border
-  of `s[0, i]`: a proper prefix that is also a suffix.
+  of `s[0, i]`.
   `kmp_match(s, pat)` lists the start of every occurrence of `pat`
-  in `s`, overlapping ones included. The smallest period of `s` is
-  `p = n - pi[n - 1]`; `s` is a power of `s[0, p)` iff `p` divides
-  `n`.
+  in `s`, overlapping ones included.
 Precondition: `pat` is non-empty. `s` and `pat` have the same type
   (`str`, `bytes` or list): a `str` character never equals a byte.
 Time: $O(n)$; `kmp_match` $O(|s| + |"pat"|)$. PyPy: about 0.1 s for
@@ -14,8 +12,6 @@ Usage:
   pi = prefix_function(s)
   per = n - pi[-1]  # smallest period, n >= 1
   occ = kmp_match(s, pat)  # start positions
-Tweak: Works on any sequence with `==`, e.g. a list of ints; no
-  separator value is needed.
 Example:
   >>> prefix_function("abaabaab")
   [0, 0, 1, 1, 2, 3, 4, 5]

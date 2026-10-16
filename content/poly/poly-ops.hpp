@@ -18,13 +18,11 @@
  *   vl b = poly_inv(a, n); // a b = 1 mod x^n
  *   vl e = poly_exp(poly_log(a, n), n); // e = a mod x^n
  *   auto [q, r] = poly_divmod(a, b);
- * Tweak: Square root when $a_0 = 1$: `poly_pow(a, (MOD + 1) / 2, n)`
- *   (an exponent in the field works because $a_0 = 1$). Otherwise
- *   strip $x^v$ and the leading coefficient $c$ as `poly_pow` does,
- *   take that root and multiply by $x^(v \/ 2)$ and
- *   `mod_sqrt(c, MOD)` (`numtheory/mod-sqrt`); there is no root if
- *   $v$ is odd or $c$ is not a square. Another NTT prime: change
- *   `MOD` (and the root 3 in `ntt` if needed).
+ * Tweak: Square root: `poly_pow(a, (MOD + 1) / 2, n)` if $a_0 = 1$;
+ *   else strip $x^v$ and $c = a_v$ as `poly_pow` does and multiply
+ *   that root by $x^(v \/ 2)$ and `mod_sqrt(c, MOD)`
+ *   (`numtheory/mod-sqrt`): none if $v$ is odd or $c$ is not a
+ *   square.
  * Example:
  *   // Partitions p(0..n-1) = 1 / prod_k (1 - x^k), via
  *   // ln(1 / (1 - x^k)) = sum_j x^(jk) / j:

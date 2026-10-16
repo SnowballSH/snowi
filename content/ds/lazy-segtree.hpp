@@ -3,8 +3,7 @@
  * Description: Range apply and range fold. Nodes `S` form a monoid
  *   under `op` with identity `e`; tags `F` act on nodes through
  *   `mapping(f, s)` and compose by `composition(f, g)` = "`g`, then
- *   `f`", with identity `id`. `max_right` and `min_left` work as in
- *   the segment tree. Default: range add, range min.
+ *   `f`", with identity `id`. Default: range add, range min.
  * Precondition: 0-indexed, half-open ranges. `mapping(f, op(a, b))
  *   = op(mapping(f, a), mapping(f, b))` and `mapping(id, s) = s`.
  *   `pred(e)` is true and `pred` is monotone.
@@ -14,12 +13,11 @@
  *   st.apply(l, r, 5); st.apply(i, -1); st.query(l, r);
  *   st.set(i, 7); st.get(i); st.query_all();
  *   int r = st.max_right(l, [&](ll v) { return v > x; });
- * Tweak: Change only the block above `n`. Max instead of min:
- *   `e = LLONG_MIN`, `max`. Range sum needs the length:
- *   `S = {sum, len}` with leaves `{a_i, 1}` and `mapping` returning
- *   `{s.sum + f * s.len, s.len}`. Range assign: `F` with a sentinel
- *   `id` for "none", `composition` returns `f == id ? g : f` and
- *   `mapping` returns `f == id ? s : f` (`push` also passes `id`).
+ * Tweak: Range sum needs the length: `S = {sum, len}` with leaves
+ *   `{a_i, 1}` and `mapping` returning `{s.sum + f * s.len, s.len}`.
+ *   Range assign: `F` with a sentinel `id` for "none",
+ *   `composition` returns `f == id ? g : f` and `mapping` returns
+ *   `f == id ? s : f` (`push` also passes `id`).
  * Example:
  *   // Range affine a_i = b a_i + c, range sum, mod MOD:
  *   struct S { ll sum, len; };

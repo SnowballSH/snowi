@@ -5,10 +5,7 @@ Description: Static array of non-negative integers answering order
   smallest value (0-indexed) of `a[l:r]`;
   `count_less(l, r, x)` counts its values `< x`,
   `count(l, r, lo, hi)` its values in `[lo, hi)`, and
-  `rank(x, r)` the copies of `x` in `a[:r]`. Level `h` stores a
-  prefix count of the ones in bit `h` of every value, then moves
-  the values whose bit `h` is 0 to the front (stably): that is the
-  order level `h - 1` sees.
+  `rank(x, r)` the copies of `x` in `a[:r]`.
 Precondition: 0-indexed, half-open ranges, `a[i] >= 0`. `kth`
   needs `0 <= k < r - l`; any integer `x` is fine elsewhere.
 Time: $O(n log V)$ build and $O(log V)$ per query, where $V$ is

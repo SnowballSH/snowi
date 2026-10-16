@@ -4,6 +4,13 @@
 claimed property (monotone `opt`, convexity in $k$) by brute force
 first.]
 
+- Keeping only the best value per state is exact when every
+  transition is non-decreasing in that value. Counting optimal
+  plans as (best, count) pairs needs each transition strictly
+  increasing in the value (only best predecessors reach the best)
+  or independent of it (every plan ties: keep the total count
+  too).
+
 === Which speed-up applies
 #fact[Quadrangle inequality][$w(a, c) + w(b, d) <= w(a, d) + w(b, c)$
   for $a <= b <= c <= d$: crossing intervals cost at most nested
@@ -12,29 +19,28 @@ first.]
   sorted point sets), and for sums over the pairs inside `[l, r)`
   of weights $>= 0$; it survives sums and adding $g(l) + h(r)$.
   Everywhere (any two rows and columns) it is a *Monge* matrix.]
-#fact[Monotone `opt`][With the inequality, the smallest optimal
-  $j$ in $min_j "old"[j] + w(j, i)$ never decreases in $i$: one
-  layer in $O(n log n)$ (`dp/dc-opt`), or $O(n)$ by SMAWK. If
-  `dp` depends on itself ($"dp"[i] = min_(j < i) "dp"[j] + w(j, i)$),
-  use CDQ on $i$ or a deque of candidates with binary search.]
-#fact[Knuth][$"dp"[l][r] = w(l, r) + min_k "dp"[l][k] + "dp"[k][r]$
-  with the inequality and $w$ monotone under inclusion: $O(n^2)$
-  (`dp/knuth`).]
-#fact[Lines][$"dp"[i] = min_j ("dp"[j] + a_j b_i + c_j)$ plus terms
-  in $i$ alone is a minimum of lines $a_j x + ("dp"[j] + c_j)$ at
-  $x = b_i$; add line $j$ once $"dp"[j]$ is known. A deque if
-  slopes and queries are sorted, else `ds/li-chao`#cpp[ or
-  `ds/line-container`]. No inequality needed.]
+#fact[Monotone `opt`][If `dp` depends on itself,
+  $"dp"[i] = min_(j < i) "dp"[j] + w(j, i)$ with the inequality:
+  keep a deque of (candidate $j$, first $i$ where $j$ is best); a
+  new $j$ pops candidates from the back while it beats them at
+  their first $i$, then binary searches where it starts to win,
+  $O(n log n)$; or CDQ on $i$. One layer of `old`: SMAWK is
+  $O(n)$.]
+#full[#fact[Lines][$"dp"[i] = min_j ("dp"[j] + a_j b_i + c_j)$ plus
+  terms in $i$ alone is a minimum of lines
+  $a_j x + ("dp"[j] + c_j)$ at $x = b_i$; add line $j$ once
+  $"dp"[j]$ is known. A deque if slopes and queries are sorted,
+  else `ds/li-chao`#cpp[ or `ds/line-container`]. No inequality
+  needed.]]
 #fact[Convolution][$c_k = min_(i + j = k) (a_i + b_j)$. Both convex:
   $c_0 = a_0 + b_0$, then the differences of $a$ and of $b$ merged
   in sorted order, $O(n + m)$, and $c$ is convex. Only $b$ convex:
   the smallest optimal $i$ never decreases in $k$ (`dp/dc-opt`,
   SMAWK). Concave sequences under (max, +): the same.]
-#fact[Exactly $k$][The best value is convex (minimum) or concave
-  (maximum) in $k$: drop $k$, charge $lambda$ per item, binary
-  search $lambda$ (`dp/wqs`). Convex: min-cost flow in the amount
-  ($k$ disjoint subarrays, $k$ buy-sell trades), matroids,
-  partitions with a quadrangle-inequality cost.]
+#fact[Exactly $k$][Convex (minimum) or concave (maximum) in $k$,
+  so `dp/wqs` applies, for: min-cost flow in the amount ($k$
+  disjoint subarrays, $k$ buy-sell trades), matroids, partitions
+  with a quadrangle-inequality cost.]
 #fact[Unit steps][$min sum_i f_i (b_i)$ over integers $b_i >= 0$
   with $sum_i b_i = m$ and every $f_i$ convex: take the $m$
   cheapest unit steps $f_i (x + 1) - f_i (x)$ over all $i$ (each
@@ -47,9 +53,11 @@ first.]
   binary search $lambda$, or Dinkelbach: from any feasible ratio,
   set $lambda$ to the ratio of a set maximising
   $sum (a - lambda b)$ until it stops growing (a few rounds).]
-#fact[Convex in a value][A DP over one numeric state $x$ that stays
-  convex piecewise linear in $x$ (costs $|x - a|$, prefix minima,
-  windows): `dp/slope-trick`.]
+#fact[(min, +) power][Shortest walks with exactly $e$ edges:
+  matrix power with `min` for $+$ and $+$ for $times$, "zero"
+  $Z = $ #cpp[`LLONG_MAX / 4`]#py[`1 << 62`] and "one" 0. An entry
+  $>= Z\/2$ means no walk, as long as every walk weighs less than
+  $Z\/4$ in absolute value.]
 #fact[Block maximum][$"dp"[j] = min_(i < j) ("dp"[i] + max(a_i,
   dots, a_(j - 1)))$ in $O(n)$: a stack of groups of $i$ that share
   the current block maximum $M$, each with its least $"dp"[i]$ and
@@ -62,9 +70,6 @@ first.]
   A big int is a fast bitset: about $10^9$ bit operations per
   0.3 s.]]
 #lang-code(
-  cpp: "bitset<S + 1> b; // b[s]: sum s is reachable
-b[0] = 1;
-for (int x : a) b |= b << x;",
   py: "b, mask = 1, (1 << (S + 1)) - 1  # bit s: sum s reachable
 for x in a:
   b = (b | b << x) & mask",
@@ -74,19 +79,17 @@ for x in a:
   two if even, and add $floor((c - 1) / 2)$ copies of $2 x$; go
   from small $x$ up. $O(sqrt(S))$ items remain:
   $O(S sqrt(S) / 64)$.
-- Bounded knapsack (count $c$, weight $w$, value $v$): split $c$
-  into $1, 2, 4, dots$ while the next power fits in what is left,
-  plus the remainder ($10 = 1 + 2 + 4 + 3$), as 0/1 items:
-  $O(W sum log c_i)$. $O(n W)$: for each residue $r$ of $w$,
+- Bounded knapsack (count $c$, weight $w$, value $v$) in $O(n W)$:
+  for each residue $r$ of $w$,
   $"new"[r + t w] = t v + max_(t - c <= s <= t) ("dp"[r + s w] - s v)$,
-  a sliding window maximum (monotone deque).
+  a sliding window maximum (monotone deque).#full[ Simpler,
+  $O(W sum log c_i)$: split $c$ into $1, 2, 4, dots$ while the next
+  power fits in what is left, plus the remainder
+  ($10 = 1 + 2 + 4 + 3$), as 0/1 items.]
+- Tree knapsack in $O(n^2)$, or $O(n K)$: _Tree techniques_.
 
-=== Bitmasks and digits
-- All submasks `s` of all masks `m`, $3^n$ in total: start at
-  `s = m`, step `s = (s - 1) & m`, stop after `s = 0`.
-- Sum over submasks in $O(n 2^n)$: for each bit `b`, for each
-  mask `m` with bit `b`: `f[m] += f[m ^ 1 << b]`. Supersets,
-  inverses, subset convolution: `poly/subset-transforms`.
+#full[
+=== Profiles and digits
 - Broken profile (tilings of $n times m$, $m$ small): cells in
   row-major order, the profile holds the state of the last $m$
   cells (covered or not; base 3 when a cell needs three states):
@@ -121,25 +124,24 @@ for x in a:
     f, t = g, nxt(t, ch)
   return sum(f[q] for q in range(Q) if accept(q)) + accept(t)",
 )
+]
 
-=== Orders and trees
+=== Insertion (component) DP
+Insert the values of a permutation in increasing order and track
+the number of blocks $j$ that the final order will glue together.
+A new value opens a block ($j + 1$ places), sticks to an end of a
+block ($2 j$ places) or joins two neighbouring blocks ($j - 1$
+places). Counts permutations with given up/down patterns, or costs
+that depend on whether a neighbour is larger.
+
+#full[
+=== More patterns
 - Exchange argument: if we choose the order (jobs, stacking),
   find when swapping neighbours `a, b` helps: `a` goes first iff
   `cost(a, b) <= cost(b, a)`, e.g. $t_a w_b < t_b w_a$ for
   weighted completion time. Sort by it, then run the DP or
   knapsack in that order. Cross-multiply instead of dividing and
   check that the order is transitive.
-- Tree knapsack in $O(n^2)$, or $O(n K)$: _Tree techniques_.
-
-#full[
-=== More patterns
-- Insertion (component) DP for permutations: insert values in
-  increasing order and track the number of blocks $j$ that the
-  final order will glue together. A new value opens a block
-  ($j + 1$ places), sticks to an end of a block ($2 j$ places)
-  or joins two neighbouring blocks ($j - 1$ places). Counts
-  permutations with given up/down patterns, or costs that depend
-  on whether a neighbour is larger.
 - Sorting first fixes the order of a DP: sort by deadline and
   knapsack over time ("take a job only before its deadline"), by
   $w + s$ for stacking boxes of weight $w$ and strength $s$, by
@@ -148,17 +150,6 @@ for x in a:
 - Huge `n` with a fixed linear transition: matrix power
   (`linalg/matrix`), over (min, +) or (max, +) too. Linear
   recurrences: `poly/linear-rec`.
-- Monotone `opt` for a single array ($"dp"$ depends on itself):
-  keep a deque of (candidate $j$, first $i$ where $j$ is best);
-  a new $j$ pops candidates from the back while it beats them at
-  their first $i$, then binary searches where it starts to win.
-  $O(n log n)$.
-- Keeping only the best value per state is exact when every
-  transition is non-decreasing in that value. Counting optimal
-  plans as (best, count) pairs needs each transition strictly
-  increasing in the value (only best predecessors reach the best)
-  or independent of it (every plan ties: keep the total count
-  too).
 - Counting inputs that a deterministic check accepts (a greedy
   with a few counters, a small DP): the check's state is the DP
   state ("DP of DP"). Prove the greedy exact first.

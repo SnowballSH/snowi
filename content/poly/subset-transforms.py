@@ -1,13 +1,10 @@
 """
 Title: Subset transforms
-Description: For arrays indexed by bit masks:
-  `bit_transform(a, "|")` replaces $a_S$ by the subset sum
-  $sum_(T subset.eq S) a_T$ (zeta), `"&"` by the superset sum and
-  `"^"` by the Walsh-Hadamard sum $sum_T (-1)^(|S inter T|) a_T$;
-  `inv=True` undoes it (for `"|"`: Möbius, inclusion-exclusion).
-  `bit_conv(a, b, op)` returns $c_S = sum a_i b_j$ over the pairs
-  with `i op j == S`; `subset_conv` takes only disjoint pairs
-  (`i | j == S`, `i & j == 0`).
+Description: On arrays indexed by masks, `bit_transform` with `"|"`
+  gives subset sums $sum_(T subset.eq S) a_T$ (zeta; `inv`:
+  Möbius), `"&"` superset sums, `"^"` Walsh-Hadamard
+  $sum_T (-1)^(|S inter T|) a_T$. `bit_conv`: $c_S = sum a_i b_j$
+  over `i op j == S`; `subset_conv` only over disjoint `i`, `j`.
 Precondition: `a` and `b` have the same length $2^n$ (pad with
   zeros), entries in `[0, MOD)`; results are modulo `MOD`.
 Time: $O(n 2^n)$ for the transforms and `bit_conv`, 0.1 to 0.2 s
@@ -23,8 +20,7 @@ Tweak: Exact integers without a modulus: replace the last three
   `% MOD` in `bit_conv`. Max, min or OR over subsets instead of a
   sum: `a[j + s] = max(a[j + s], a[j])` in the `"|"` loop
   (`a[j] = max(a[j], a[j + s])` for `"&"`), delete the last three
-  lines, no inverse. $k$-fold power: transform, raise each entry
-  to the $k$-th power, invert.
+  lines, no inverse.
 Uses: numtheory/modpow
 Example:
   >>> bit_conv([1, 2, 0, 3], [2, 0, 1, 1], "^")

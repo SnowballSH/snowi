@@ -1,8 +1,7 @@
 /**
  * Title: Convolution modulo any m
  * Description: `conv_mod(a, b, m)` multiplies polynomials modulo any
- *   `m`, prime or not: `c[k]` is $sum_(i + j = k) a_i b_j mod m$. It
- *   splits each value into two 15-bit halves and needs four FFTs.
+ *   `m`, prime or not.
  * Precondition: $2 <= m < 2^31$, entries in `[0, m)`. Exact for
  *   result lengths up to $2^20$ when $m < 2^30$ (e.g. $10^9 + 7$),
  *   up to $2^19$ when $m < 2^31$; random inputs allow more.
@@ -10,8 +9,6 @@
  *   product takes about 0.3 s.
  * Usage:
  *   vl c = conv_mod(a, b, 1'000'000'007);
- * Tweak: For $m = 998244353$ use the faster `conv`. Three NTT primes
- *   with CRT are an exact alternative while $n m^2 < 2^86$.
  * Notes: Values are first shifted into $(-m/2, m/2]$ and split into
  *   balanced digits in $[-2^14, 2^14)$. Their products then cancel in
  *   the sums, which makes the doubles hundreds of times more accurate

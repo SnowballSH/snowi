@@ -1,10 +1,9 @@
 /**
  * Title: Lyndon factorization
  * Description: A Lyndon word is strictly smaller than all its
- *   proper suffixes, like `aab` or `abb`. `duval(s)` splits `s`
- *   into Lyndon words $w_1 >= w_2 >= dots >= w_k$ (the split is
- *   unique) and returns their start indices; the last factor is the
- *   smallest suffix of `s`. `min_rotation(s)` returns the smallest
+ *   proper suffixes. `duval(s)` splits `s` into Lyndon words
+ *   $w_1 >= w_2 >= dots >= w_k$ (the split is unique) and returns
+ *   their start indices. `min_rotation(s)` returns the smallest
  *   `i` for which the rotation `s[i, n) + s[0, i)` is
  *   lexicographically smallest.
  * Time: $O(n)$.
@@ -14,9 +13,8 @@
  *   st.push_back(n); // now factor j is s[st[j], st[j + 1])
  *   int r = min_rotation(s);
  *   rotate(s.begin(), s.begin() + r, s.end());
- * Tweak: Works on any sequence with `<` and `==`, e.g.
- *   `vector<int>`. Largest rotation: the smallest one with the
- *   order flipped (`-x` for numbers, `'z' + 'a' - c` for letters).
+ * Tweak: Largest rotation: the smallest one with the order flipped
+ *   (`-x` for numbers, `'z' + 'a' - c` for letters).
  * Example:
  *   // duval("abbabbaba") = {0, 3, 6, 8}: abb, abb, ab, a.
  *   // min_rotation("baba") = 1 (abab, the first of 1 and 3).

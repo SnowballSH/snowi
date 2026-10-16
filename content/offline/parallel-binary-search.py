@@ -2,25 +2,22 @@
 Title: Parallel binary search
 Description: For each query `i`, finds the fewest updates `t`
   (from `0..T`) after which `pred(i)` holds, or `T + 1` if it never
-  does. All the binary searches advance together: a round resets
-  the state, applies the updates in order and tests each unfinished
-  query at its own midpoint.
+  does.
 Precondition: `pred(i)` is monotone: once true, it stays true as
   more updates are applied. `reset()` restores the state before any
   update, `apply(t)` applies update `t` (`0 <= t < T`), and
   `pred(i)` only reads the state.
 Time: $ceil(log_2(T + 2))$ rounds, each with one `reset`, $T$
   calls of `apply`, one `pred` per unfinished query and $O(T + Q)$
-  extra work. PyPy, with ds/fenwick: the Usage takes about 1 s for
-  $T = Q = 10^5$ and 2.2 s for $2 dot 10^5$. The METEORS Example
-  (up to 3 adds per shower and one query per sector each round)
-  takes 1.5 s for $n = m = k = 10^5$ but about 7 s at the full
-  $3 dot 10^5$, where C++ needs 1.5 s.
+  extra work. PyPy: the Usage takes about 1 s for $T = Q = 10^5$
+  and 2.2 s for $2 dot 10^5$.
 Usage:
-  # ds/fenwick; update t: a[p[t]] += w[t] with w[t] >= 0
+  # update t: a[p[t]] += w[t] with w[t] >= 0, in a Fenwick tree
+  # with add(i, x) and query(r) = sum of a[:r]
   fw = Fenwick(n)
   def reset():
-    fw.t = [0] * n
+    nonlocal fw  # in main()
+    fw = Fenwick(n)
   res = parallel_bs(T, Q, reset, lambda t: fw.add(p[t], w[t]),
                     lambda i: fw.query(r[i]) >= need[i])
 Tweak: Over values (k-th smallest of `a[l:r]`): sort the positions
@@ -76,7 +73,10 @@ Notes: Think of it for "for each query, the first day (edge,
   it needs no `reset`, only an undo or subtracting what the left
   half gave. Online alternatives: a Kruskal reconstruction tree
   (DSU), a persistent segment tree or wavelet matrix (k-th
-  smallest).
+  smallest). The METEORS Example (up to 3 adds per shower and one
+  query per sector each round) takes 1.5 s in PyPy for
+  $n = m = k = 10^5$ but about 7 s at the full $3 dot 10^5$, where
+  C++ needs 1.5 s.
 Source: UCup S4-S5 Training Packet 14; POI 2011 Meteors.
 Status: stress-tested against brute force; rounds bounded
 """

@@ -1,12 +1,15 @@
 #import "/typst/notes.typ": *
 
+#full[
 Over a field ($FF_p$, $FF_2$, $RR$) every question below is
 Gaussian elimination: `linalg/gauss-mod`, `linalg/gauss-real`,
 `linalg/xor-basis`. Work in the field the problem lives in: a
 matrix can have full rank over $QQ$ but not mod $p$, and a 0/1
 matrix has different ranks over $FF_2$ and over $RR$.
+]
 
-=== Rank, solutions, subspaces
+=== Matrices and subspaces
+#full[
 #fact[Solutions][For an $n times m$ matrix
   $"rank" A + dim ker A = m$. $A x = b$ is solvable iff
   $"rank" A = "rank" [A | b]$; the solutions are one solution plus
@@ -14,19 +17,21 @@ matrix has different ranks over $FF_2$ and over $RR$.
   "Count assignments mod $p$ (or 0/1 under parity rules) that
   satisfy linear conditions" is this formula. A basis of $ker A$:
   one vector per free column (`linalg/gauss-mod` Example).]
-#fact[Random matrices][A uniform $n times n$ matrix over $FF_q$ is
-  invertible with probability $product_(i = 1)^n (1 - q^(-i))$:
-  about $0.289$ over $FF_2$, about $1 - 1\/q$ for large $q$.]
 #fact[Exchange][Replacing $v_i$ in a basis by $w$ gives a basis iff
   the $v_i$-coordinate of $w$ is nonzero. Over $FF_2$, replacing
   $v_i$ by $v_i xor x$ keeps a basis iff the $v_i$-coordinate of
   $x$ is 0, so a rank oracle reveals coordinates one by one.]
+]
+#fact[Random matrices][A uniform $n times n$ matrix over $FF_q$ is
+  invertible with probability $product_(i = 1)^n (1 - q^(-i))$:
+  about $0.289$ over $FF_2$, about $1 - 1\/q$ for large $q$.]
 #fact[Subspaces][$FF_q^n$ has $product_(i < k) (q^(n - i) - 1) \/
   (q^(k - i) - 1)$ subspaces of dimension $k$, so a plane has
-  $q + 1$ lines. If $q + 1$ pairwise non-proportional linear forms
-  span a 2-dimensional space of forms, every vector is a zero of
-  at least one of them (with basis $f, g$ they are $f$ and
-  $g + t f$).]
+  $q + 1$ lines.#full[ If $q + 1$ pairwise non-proportional linear
+  forms span a 2-dimensional space of forms, every vector is a
+  zero of at least one of them (with basis $f, g$ they are $f$ and
+  $g + t f$).]]
+#full[
 - Intersection of spans $U$ and $W$ (Zassenhaus): eliminate the
   rows $(u, u)$ for a basis of $U$ and $(w, 0)$ for a basis of $W$;
   the echelon rows of the form $(0, x)$ are a basis of
@@ -35,27 +40,31 @@ matrix has different ranks over $FF_2$ and over $RR$.
   solve $A^T A x = A^T b$ (`linalg/gauss-real`). Measurements
   known only up to sign (unsigned areas that are linear in the
   unknowns): try every sign pattern, keep the smallest residual.
+]
 #fact[Tridiagonal][$a_i x_(i - 1) + b_i x_i + c_i x_(i + 1) = d_i$
   in $O(n)$ (Thomas): forwards
   $c'_i = c_i \/ (b_i - a_i c'_(i - 1))$ and
   $d'_i = (d_i - a_i d'_(i - 1)) \/ (b_i - a_i c'_(i - 1))$, then
   $x_i = d'_i - c'_i x_(i + 1)$ backwards. Safe without pivoting
   when $|b_i| > |a_i| + |c_i|$; mod $p$ it only needs nonzero
-  pivots. Expectations on a line or level by level are such
-  systems.]
+  pivots.#full[ Expectations on a line or level by level are such
+  systems.]]
 
 === Determinants
+#full[
 - Matrix determinant lemma: $det(A + u v^T) = det A (1 + v^T
   A^(-1) u)$; so $det(I + u v^T) = 1 + v^T u$, and every
   principal minor of $I + bold(1) a^T$ is 1 plus the sum of the
   chosen $a_i$.
 - Vandermonde: $det(x_i^j)_(0 <= i, j < n) = product_(i < j)
   (x_j - x_i)$, nonzero iff the $x_i$ are distinct.
+]
 - The permanent is hard in general, but mod 2 it equals the
   determinant.
 - Composite modulus: clear each column with Euclid steps between
   two rows (subtract $floor(a\/b)$ times, swap, repeat; each swap
   flips the sign) in $O(n^3 log M)$.
+#full[
 #fact[Traces][$op("tr")(A^k) = sum_i lambda_i^k$ are the power sums
   $p_k$ of the eigenvalues. Newton's identities (Generating
   functions) turn $p_1, dots, p_n$ into the elementary symmetric
@@ -65,21 +74,25 @@ matrix has different ranks over $FF_2$ and over $RR$.
   determinants.]
 - Graham-Pollak: the distance matrix of any tree on $n >= 2$
   vertices has determinant $(-1)^(n - 1) (n - 1) 2^(n - 2)$.
+]
 
 === XOR and $FF_2$
-- An XOR basis is Gaussian elimination on the bit vectors of the
-  numbers. $n$ numbers of rank $r$ give $2^r$ distinct subset
+- #full[An XOR basis is Gaussian elimination on the bit vectors of
+  the numbers. ]$n$ numbers of rank $r$ give $2^r$ distinct subset
   XORs; each of them, 0 included, is the XOR of exactly
   $2^(n - r)$ subsets. Non-empty subsets with XOR 0:
   $2^(n - r) - 1$. A fixed element lies in none or in exactly half
   of the zero-XOR subsets.
+#full[
 - Which elements lie in some zero-XOR subset: store with each
   basis vector the mask of independent inserted elements it is
   the XOR of. An element that reduces to 0 forms a zero-XOR subset
   with the mask it reduced by; these circuits span all zero-XOR
   subsets, so OR their masks.
+]
 - Masking is linear: the largest `(subset XOR) & mask` is the
   largest subset XOR of the values `a_i & mask`.
+#full[
 - Walks in a graph where the length is the XOR of the edges and
   edges may repeat: take root distances $d$ in a spanning tree;
   every non-tree edge $(u, v, w)$ adds $d_u xor d_v
@@ -101,7 +114,9 @@ matrix has different ranks over $FF_2$ and over $RR$.
   forms are equal: hash that form to compare spans. For a fixed
   right end `r`, the spans of `a[l..r]` take at most $B + 1$
   distinct values over all `l` (`PrefixXorBasis`).
+]
 
+#full[
 === Rank tests with random values
 Schwartz-Zippel, Freivalds and the Tutte matrix are in
 Randomisation and hashing; two disjoint bases (union of linear
@@ -136,6 +151,7 @@ matroids) by random lifting in Matroids.
   the count is $P(n - 1, m - 1)^2 - P(n, m - 2) P(n - 2, m)$.
   Weighted paths work the same way (products of edge weights); the
   $k times k$ matrix of path counts comes from binomials or a DP.
+]
 
 === Matrix powers
 #fact[Cayley-Hamilton][$p(A) = 0$ for the characteristic
@@ -143,5 +159,5 @@ matroids) by random lifting in Matroids.
   $A^k = r(A)$ for $r = x^k mod p$, and $s_k = u^T A^k v$ satisfies
   a linear recurrence of order at most $n$: get $2n + 10$ terms by
   simulation and use `poly/linear-rec`, $O(n^2 log k)$ instead of
-  $O(n^3 log k)$. Walk counts, (max, +) powers and
-  $sum_(i < k) A^i$: `linalg/matrix`.]
+  $O(n^3 log k)$.#full[ Walk counts, (max, +) powers and
+  $sum_(i < k) A^i$: `linalg/matrix`.]]

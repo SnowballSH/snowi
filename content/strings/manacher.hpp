@@ -4,15 +4,13 @@
  *   center `c = l + r - 1` in $[0, 2n - 1)$: even `c` is the
  *   character `c/2`, odd `c` the gap after character `(c-1)/2`.
  *   `plen[c]` is the length of the longest palindrome with center
- *   `c`. So `s[l, r)` is a palindrome iff `plen[l + r - 1] >= r - l`.
+ *   `c`.
  * Time: $O(n)$.
  * Usage:
  *   vi plen = manacher(s); // size 2n - 1
  *   bool pal = plen[l + r - 1] >= r - l; // s[l, r), l < r
  *   int c = max_element(all(plen)) - begin(plen); // n >= 1
  *   string best = s.substr((c + 1 - plen[c]) / 2, plen[c]);
- * Tweak: Works on any sequence with `==`, e.g. `vector<int>`. Odd
- *   lengths only: `plen[2 * i]`; even only: `plen[2 * i + 1]`.
  * Example:
  *   // Number of palindromic substrings (with repeats):
  *   ll total = 0;

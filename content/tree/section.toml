@@ -29,6 +29,7 @@ icpc = ["cpp"]
 
 [[entry]]
 item = "tree-hash"
+icpc = true
 
 [[entry]]
 note = "techniques"

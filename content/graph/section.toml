@@ -2,7 +2,7 @@ title = "Graphs"
 
 [[entry]]
 item = "dijkstra"
-icpc = true
+icpc = ["py"]
 
 [[entry]]
 item = "bellman-ford"
@@ -10,11 +10,10 @@ icpc = true
 
 [[entry]]
 item = "floyd-warshall"
-icpc = true
+icpc = ["cpp"]
 
 [[entry]]
 item = "topo-sort"
-icpc = true
 
 [[entry]]
 item = "scc"
@@ -34,12 +33,19 @@ icpc = true
 
 [[entry]]
 item = "directed-mst"
+icpc = true
 
 [[entry]]
 item = "dominator-tree"
+icpc = true
 
 [[entry]]
 item = "max-clique"
+icpc = true
+
+[[entry]]
+item = "edge-colouring"
+icpc = ["cpp"]
 
 [[entry]]
 note = "theory"

@@ -1,20 +1,13 @@
 """
 Title: Interactive I/O
-Description: Talks to an interactive judge. `ask(x, y)` prints
-  the query line `? x y`, flushes, and reads one integer reply;
-  `reply()` reads the next one; `answer(x)` prints `! x`. If the
-  judge replies `-1` (an invalid query, or too many) or closes
-  the pipe, the program exits at once with status 0, so the
-  verdict is Wrong Answer instead of a time limit or a runtime
-  error.
+Description: `ask(x, y)` prints `? x y`, flushes and reads one
+  integer; `reply()` reads the next; `answer(x)` prints `! x`. A
+  reply of `-1` or EOF exits with status 0 (WA, not TLE or RE).
 Precondition: Replies are integers separated by any whitespace.
-  Every line must be flushed (`flush=True` does it); debug output
-  goes to `sys.stderr` only. Read the judge only with `reply()` or
-  `input()`, never with `sys.stdin.buffer` (as the template does):
-  that waits forever.
-Time: Each query is a round trip through the judge, measured at
-  about 20 µs of CPU and 25 to 40 µs of wall time: $10^5$
-  queries take 3 to 4 s of wall time.
+  Read the judge only with `reply()` or `input()`, never with
+  `sys.stdin.buffer` (as the template does): that waits forever.
+Time: 25 to 40 µs of wall time per query: $10^5$ queries take 3
+  to 4 s.
 Usage:
   n = reply()  # the judge's input, too
   r = ask(u, k)  # prints "? u k", reads one reply

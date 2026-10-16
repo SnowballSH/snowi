@@ -12,9 +12,7 @@ Time: $O(n + m)$, iterative.
 Usage:
   res = euler_path(n, edges, directed, src)
   if res: vs, es = res  # None: impossible from src
-Tweak: Circuit only: also require `vs[-1] == src`. To find a start:
-  an odd-degree vertex (undirected) or one with $"out" = "in" + 1$
-  (directed), else any vertex with an edge.
+Tweak: Circuit only: also require `vs[-1] == src`.
 Example:
   >>> edges = [(0, 1), (1, 2), (2, 0), (2, 3), (3, 2)]
   >>> euler_path(4, edges, False, 0)  # all degrees even

@@ -11,7 +11,6 @@ Precondition: `s` is a `str`, `bytes` or list of hashable, mutually
 Time: $O(n log n)$. PyPy: about 0.3 s for $n = 2 dot 10^5$.
 Usage:
   S = SuffixArray(s)
-  # S.sa[r]: start of the suffix of rank r
   d = n * (n + 1) // 2 - sum(S.lcp)  # distinct substrings
 Tweak: Sorted cyclic shifts: build on `s + s` and keep the starts `<
   n`.
