@@ -14,25 +14,9 @@ A crash in deep recursion can be a silent segmentation fault
 (exit code 139) rather than a `RecursionError`.]
 
 === Stress testing
-A generator takes a seed, so a failing case can be reproduced:
-#lang-code(
-  cpp: "int main(int, char** argv) {
-  mt19937 rng(atoi(argv[1]));
-  auto rnd = [&](int lo, int hi) {
-    return uniform_int_distribution(lo, hi)(rng);
-  };
-  int n = rnd(1, 8);
-  printf(\"%d\\n\", n);
-  rep(i, 0, n) printf(\"%d \", rnd(1, 10));
-  puts(\"\");
-}",
-  py: "import random, sys
-random.seed(int(sys.argv[1]))
-n = random.randint(1, 8)
-print(n)
-print(*[random.randint(1, 10) for _ in range(n)])",
-)
-Run until the first difference or crash, then print the input:
+A generator takes a seed, so a failing case can be reproduced: see
+Random test generators. Run until the first difference or crash,
+then print the input:
 #cpp[#cmd("sh", "for i in $(seq 1000); do
   ./{gen} $i > in && ./{brute} < in > want && ./{source} < in > got &&
     diff -b want got > /dev/null ||

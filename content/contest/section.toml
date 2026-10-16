@@ -10,6 +10,10 @@ title = "Setup, stress testing, hashing"
 icpc = true
 
 [[entry]]
+item = "gen"
+icpc = true
+
+[[entry]]
 note = "troubleshoot"
 title = "Troubleshooting"
 icpc = true
