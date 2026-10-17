@@ -22,7 +22,7 @@ Tweak: `lift(x, u, v)` carries `u`'s side across the edge to `v`
   and may depend on the direction (edges that must be reversed).
   Edge weights: let `adj` hold `(v, w)` pairs, keep `pw[v] = w`
   (the edge to `par[v]`) in the BFS, and pass `pw[v]` and `pw[c]`
-  to the two `lift` calls. For speed, inline the three functions.
+  to the two `lift` calls.
 Example:
   >>> adj = [[1], [0, 2, 3], [1, 4], [1], [2]]  # 0-1 1-2 1-3 2-4
   >>> rr = Reroot(adj, 0, max, lambda x, u, v: x + 1,

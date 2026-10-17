@@ -1,8 +1,8 @@
 """
 Title: Prime counting
-Description: Lucy_Hedgehog's sieve. After an $O(n^(3\/4))$ build,
-  `pc(v)` is $pi(v)$, the number of primes $<= v$, for $v = n$ and
-  every $v = floor(n\/i)$, and for every $v <= sqrt(n)$.
+Description: Lucy_Hedgehog's sieve: `pc(v)` is $pi(v)$, the number
+  of primes $<= v$, for every $v = floor(n\/i)$ and every
+  $v <= sqrt(n)$.
 Precondition: $n >= 0$. Other values of `v` give wrong answers.
 Time: $O(n^(3\/4) \/ log n)$, memory $O(sqrt(n))$. PyPy: 0.2 s for
   $n = 10^10$, 0.9 s for $10^11$.
@@ -31,20 +31,8 @@ Notes: $pi(10^10) = 455052511$, $pi(10^11) = 4118054813$,
   have no prime factor below `p`, so only $v >= p^2$ change.
   Cues: one query about primes with $n$ up to $10^11$, sums like
   $sum_p f(floor(n\/p))$, numbers with few prime factors (as in
-  the example). Min_25 sieve, for a multiplicative `f` with $f(p)$
-  a polynomial in `p`: get $G(v) = sum_(p <= v) f(p)$ from one
-  table per monomial; then $S(v, j)$, the sum of $f(i)$ over
-  $2 <= i <= v$ with no prime factor below $p_j$, is
-  $G(v) - G(p_(j - 1)) + sum_(k >= j, p_k^2 <= v)
-  sum_(e >= 1, p_k^(e + 1) <= v) (f(p_k^e) S(floor(v\/p_k^e),
-  k + 1) + f(p_k^(e + 1)))$, and $sum_(i <= n) f(i) = S(n, 1) +
-  f(1)$. Plain recursion is fine: its depth is $O(log n)$. For
-  $Phi(n) = sum_(i <= n) phi(i)$ and $M(n) = sum_(i <= n) mu(i)$,
-  Du's sieve is shorter: $Phi(n) = n(n + 1)\/2 - sum_(d = 2)^n
-  Phi(floor(n\/d))$ and $M(n) = 1 - sum_(d = 2)^n M(floor(n\/d))$,
-  summed over floor blocks and memoized on the values
-  $floor(n\/i)$, with a sieve for the arguments up to $n^(2\/3)$:
-  $O(n^(2\/3))$ in all.
+  the example).
+  Min_25 and Du's sieves: _Number theory facts_.
 Source: Lucy_Hedgehog's post in the Project Euler problem 10
   forum; min_25's blog.
 Status: stress-tested against a sieve

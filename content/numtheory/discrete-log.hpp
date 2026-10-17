@@ -2,8 +2,7 @@
  * Title: Discrete logarithm
  * Description: The smallest $x >= 0$ with
  *   $a^x equiv b thick (mod m)$, or -1 if there is none, for any
- *   modulus, with $0^0 = 1$. Divides out the common factors of `a`
- *   and `m`, then runs baby-step giant-step with a hash map.
+ *   modulus, with $0^0 = 1$.
  * Precondition: $1 <= m <= 3 dot 10^9$, so products fit in `ll`;
  *   `a` and `b` may be any integers.
  * Time: $O(sqrt(m))$ hash operations: about 5 ms for $m = 10^9$.

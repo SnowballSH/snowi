@@ -5,7 +5,7 @@ Description: Shortest paths from `s` when weights may be negative.
   to `v` can be arbitrarily short (`v` is reachable from a negative
   cycle that `s` reaches), with `INF = BellmanFord.INF`. For finite
   `dist[v]`, `par[v]` is the vertex before `v` on a shortest path
-  (-1 for `s`): follow it back to `s` to get the path.
+  (-1 for `s`).
 Precondition: Edges `(a, b, w)` are directed `a -> b`; vertices
   0-indexed. True distances are below `INF` $= 2^62$ in absolute
   value.
@@ -13,11 +13,11 @@ Time: $O(n m)$; stops as soon as a round changes nothing.
 Usage:
   bf = BellmanFord(n, edges, s)  # edges: (a, b, w), a -> b
   if bf.dist[v] == -BellmanFord.INF: ...  # no shortest path
-Tweak: Any negative cycle at all (not only reachable from `s`): add
-  a vertex `n` with 0-weight edges to every vertex and use it as
-  `s`. Longest paths: negate the weights. Real weights (arbitrage):
-  relax only if `da + w < dist[b] - 1e-9`, or rounding fakes
-  negative cycles.
+Tweak: Print a negative cycle (any one if `dist` starts all 0):
+  relax plainly for $n$ rounds (no `-INF` marking); if round $n$
+  still relaxes some `b`, follow `par` from `b` $n$ times, then
+  once around. Real weights (arbitrage): relax only if
+  `da + w < dist[b] - 1e-9`, or rounding fakes negative cycles.
 Example:
   >>> INF = BellmanFord.INF
   >>> edges = [(0, 1, 4), (0, 2, 5), (2, 1, -3), (1, 3, 1)]
@@ -38,10 +38,7 @@ Notes: Use it when weights are negative: arbitrage (weights
   `-INF`), "is there a cycle that gains money", or potentials for
   Johnson's all-pairs algorithm (then Dijkstra on
   $w(u, v) + d(u) - d(v) >= 0$). An undirected negative edge is
-  already a negative cycle. To print a negative cycle, relax plainly
-  for $n$ rounds (no `-INF` marking); if round $n$ still relaxes
-  some `x`, follow `par` from `x` $n$ times to land on a negative
-  cycle, then once around it. SPFA (queue-based) has the same worst
+  already a negative cycle. SPFA (queue-based) has the same worst
   case and is often targeted by anti-tests. PyPy checks about
   $2 dot 10^7$ edges per second, so $n m <= 10^7$ is safe.
 Source: kactl BellmanFord (CC0), simplified (no edge sorting).

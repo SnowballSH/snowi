@@ -1,5 +1,6 @@
 #import "/typst/notes.typ": *
 
+#full[
 A segment tree works for any *monoid*: an associative `op` with an
 identity `e`. It need not be commutative, since the tree always
 combines left before right. All the thinking goes into the node.
@@ -17,8 +18,10 @@ combines left before right. All the thinking goes into the node.
 A range whose answer comes from a left-to-right scan with a small
 state is a composition of functions (one per element): store the
 composed function if it stays in a small family.
+]
 
 === Standard nodes
+#full[
 #fact[Max subarray sum][Store `(sum, pre, suf, best)`; the best
   crossing subarray is `a.suf + b.pre`. Identity
   `(0, -INF, -INF, -INF)`. If the empty subarray counts, leaves
@@ -38,6 +41,7 @@ T op(T a, T b) {
   `mn`, add counts on ties. Under range add, the number of zeros is `cnt`
   when `mn = 0` and values stay $>= 0$: area of a union of
   rectangles, positions covered by no interval.]
+]
 #fact[Affine maps][Store $x -> b x + c$ as `(b, c)`. "`f`, then
   `g`" is `(g.b f.b, g.b f.c + g.c)`, identity `(1, 0)`.]
 #fact[Clamped shift][Store $x -> min(h, max(ell, x + a))$ as
@@ -50,18 +54,12 @@ T op(T a, T b) {
   $-infinity$ elsewhere. Rows are the state before, columns the
   state after. Independent set on a path: $M(w) = mat(0, w; 0,
   -infinity)$. On a cycle, take the trace: $max_s P[s][s]$.]
-#fact[Hash][Store `(h, p)` with $p = B^"len"$; merge to
-  `(a.h * b.p + b.h, a.p * b.p)` mod a prime, identity `(0, 1)`.
-  Keep a reversed hash too for palindrome checks under point
-  updates.]
-#fact[First index]["First `i >= l` with `a[i] >= x`" is
-  `max_right(l, v < x)` on max (`n` if none). On sums of values
-  $>= 0$, `r = max_right(l, s <= k)` makes `[l, r + 1)` the
-  shortest range from `l` with sum `> k` (none if `r = n`). Over
-  compressed values with leaves `(count, sum)`,
-  `min_left(V, c <= t)` finds where the `t` largest start: their
-  sum is that range's sum plus the missing copies of the value
-  just below.]
+#fact[First index][On sums of values $>= 0$,
+  `r = max_right(l, s <= k)` makes `[l, r + 1)` the shortest range
+  from `l` with sum `> k` (none if `r = n`). Over compressed values
+  with leaves `(count, sum)`, `min_left(V, c <= t)` finds where the
+  `t` largest start: their sum is that range's sum plus the missing
+  copies of the value just below.]
 #fact[Prefix maxima][Records of a range, or
   $sum_i max(a_l, dots, a_i)$, under point updates. Node `v` keeps
   its max and `R[v] = f(right, max(left))`, where `f(u, h)` is the
@@ -83,12 +81,6 @@ T op(T a, T b) {
   around the block of `c`.]
 
 === Lazy tags
-A tag `f` needs three laws: it acts on a node summary in $O(1)$
-(`mapping`), two tags fold into one (`composition(new, old)`,
-new on the outside), and it distributes over `op`. Range add and
-assign are in `ds/lazy-segtree`; affine `(b, c)` maps
-`(sum, len)` to `(b * sum + c * len, len)` and composes as in Affine
-maps.
 #fact[Linear tags][If an update applies the same linear map to
   each element's vector $(x_1, dots, x_k, 1)$, the node stores the
   sum of each coordinate (the length for the 1), a tag is a
@@ -107,18 +99,21 @@ maps.
   sorted.]
 
 === When it does not fit
+#py[
 - The tag cannot update a summary without looking inside: range
   chmin with range sum. Use segment tree beats: store `mx`, the
   strict second max `smx` and `cnt` of `mx`; stop if `mx <= x`,
   tag if `smx < x < mx`, else recurse. $O((n + q) log n)$
   amortized, $O(log^2 n)$ with adds.
+]
 - Range `a_i %= x`, `a_i /= x`, `a_i = floor(sqrt(a_i))` on values
   $>= 0$: store `mx` and recurse only into nodes that change:
   `mx >= x` for `%=`, `mx >= 1` for `/=` (skip `x = 1`), `mx >= 2`
   for sqrt. A changed element at least halves: $O(log V)$ changes.
+#full[
 - k-th smallest in a range, count distinct: merge sort tree,
   wavelet tree, persistent tree, or offline sweeps.
-- `op` is too heavy (sets, sorted lists): sqrt decomposition or Mo.
+]
 
 #full[
 === Pitfalls

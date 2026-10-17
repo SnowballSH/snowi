@@ -12,10 +12,10 @@ Precondition: `solve(lam)` returns `(v, c)`: the minimum `v` of
 Time: $O(log("hi" - "lo"))$ calls to `solve`.
 Usage:
   best = wqs(k, -C, C, solve)  # |slopes| <= C
-Tweak: Maximum of concave $F$: let `solve` minimise
-  `-value + lam * count` and negate the result. Ties toward more
-  items: search the largest `lam` with count `>= k`. At most `k`
-  items: `lo = 0`.
+Tweak: Ties toward more items: search the largest `lam` with
+  count `>= k`. At most `k` items: `lo = 0`. Smallest count in the
+  solver: minimise $v dot 2^20 + c$ as one int ($|v| < 2^42$),
+  much faster than tuples.
 Example:
   >>> def solve(lam, a=(5, 1, 1, 5, 2)):  # max sum, non-adjacent
   ...   B = 1 << 20  # (value, count) packed: value * B + count
@@ -36,9 +36,8 @@ Notes: Why the tie rule: with ties toward fewer items, the
   Where $F$ is straight, many counts tie at one `lam`; a solver
   that breaks ties inconsistently (one comparison on values
   alone) makes the search overshoot to a `lam` where `k` is not
-  optimal. Packing `value * 2^20 + count` into one int (Example)
-  makes every `min` tie-correct and is much faster than tuples
-  in PyPy. Slopes can be as large as $F$ itself (in the Example,
+  optimal; the packing of Tweak (used in the Example) avoids it.
+  Slopes can be as large as $F$ itself (in the Example,
   `a = 0, M, 0, ..., M, 0` with `k` near its maximum), so packed
   values may pass $2^63$: still correct, but big ints make
   `solve` about 5 times slower. Concavity sources: min-cost flow

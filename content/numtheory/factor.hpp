@@ -11,8 +11,7 @@
  *   bool p = is_prime(1'000'000'007);
  *   vector<ll> f = factor(360); // {2, 2, 2, 3, 3, 5}
  * Tweak: `mulmod` and `powmod` take nonnegative arguments and any
- *   modulus $1 <= m < 2^63$. For $n <= 10^12$ trial division up to
- *   $sqrt(n)$ is simpler.
+ *   modulus $1 <= m < 2^63$.
  * Example:
  *   vector<ll> divs = {1}; // all divisors of n, unsorted
  *   ll last = 0;

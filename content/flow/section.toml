@@ -22,10 +22,11 @@ icpc = true
 
 [[entry]]
 item = "global-min-cut"
-icpc = ["cpp"]
+icpc = true
 
 [[entry]]
 item = "gomory-hu"
+icpc = true
 
 [[entry]]
 note = "modelling"

@@ -3,7 +3,7 @@ Title: Li Chao tree
 Description: Minimum of lines $k x + m$ at the points of a fixed
   sorted list `xs`. `add_segment` adds a line that exists only
   for `x` in `[l, r)`. `query(x)` returns `LiChao.INF` if no line
-  covers `x`. The convex hull trick for PyPy.
+  covers `x`.
 Precondition: `xs` is sorted and non-empty; `query(x)` needs `x`
   in `xs`; `l` and `r` may be any values. Values $k x + m$ stay
   below `INF` $= 2^63 - 1$ (raise `INF` for larger ones).
@@ -12,9 +12,6 @@ Usage:
   lc = LiChao(xs)  # the query points
   lc.add_line(k, m); lc.add_segment(k, m, l, r)
   y = lc.query(x)
-Tweak: Maximum: add `(-k, -m)` and negate the answer. Online `x`
-  in a large range: use `xs = range(lo, hi)` if it fits in memory,
-  else read the queries first and compress.
 Example:
   >>> lc = LiChao(list(range(8)))
   >>> lc.add_line(1, 0); lc.add_line(-1, 5)

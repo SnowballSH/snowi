@@ -1,12 +1,11 @@
 /**
  * Title: Persistent segment tree
- * Description: Point add and range sum over `[0, n)`, where every
- *   update leaves the old tree intact and returns the root of a new
- *   version. Versions share all untouched nodes. Root 0 is the
- *   all-zero array. `kth(a, b, k)` reads version `b` minus version
- *   `a` as counts and returns the smallest `i` whose count over
- *   `[0, i]` exceeds `k`: the `k`-th smallest (0-indexed) value of
- *   a subarray when version `i` counts the compressed values of
+ * Description: Point add and range sum over `[0, n)`; every `add`
+ *   returns the root of a new version. Root 0 is the all-zero
+ *   array. `kth(a, b, k)` reads version `b` minus version `a` as
+ *   counts and returns the smallest `i` whose count over `[0, i]`
+ *   exceeds `k`: the `k`-th smallest (0-indexed) value of a
+ *   subarray when version `i` counts the compressed values of
  *   `a[0, i)`.
  * Precondition: 0-indexed, half-open ranges, `n >= 1`. For `kth`,
  *   every count of `b` minus `a` is $>= 0$ and `0 <= k <` their
@@ -19,12 +18,9 @@
  *   ll s = st.query(v1, l, r); // sum of [l, r) in version v1
  *   int idx = st.kth(v1, v2, k); // k-th unit of v2 - v1
  * Tweak: Point set: `add(v, i, x - query(v, i, i + 1))`. Max or
- *   min: `add` adds `delta` along the path, which is right only
- *   for sums (or xor), so set the new leaf and recompute the new
- *   path nodes from their children bottom-up; `query` then uses
- *   `max` with identity $-infinity$. Starting from an array `a`:
- *   `n` adds into root 0. Near the memory limit call
- *   `t.reserve(nodes)` first.
+ *   min: set the new leaf and recompute the copied path from its
+ *   children (`add`'s delta trick is only for sums). Near the
+ *   memory limit call `t.reserve(nodes)` first.
  * Example:
  *   // k-th smallest (0-indexed) of a[l, r), values compressed.
  *   vector<ll> vals = a;

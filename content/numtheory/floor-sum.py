@@ -3,7 +3,7 @@ Title: Floor sum
 Description: `floor_sum(n, m, a, b)` is
   $sum_(i=0)^(n-1) floor((a i + b) / m)$, for any signs of `a` and
   `b`, by a Euclid-like reduction.
-Precondition: $n >= 0$, $m >= 1$. No overflow concerns in Python.
+Precondition: $n >= 0$, $m >= 1$.
 Time: $O(log m)$; in PyPy about 1.5 µs per call for 32-bit
   inputs.
 Usage:

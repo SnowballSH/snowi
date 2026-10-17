@@ -144,6 +144,119 @@ def brute_mec(ps):
   return best
 
 
+def in_poly(v, p):
+  inside = False
+  for i in range(len(v)):
+    a, b = v[i - 1], v[i]
+    if (a[1] > p[1]) != (b[1] > p[1]):
+      x = a[0] + (b[0] - a[0]) * (p[1] - a[1]) / (b[1] - a[1])
+      inside ^= p[0] < x
+  return inside
+
+
+def signed_area(v):
+  return sum(cross(v[i - 1], v[i]) for i in range(len(v))) / 2
+
+
+def cross(a, b):
+  return a[0] * b[1] - a[1] * b[0]
+
+
+def green_area(c, r, v):
+  """Disc (c, r) inside a simple polygon by Green's theorem, another
+  method than circle_poly: polygon edges cut at the circle (pieces in
+  the disc), then circle arcs between crossings (arcs in the
+  polygon). Generic input only."""
+  sign = 1
+  if signed_area(v) < 0:
+    v, sign = v[::-1], -1
+  v = [(x - c[0], y - c[1]) for x, y in v]
+  total, angles = 0.0, []
+  for i in range(len(v)):
+    a, b = v[i - 1], v[i]
+    d = (b[0] - a[0], b[1] - a[1])
+    A = d[0] ** 2 + d[1] ** 2
+    B = 2 * (a[0] * d[0] + a[1] * d[1])
+    C = a[0] ** 2 + a[1] ** 2 - r * r
+    ts, disc = [0.0, 1.0], B * B - 4 * A * C
+    if disc > 0:
+      for sg in (-1, 1):
+        t = (-B + sg * math.sqrt(disc)) / (2 * A)
+        if 0 < t < 1:
+          ts.append(t)
+          angles.append(math.atan2(a[1] + d[1] * t, a[0] + d[0] * t))
+    ts.sort()
+    for t0, t1 in zip(ts, ts[1:]):
+      p = (a[0] + d[0] * t0, a[1] + d[1] * t0)
+      q = (a[0] + d[0] * t1, a[1] + d[1] * t1)
+      if math.hypot((p[0] + q[0]) / 2, (p[1] + q[1]) / 2) < r:
+        total += cross(p, q) / 2
+  if not angles:
+    return sign * (total + (math.pi * r * r if in_poly(v, (r, 0)) else 0))
+  angles.sort()
+  for i, lo in enumerate(angles):
+    hi = angles[i + 1] if i + 1 < len(angles) else angles[0] + 2 * math.pi
+    if in_poly(v, polar(r, (lo + hi) / 2)):
+      total += r * r * (hi - lo) / 2
+  return sign * total
+
+
+def clip(v, w):
+  """v clipped to the left of every edge of the convex polygon w."""
+  for k in range(len(w)):
+    s, e = w[k - 1], w[k]
+    ex, ey, out = e[0] - s[0], e[1] - s[1], []
+    for i in range(len(v)):
+      prev, cur = v[i - 1], v[i]
+      a = ex * (cur[1] - s[1]) - ey * (cur[0] - s[0])
+      b = ex * (prev[1] - s[1]) - ey * (prev[0] - s[0])
+      if (a < 0) != (b < 0):
+        f = a / (a - b)
+        out.append(
+          (cur[0] + (prev[0] - cur[0]) * f, cur[1] + (prev[1] - cur[1]) * f)
+        )
+      if a >= 0:
+        out.append(cur)
+    v = out
+  return v
+
+
+def ngon_bounds(c, r, v, m=128):
+  """Areas inside regular m-gons inscribed in and around the circle."""
+  ins = [add(c, polar(r, 2 * math.pi * k / m)) for k in range(m)]
+  R = r / math.cos(math.pi / m)
+  out = [add(c, polar(R, 2 * math.pi * k / m)) for k in range(m)]
+  x, y = signed_area(clip(v, ins)), signed_area(clip(v, out))
+  return min(x, y), max(x, y)
+
+
+def rnd_star(o, n, rmax):
+  """Star-shaped (so simple) counter-clockwise polygon around o."""
+  while True:
+    t = sorted(rng.uniform(0, 2 * math.pi) for _ in range(n))
+    gaps = [t[0] + 2 * math.pi - t[-1]] + [y - x for x, y in zip(t, t[1:])]
+    if max(gaps) < 3:
+      return [add(o, polar(rng.uniform(0.05, rmax), x)) for x in t]
+
+
+def simple(v):
+  n = len(v)
+  if abs(signed_area(v)) < 1e-9 or any(v[i - 1] == v[i] for i in range(n)):
+    return False
+  for i in range(n):
+    for j in range(i + 2, n):
+      if i == 0 and j == n - 1:
+        continue
+      a, b, p, q = v[i], v[(i + 1) % n], v[j], v[(j + 1) % n]
+      d1 = (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])
+      d2 = (b[0] - a[0]) * (q[1] - a[1]) - (b[1] - a[1]) * (q[0] - a[0])
+      d3 = (q[0] - p[0]) * (a[1] - p[1]) - (q[1] - p[1]) * (a[0] - p[0])
+      d4 = (q[0] - p[0]) * (b[1] - p[1]) - (q[1] - p[1]) * (b[0] - p[0])
+      if d1 * d2 <= 0 and d3 * d4 <= 0:
+        return False
+  return True
+
+
 for _ in range(iters(2000)):
   c, a, b = rnd_pt(10), rnd_pt(10), rnd_pt(10)
   r, t = rng.uniform(0.1, 10), rng.uniform(0, 2 * math.pi)
@@ -226,6 +339,46 @@ for it in range(iters(1500)):
   # The returned center is rounded to about 1e-7 at 1e9.
   check(all(dist(p, ctr) <= rad * (1 + 1e-7) + 1e-6 for p in ps))
 
+# circle_poly: generic polygons against Green's theorem.
+for it in range(iters(2000)):
+  c, v = rnd_pt(5), rnd_star(rnd_pt(5), rnd(3, 9), 6)
+  if it % 2:
+    v.reverse()
+  r = (0.3, 1, 3, 8, 20)[it % 5] * rng.uniform(0.5, 1)
+  got, want = lib.circle_poly(c, r, v), green_area(c, r, v)
+  check(close(got, want, 1e-7), f"{c} {r} {v}: {got} vs {want}")
+  check(close(lib.circle_poly(c, r, v[::-1]), -want, 1e-7))
+
+# Degenerate integer cases (vertices on the circle, tangent edges, the
+# center on a vertex or an edge): inside regular-polygon bounds and
+# close to the area for a slightly larger radius.
+degenerate = 0
+for it in range(iters(400)):
+  if it % 4 == 0:
+    v = [(0, 0), (6, 0), (6, 6), (0, 6)]
+  else:
+    v = [(rnd(-5, 5), rnd(-5, 5)) for _ in range(rnd(3, 6))]
+  if it % 8 == 4:
+    v.reverse()
+  if not simple(v):
+    continue
+  mid = ((v[0][0] + v[1][0]) / 2, (v[0][1] + v[1][1]) / 2)
+  c = (rnd(-3, 3), rnd(-3, 3)) if it % 2 else (v[0], mid, (3, 3))[it // 2 % 3]
+  r = rnd(1, 5)
+  lo, hi = ngon_bounds(c, r, v)
+  got = lib.circle_poly(c, r, v)
+  check(lo - 1e-9 <= got <= hi + 1e-9, f"{c} {r} {v}: {got}")
+  check(close(got, green_area(c, r + 1e-8, v), 1e-6))
+  degenerate += 1
+check(degenerate > iters(400) // 4)
+
+sq = [(0, 0), (2, 0), (2, 2), (0, 2)]
+check(close(lib.circle_poly((0, 0), 1, sq), math.pi / 4, 1e-12))
+check(close(lib.circle_poly((1, 1), 1, sq), math.pi, 1e-12))
+check(close(lib.circle_poly((1, 1), 5, sq), 4, 1e-12))
+check(close(lib.circle_poly((9, 9), 1, sq), 0, 1e-12))
+check(close(lib.circle_poly((1, 0), 1, sq), math.pi / 2, 1e-12))
+
 n = 200_000
 ps = [
   polar(rng.uniform(0, 1e3) if i % 10 else 1e3, rng.uniform(0, 2 * math.pi))
@@ -242,4 +395,6 @@ with Timer("2e5 each of circle_line, circle_inter, tangents"):
     total += len(lib.circle_line(p, 1.0, q, (0, 0)))
     total += len(lib.circle_inter(p, 3.0, q, 4.0))
     total += len(lib.tangents(p, 3.0, q, -4.0))
+with Timer("circle_poly of 2e5 vertices"):
+  lib.circle_poly((1, 2), 500.0, ps)
 print("OK geometry/circles")

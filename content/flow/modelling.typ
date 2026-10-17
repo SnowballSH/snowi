@@ -1,26 +1,29 @@
 #import "/typst/notes.typ": *
 
-Build a network, run `flow/dinic`, and read the answer from the
-flow value or from the minimum cut: the source side is what `s`
-still reaches in the residual graph.
-
 === Max flow and min cut
-#fact[Max-flow min-cut][The maximum flow equals the minimum
+#full[#fact[Max-flow min-cut][The maximum flow equals the minimum
   capacity of a cut: a vertex set $S$ with $s in S$, $t in.not S$,
   costing the capacities of edges from $S$ to the rest. Integer
-  capacities give an integer maximum flow.]
+  capacities give an integer maximum flow.]]
 #fact[Supply and demand][Supplies $b_v > 0$ and demands $b_v < 0$
   (summing to 0) can all be met iff every vertex set $X$ has net
   supply
   $sum_(v in X) b_v$ at most the capacity of the edges leaving
   $X$. When only a few $X$ can be tight (prefixes, subtrees, sides
   of a bridge, subsets of few types) check those directly.]
-#fact[Disjoint paths][With unit capacities the max flow counts
-  edge-disjoint $s$-$t$ paths (Menger, _Graph theory facts_). For
-  vertex-disjoint paths also split every vertex except $s$ and $t$
-  with capacity 1 (or run from $s_"out"$ to $t_"in"$).]
+- Planar $s$-$t$ min cut with $s$ and $t$ on the outer face:
+  split that face by an $s$-$t$ edge; the cut is a shortest path
+  in the dual between the two halves (grid with $s$ left and $t$
+  right: top border to bottom border). Otherwise it is a shortest
+  dual cycle separating $s$ from $t$.
+#full[#fact[Disjoint paths][With unit capacities the max flow
+  counts edge-disjoint $s$-$t$ paths (Menger, _Graph theory
+  facts_). For vertex-disjoint paths also split every vertex except
+  $s$ and $t$ with capacity 1 (or run from $s_"out"$ to
+  $t_"in"$).]]
 
 === Building blocks
+#full[
 - Vertex capacity $c$: split $v$ into $v_"in" -> v_"out"$ with
   capacity $c$; edges enter $v_"in"$ and leave $v_"out"$.
 - Undirected edge: one `add_edge(u, v, c, c)`.
@@ -30,6 +33,7 @@ still reaches in the residual graph.
   forces $v$ there too". Make it larger than every finite cut.
 - "Each item usable $k$ times", "at most $k$ per group": a
   capacity-$k$ edge, through a group vertex if needed.
+]
 - Huge counts of few kinds: one vertex per kind with summed
   capacities; binary search an answer $K$ outside the flow.
 - "$x$ can serve $y$" when $y$ is reachable from $x$ in a sparse
@@ -60,6 +64,10 @@ it, then zero both capacities of `ts`. For the largest value add
   Edges $s -> i$ with $w_i$ for profits, $i -> t$ with $-w_i$ for
   costs, $i -> j$ with $infinity$. Best total
   $= sum_(w_i > 0) w_i - "min cut"$; take the source side.]
+#fact[Densest subgraph][Max $|E(S)| \/ |S|$: binary search $g$.
+  Some $S$ beats $g$ iff the closure with every edge a profit-1
+  item requiring both ends and every vertex a cost-$g$ item has a
+  positive optimum. Distinct densities differ by $>= 1\/n^2$.]
 #fact[Two labels][Each $x_v in {0, 1}$ (0 = source side). Cost $a$
   if $x_v = 1$: edge $s -> v$ with $a$. Cost $b$ if $x_v = 0$:
   $v -> t$ with $b$. Penalty $p >= 0$ if $x_u = 0$ and $x_v = 1$:
@@ -67,18 +75,17 @@ it, then zero both capacities of `ts`. For the largest value add
   penalties for disagreeing work; on a bipartite grid, flip the
   labels of one color class to turn "equal" into "differ".]
 
+#full[
 === Bipartite matching (`flow/hopcroft-karp`)
 - Kőnig, Hall, Dilworth and path covers: _Graph theory facts_.
 - Costs on pairs: `flow/hungarian` (dense, $n <= 500$) or
   `flow/min-cost-flow`.
+]
 
 === Min-cost flow (`flow/min-cost-flow`)
-- $k$ disjoint paths of least total length: unit capacities,
-  `max_flow(s, t, k)`; split vertices for vertex-disjoint.
-- Maximum-weight matching of any size: costs $-w$, and stop
-  when the next path costs $>= 0$ (see the Tweak: test it right
-  after the potential update).
+#full[
 - Convex cost per unit: parallel unit edges with increasing cost.
+]
 - Transport on a path or tree: each edge carries the imbalance
   $b_e$ of the side it cuts off, so the cost is
   $sum_e c_e |b_e|$.
@@ -167,8 +174,7 @@ $n times n$ box give $O(n^(2\/3))$ hull vertices.
 - "Fewest cells to block", "fewest roads to destroy": min cut,
   splitting vertices when cells (not borders) are blocked.
 - "Choose a set, choosing $x$ forces $y$, maximize profit":
-  closure. "Edges minus vertices" (densest subgraph): each edge
-  is a profit item requiring its two endpoints.
+  closure. "Edges minus vertices": densest subgraph.
 - "Maximum set with no two conflicting" where conflicts are
   bipartite (cells of a chessboard, odd and even sums):
   $|V| - nu$.
@@ -182,11 +188,6 @@ $n times n$ box give $O(n^(2\/3))$ hull vertices.
 - Neighborhoods that are prefixes $[0, r_j)$: sort the $r_j$; the
   $k$-th smallest must be $>= k$.
 - Matching on a tree: match a leaf with its parent, bottom-up.
-- Planar $s$-$t$ min cut with $s$ and $t$ on the outer face:
-  split that face by an $s$-$t$ edge; the cut is a shortest path
-  in the dual between the two halves (grid with $s$ left and $t$
-  right: top border to bottom border). Otherwise it is a shortest
-  dual cycle separating $s$ from $t$.
 
 === Pitfalls
 - An "infinite" capacity must beat every finite cut, yet a few

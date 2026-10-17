@@ -12,9 +12,8 @@
  *   w[u][v] += c, w[v][u] += c;
  *   auto [cut, side] = global_min_cut(w);
  * Tweak: Real weights: `double` for `ll`, `INFINITY` for
- *   `LLONG_MAX`. The cut edges are those with one end in `side`.
- *   Sparse graphs: adjacency lists and a max-heap of `key` (lazy
- *   deletion) give $O(n m log n)$.
+ *   `LLONG_MAX`. Sparse graphs: adjacency lists and a max-heap of
+ *   `key` (lazy deletion) give $O(n m log n)$.
  * Example:
  *   // Fewest roads to close so that the towns fall apart, and
  *   // the towns on one side (edge connectivity).

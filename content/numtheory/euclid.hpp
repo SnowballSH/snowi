@@ -17,8 +17,6 @@
  *   ll inv = inv_mod(3, 10); // 7
  *   auto [r, l] = crt(2, 4, 4, 6); // (10, 12)
  *   auto [r2, l2] = crt_all({1, 2, 3}, {2, 3, 5}); // (23, 30)
- * Tweak: For a prime modulus `modinv` from Modular arithmetic is
- *   shorter. If the lcm can exceed $2^63$, switch to `__int128`.
  * Example:
  *   // a x + b y = c, any signs, a or b nonzero: solvable iff g | c
  *   ll x, y, g = euclid(abs(a), abs(b), x, y);

@@ -11,9 +11,8 @@ Usage:
   w = [[0] * n for _ in range(n)]
   w[u][v] += c; w[v][u] += c
   cut, side = global_min_cut(w)
-Tweak: The cut edges are those with one end in `side`. Sparse
-  graphs: adjacency dicts and a max-heap of `key` (lazy deletion)
-  give $O(n m log n)$.
+Tweak: Sparse graphs: adjacency dicts and a max-heap of `key`
+  (lazy deletion) give $O(n m log n)$.
 Example:
   >>> w = [[0] * 6 for _ in range(6)]
   >>> for u, v, c in [(0, 1, 3), (1, 2, 3), (2, 0, 3), (2, 3, 1),

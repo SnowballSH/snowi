@@ -1,5 +1,6 @@
 #import "/typst/notes.typ": *
 
+#full[
 Offline means every operation is read before any answer is due, so
 the answers may be computed in any order. Choose the order that
 makes the structure static, insert-only or monotone. It does not
@@ -7,8 +8,10 @@ apply when queries are decoded with the previous answer (forced
 online) or the problem is interactive, unless the answers are
 predictable (Fake online below). Keep each query's index and
 print in input order.
+]
 
 === Reordering
+#full[
 #fact[Sort the queries][Answer in an order in which the structure
   only grows. "Using only edges of weight $<= w$": sort edges and
   queries by weight, join into a DSU, answer when the weight is
@@ -25,6 +28,7 @@ print in input order.
   insert before they ask. A contribution that is a polynomial in
   the query coordinate, $sum_k c_k x^k$, needs one Fenwick tree per
   power $k$ (the coefficients $w, w l, w l^2$ of each update).]
+]
 #fact[All left ends][Sweep `r` and keep $f(l, r)$ for every
   `l <= r` in a lazy segment tree over `l`. Appending `a[r]`
   changes $f(dot, r)$ on a few contiguous ranges of `l`, found with
@@ -42,6 +46,7 @@ print in input order.
   $g(R) = |[c, d] inter [1, R]|$. Range adds on $[c, d]$ into
   Fenwick trees for the count, $sum (b + 1)$ and $sum (b - a + 1)$
   give the answer as a combination linear in $L$.]
+#full[
 #fact[Last occurrence][Distinct values in `a[l, r)`: sweep `r` and
   keep a mark only at the last position of each value seen; the
   answer is the number of marks in `[l, r)`. With `prev[i]`, the
@@ -78,6 +83,7 @@ for r in range(n + 1):
   and reverse the answers. "Components after each removal" is the
   standard case; an element that is never deleted is inserted at
   the start.]
+]
 #fact[Fake online][Queries decoded with the previous answer, but
   the answers are monotone in time (connected until some deletion,
   then never again): decode as if every answer were the first
@@ -110,6 +116,7 @@ for r in range(n + 1):
   free cell recurses into one half only.]
 
 === Divide and conquer
+#full[
 #fact[CDQ][Updates and queries interleaved in time, or a 3D partial
   order: split the operations in half; the left half's updates
   reach the right half's queries by one static sweep, so each
@@ -126,6 +133,7 @@ for r in range(n + 1):
   check needs the state after $t$ updates: run all binary searches
   together, one sweep over the updates per round, $O(log T)$
   rounds (`offline/parallel-binary-search`).]
+]
 #fact[Queries crossing a midpoint][Static range queries whose
   answer does not merge cheaply (best knapsack value on `[l, r)`,
   a non-invertible operation): recurse on `[lo, hi)` with middle
@@ -149,20 +157,24 @@ for r in range(n + 1):
   leaves below can still need.]
 
 === Other offline tools
+#full[
 - Mo's algorithm (`offline/mo`): range queries whose answer does
   not merge from halves but changes in $O(1)$ when an end moves.
+]
 - Mo with deletions only, when removing is cheap and adding is
   not (unlink from a sorted linked list; relinking in reverse
   order undoes it): per block of left ends, build the window
   `[block start, n)` once, take its queries by decreasing `r` and
   delete from the right for good; per query delete
   `[block start, l)`, answer, and undo. $O((n + q) sqrt(n))$.
+#full[
 - Blocks of $sqrt(q)$ operations: rebuild a static structure per
   block and handle the block's own updates by brute force
   (Periodic rebuild in _Sqrt decomposition and small tricks_).
 - Offline LCA, tree queries sorted by depth or by DFS order, and
   small-to-large merging are offline too: all queries of a vertex
   are answered when its subtree is complete.
+]
 
 #full[
 === Cues

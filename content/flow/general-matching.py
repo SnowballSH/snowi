@@ -12,9 +12,6 @@ Usage:
   g = [[] for _ in range(n)]
   g[u].append(v); g[v].append(u)
   k, mate = general_matching(g)
-Tweak: Bipartite graphs: `flow/hopcroft-karp` is faster. Weighted
-  matching in a general graph needs the much longer weighted
-  blossom algorithm; for $n <= 20$ use a bitmask DP.
 Example:
   >>> tri = [[1, 2], [0, 2], [0, 1, 3], [2, 4], [3, 5], [4]]
   >>> general_matching(tri)  # triangle 0 1 2, path 2 3 4 5

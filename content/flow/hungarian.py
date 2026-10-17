@@ -1,17 +1,15 @@
 """
 Title: Hungarian algorithm
-Description: Minimum-cost assignment: gives each of the `n` rows of
-  the cost matrix `a` its own column, minimizing the total cost.
-  Returns the cost and `match`, where `match[i]` is the column of
-  row `i`.
+Description: Minimum-cost assignment of the `n` rows of `a` to
+  distinct columns. Returns the cost and `match`, where `match[i]`
+  is the column of row `i`.
 Precondition: `n <= m` for an `n x m` matrix (transpose if not).
   Costs may be negative, with $|a_(i j)| < 2^60$.
 Time: $O(n^2 m)$.
 Usage:
   cost, match = hungarian(a)  # a: list of n rows of length m
-Tweak: Maximum-weight assignment: negate every entry and the
-  returned cost. Rows that may stay unassigned: add $n$ dummy
-  columns of cost 0. Float costs work unchanged.
+Tweak: Rows that may stay unassigned: add $n$ dummy columns of
+  cost 0. Float costs work unchanged.
 Example:
   >>> hungarian([[4, 1, 3], [2, 0, 5], [3, 2, 2]])
   (5, [1, 0, 2])

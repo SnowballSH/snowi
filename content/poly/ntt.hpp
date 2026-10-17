@@ -1,9 +1,9 @@
 /**
  * Title: Number theoretic transform
- * Description: `conv(a, b)` multiplies polynomials modulo `MOD`:
- *   `c[k]` is $sum_(i + j = k) a_i b_j$. `ntt(a)` replaces `a` by its
- *   values at $w^0, w^1, dots$ for $w = 3^(("MOD" - 1) / n)$, a
- *   primitive `n`-th root of unity, in natural order.
+ * Description: `conv(a, b)` multiplies polynomials modulo `MOD`.
+ *   `ntt(a)` replaces `a` by its values at $w^0, w^1, dots$ for
+ *   $w = 3^(("MOD" - 1) / n)$, a primitive `n`-th root of unity, in
+ *   natural order.
  * Precondition: `MOD` $= 998244353 = 119 dot 2^23 + 1$ with primitive
  *   root 3. Entries in `[0, MOD)`. `sz(a)` is a power of two, at most
  *   $2^23$, so `conv` needs `sz(a) + sz(b) - 1` $<= 2^23$.
@@ -12,10 +12,7 @@
  *   vl c = conv(a, b); // sz(a) + sz(b) - 1 entries
  * Tweak: Inverse transform: `ntt(a)`, then
  *   `reverse(a.begin() + 1, a.end())` and multiply by `modinv(n)`.
- *   Other NTT primes $c dot 2^k + 1$ with primitive root 3:
- *   `167772161` $(2^25)$, `469762049` $(2^26)$. To reuse transforms
- *   (matrices of polynomials) pad all to one `n`, `ntt` each entry,
- *   combine pointwise and invert each result.
+ *   Other primes: the table in Polynomial techniques.
  * Notes: `conv` falls back to the schoolbook product up to 40
  *   entries, which matters for divide-and-conquer products of many
  *   small polynomials. Cues: "for every $k$" with a sum over

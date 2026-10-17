@@ -4,15 +4,9 @@
  *   LCAs of all pairs of them (at most $2k - 1$ vertices for `k`
  *   keys), keeping ancestry. Returns `vs` sorted by DFS preorder
  *   `tin`, and `par[i]`, the index in `vs` of the parent of `vs[i]`
- *   in the compressed tree (-1 for `vs[0]`, the root). The edge
- *   into `vs[i]` stands for a path of
- *   `depth[vs[i]] - depth[vs[par[i]]]` tree edges. Only the LCAs of
- *   keys adjacent in preorder need to be added.
- * Precondition: `tree` is a tree/lca `LCA` (an `RmqLCA` from tree/lca-rmq,
- *   full packet, also works) of the tree. Keys may repeat; no keys gives empty
- *   lists.
- * Time: $O(k (log k + log n))$ for `k` keys; $O(k log k)$ with
- *   `RmqLCA`.
+ *   in the compressed tree (-1 for `vs[0]`, the root).
+ * Precondition: Keys may repeat; no keys gives empty lists.
+ * Time: $O(k (log k + log n))$ for `k` keys.
  * Usage:
  *   LCA lc(adj);
  *   auto [vs, par] = virtual_tree(lc, keys);
@@ -33,7 +27,9 @@
  *     cnt[par[i]] += cnt[i];
  *   }
  *   for (int v : keys) is_key[v] = 0;
- * Notes: Use it when queries each name a few special vertices with
+ * Notes: Only the LCAs of keys adjacent in preorder need to be
+ *   added. An `RmqLCA` (tree/lca-rmq) also works: $O(k log k)$.
+ *   Use it when queries each name a few special vertices with
  *   the total size bounded ($sum k_i <= 2 dot 10^5$): run the
  *   $O(n)$ tree DP on the compressed tree instead, in $O(k)$ per
  *   query after sorting. Keep per-query arrays indexed by position

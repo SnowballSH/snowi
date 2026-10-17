@@ -1,9 +1,9 @@
 """
 Title: Suffix automaton
-Description: Online automaton of the substrings of `s`: the paths
-  from state 0 spell exactly the substrings. Each state `v` is a
-  class of substrings with the same end positions: the suffixes of
-  its longest member with lengths `len[link[v]] + 1` to `len[v]`.
+Description: Online automaton of the substrings of `s`. Each state
+  `v` is a class of substrings with the same end positions: the
+  suffixes of its longest member with lengths `len[link[v]] + 1` to
+  `len[v]`.
   After `count()`, `cnt[v]` is how often each string of `v` occurs
   in `s`. Each `extend` adds `len[last] - len[link[last]]` new
   distinct substrings. Edges are flat: `nxt[26 * v + c]`, 0 when
@@ -17,9 +17,6 @@ Usage:
   sam.count()  # once, after the last extend
   occ = sam.cnt[v] if v >= 0 else 0  # t non-empty
   d = sam.distinct()  # distinct non-empty, O(n)
-Tweak: Other alphabets: change every `26` and the offset 97. `nxt`
-  is an `array` of 4-byte ints: a list takes twice the memory and is
-  slower.
 Example:
   >>> sam = SuffixAutomaton("abcbc")
   >>> sam.distinct(), sam.find("cb") > 0, sam.find("ca")

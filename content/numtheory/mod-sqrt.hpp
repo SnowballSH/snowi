@@ -8,9 +8,7 @@
  *   about 3 µs for $p = 998244353$.
  * Usage:
  *   ll r = mod_sqrt(a, p); // -1, or roots r and p - r
- * Tweak: For $p equiv 3 thick (mod 4)$ the root is simply
- *   $a^((p + 1)\/4)$ (check its square). `powmod` and `mulmod` come
- *   from Primality and factoring; only those two are needed.
+ * Tweak: Only its `powmod` and `mulmod` are needed.
  * Uses: numtheory/factor
  * Example:
  *   mod_sqrt(2, 7); // 3: 3^2 = 9 = 2, and 4^2 = 16 = 2

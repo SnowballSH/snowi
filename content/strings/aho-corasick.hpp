@@ -1,12 +1,9 @@
 /**
  * Title: Aho-Corasick
- * Description: Automaton of a set of patterns. State `v` is a node
- *   of their trie, that is a prefix of some pattern; after reading
- *   a text, the state is its longest suffix that is such a prefix.
+ * Description: Automaton of a set of patterns on their trie.
  *   `next[v][c]` is the move on letter `c`, `link[v]` the longest
- *   proper suffix of `v` in the trie, and `words[v]` the number of
- *   patterns that end at the current position when in state `v`.
- *   `count(t)` returns how often each pattern occurs in `t`.
+ *   proper suffix of `v` in the trie, `words[v]` the number of
+ *   patterns ending at the current position in state `v`.
  * Precondition: Non-empty patterns of letters `'a'` to `'z'`;
  *   duplicates are fine.
  * Time: $O(26 L)$ to build, $L$ the total pattern length; $O(|t| +
@@ -17,9 +14,6 @@
  *   ll total = 0; // matches of all patterns in t:
  *   for (int v = 0; char ch : t)
  *     total += ac.words[v = ac.next[v][ch - 'a']];
- * Tweak: Other alphabets: change `26` and the offset `'a'`.
- *   Weighted patterns: add the weight instead of 1 to `words`,
- *   which is `ll` since its sums along links overflow `int`.
  * Example:
  *   // Every match as (pattern, end position). out[v]: nearest
  *   // state on the link path from v, v included, that ends a

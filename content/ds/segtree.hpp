@@ -1,23 +1,22 @@
 /**
  * Title: Segment tree
- * Description: Point assign and range fold over a monoid, bottom-up.
- *   `max_right(l, pred)` returns the largest `r` such that
- *   `pred(query(l, r))` is true; `min_left(r, pred)` returns the
- *   smallest `l` such that `pred(query(l, r))` is true.
- * Precondition: 0-indexed, half-open ranges. `op` is associative and
- *   `e` is its identity; `op` need not be commutative (left operand
- *   is the left part). `pred(e)` is true and `pred` is monotone:
- *   once false for a range, false for every range containing it.
+ * Description: Bottom-up point assign and range fold over a monoid.
+ *   The largest `r` with `pred(query(l, r))` true is
+ *   `max_right(l, pred)`, and the smallest such `l` is
+ *   `min_left(r, pred)`.
+ * Precondition: 0-indexed, half-open ranges. `op` need not be
+ *   commutative (left operand is the left part). `pred(e)` is true
+ *   and `pred` is monotone: once false for a range, false for
+ *   every range containing it.
  * Time: $O(n)$ build, $O(log n)$ per operation.
  * Usage:
  *   SegTree st(a); // or SegTree st(n): all leaves e
  *   st.set(i, 5); st.get(i); st.query(l, r); st.query_all();
  *   // position of the k-th one (k >= 1) in a 0/1 array, or n:
  *   int i = st.max_right(0, [&](ll s) { return s < k; });
- * Tweak: Change only `T`, `e` and `op` (default: range sum). Max:
- *   `e = LLONG_MIN`, `max(a, b)`; then `max_right(l, v < x)` is the
- *   first index `>= l` with `a[i] >= x`. Min: `e = LLONG_MAX`. A
- *   struct node works if `e` is a `constexpr` aggregate.
+ * Tweak: Max: `e = LLONG_MIN`; then `max_right(l, v < x)` is the
+ *   first index `>= l` with `a[i] >= x`. A struct node needs `e` as
+ *   a `constexpr` aggregate.
  * Example:
  *   // Point set range composite: f(x) = (b x + c) % MOD,
  *   // op(f, g) = "f, then g" (non-commutative).

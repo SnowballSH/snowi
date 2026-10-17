@@ -2,15 +2,11 @@
 Title: Z-function
 Description: `z[i]` is the length of the longest common prefix of
   `s` and its suffix `s[i, n)`. By convention `z[0] = n`.
-Precondition: `s` is a `str`, `bytes` or list.
 Time: $O(n)$. PyPy: about 0.1 s for $n = 10^6$.
 Usage:
   z = z_function(s)
   # pat occurs at i in s iff zt[m + 1 + i] == m, m = len(pat):
   zt = z_function(pat + "#" + s)  # "#" in neither
-Tweak: For lists use a separator value that occurs nowhere, like
-  -1: `z_function(pat + [-1] + s)`. Many implementations use
-  `z[0] = 0`; check before reusing a formula.
 Example:
   >>> z_function("abaabaab")
   [8, 0, 1, 5, 0, 1, 2, 0]

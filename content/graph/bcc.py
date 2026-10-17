@@ -14,9 +14,6 @@ Usage:
   b = BCC(n, edges)  # edges: list of (u, v)
   b.comp[e]; b.bridge[e]; b.cut[v]  # b.nb blocks
   b.tree[n + b.comp[e]]  # the vertices of e's block
-Tweak: 2-edge-connected components: join the endpoints of every
-  non-bridge edge in a DSU. Vertex `v`'s blocks are its neighbours in
-  `tree`; `v` is a cut vertex iff it has two or more.
 Example:
   >>> # triangle 0-1-2, bridge 2-3, double edge 3-4, loop at 4
   >>> edges = [(0, 1), (1, 2), (2, 0), (2, 3)]

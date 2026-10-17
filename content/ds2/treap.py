@@ -1,17 +1,14 @@
 """
 Title: Implicit treap
 Description: A sequence with insert and erase at any position,
-  range reverse, range sum and access by index, by splitting and
-  merging a treap keyed by position. `split(x, k)` cuts tree `x`
-  into its first `k` elements and the rest; `merge(a, b)`
-  concatenates. Node 0 is the empty tree; node `x` has children
-  `ch[2x]` and `ch[2x + 1]`, other fields in parallel lists.
+  range reverse, range sum and access by index. `split(x, k)`
+  returns the first `k` elements and the rest; `merge(a, b)`
+  concatenates. Node 0 is the empty tree.
 Precondition: 0-indexed positions, half-open ranges `[l, r)`,
   `0 <= i <= size()` for `insert`, `i < size()` otherwise.
-Time: $O(log n)$ expected per operation. No recursion: `split`
-  and `merge` walk down, then fix the path bottom-up. At
+Time: $O(log n)$ expected per operation, no recursion. At
   $n = 10^5$: $10^5$ inserts 0.6 s, $10^5$ reversals 1.5 s,
-  $10^5$ range sums 0.4 s (cache misses dominate).
+  $10^5$ range sums 0.4 s.
 Usage:
   tr = Treap()
   tr.insert(i, v); tr.erase(i); tr.get(i)

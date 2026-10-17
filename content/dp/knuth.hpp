@@ -5,9 +5,9 @@
  *   for all $0 <= l < r <= n$, with $"dp"[i][i + 1] = 0$, in
  *   $O(n^2)$ instead of $O(n^3)$: the smallest optimal split
  *   satisfies $"opt"[l][r - 1] <= "opt"[l][r] <= "opt"[l + 1][r]$.
- * Precondition: For $a <= b <= c <= d$, `w` satisfies the
- *   quadrangle inequality $w(a, c) + w(b, d) <= w(a, d) + w(b, c)$
- *   and is monotone, $w(b, c) <= w(a, d)$. Sums of values over the
+ * Precondition: `w` satisfies the quadrangle inequality (DP
+ *   techniques) and is monotone, $w(b, c) <= w(a, d)$ for
+ *   $a <= b <= c <= d$. Sums of values over the
  *   interval, with values $>= 0$, satisfy both.
  * Time: $O(n^2)$ time and memory (12 bytes per pair: 300 MB at
  *   $n = 5000$).
@@ -18,8 +18,7 @@
  *   });
  *   ll ans = dp[0][n];
  * Tweak: Leaf values: set `dp[i][i + 1]` before the loops; they
- *   do not change `opt`. Maximum: negate `w`; the negated `w` must
- *   satisfy the conditions.
+ *   do not change `opt`.
  * Example:
  *   // Optimal binary search tree on keys 0..n-1 searched f[i]
  *   // times; cost = sum of f[i] * depth (root depth 1). Root k

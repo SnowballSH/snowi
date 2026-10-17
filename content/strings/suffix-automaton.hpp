@@ -1,12 +1,11 @@
 /**
  * Title: Suffix automaton
- * Description: Online automaton of the substrings of `s`: the paths
- *   from state 0 spell exactly the substrings. Each state `v` is a
- *   class of substrings with the same end positions: the suffixes
- *   of its longest member with lengths `len[link[v]] + 1` to
- *   `len[v]`. After `count()`, `cnt[v]` is how often each string of
- *   `v` occurs in `s`. Each `extend` adds `len[last] -
- *   len[link[last]]` new distinct substrings.
+ * Description: Online automaton of the substrings of `s`. Each
+ *   state `v` is a class of substrings with the same end positions:
+ *   the suffixes of its longest member with lengths
+ *   `len[link[v]] + 1` to `len[v]`. After `count()`, `cnt[v]` is how
+ *   often each string of `v` occurs in `s`. Each `extend` adds
+ *   `len[last] - len[link[last]]` new distinct substrings.
  * Precondition: Letters `'a'` to `'z'`.
  * Time: $O(n)$ amortized, at most $2n$ states and $3n$ edges;
  *   memory $2n dot 26$ ints.
@@ -16,10 +15,9 @@
  *   sam.count(); // once, after the last extend
  *   int occ = v < 0 ? 0 : sam.cnt[v]; // t non-empty
  *   ll d = sam.distinct(); // distinct non-empty, O(n)
- * Tweak: Other alphabets: change `26` and the offset `'a'`. For a
- *   large alphabet or tight memory use `SuffixAutomaton<map<int,
- *   int>>` and pass any `int` to `extend`. Missing edges then read
- *   as 0 (`next[v][c]` inserts them): test edges by value, never
+ * Tweak: Large alphabet or tight memory:
+ *   `SuffixAutomaton<map<int, int>>`, passing any `int` to
+ *   `extend`. Missing edges then read as 0 (`next[v][c]` inserts them): test edges by value, never
  *   with `count(c)`.
  * Example:
  *   // Longest common substring of s and t: walk t, keeping the

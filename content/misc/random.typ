@@ -1,6 +1,9 @@
 #import "/typst/notes.typ": *
 #let xor = sym.plus.o
 
+#icpc[#cpp[#code("cpp", "mt19937_64 rng(chrono::steady_clock::now()
+                     .time_since_epoch().count());")]]
+#full[
 === Random numbers
 #lang-code(
   cpp: "mt19937_64 rng(chrono::steady_clock::now()
@@ -20,13 +23,13 @@ debugging so that failures repeat. Where tests may target you
 (hacks; tests built against unseeded hashes or first-element
 pivots), use an unpredictable seed#cpp[ (the clock)]#py[ (the
 default)].
+]
 
 === Fingerprints
 Give every value $v$ an independent random label $R_v$ of $b =$
-#cpp[64]#py[62] bits. Two different objects get equal fingerprints
-with probability $2^(-b)$; among $n$ objects some pair collides
-with probability about $n^2 \/ 2^(b + 1)$, so 32-bit labels
-already fail for $10^5$ objects.
+#cpp[64]#py[62] bits; some pair of $n$ objects collides with
+probability about $n^2 \/ 2^(b + 1)$ (32-bit labels fail at
+$10^5$).
 #fact[Sets][XOR of the labels. It sees the values that occur an
   odd number of times; adding or removing a value is one XOR.
   Zobrist hashing of a board: XOR of `R[cell][piece]`.]
@@ -65,39 +68,37 @@ for i, v in enumerate(a):
   divisible by $k$, so is this number; otherwise it is not with
   probability at least $1 \/ 2$. Repeat 30 times, with one prefix
   count array (or Fenwick tree) per trial.]
-Count equal fingerprints by sorting them or in a hash map:
+#full[Count equal fingerprints by sorting them or in a hash map:
 random keys are safe. Keys taken from the input need a seeded
 hash#cpp[ (`ds2/hash-map`)]#py[: store `x ^ R` for one random
-62-bit `R`].
+62-bit `R`].]
 
 === Polynomial identity testing
 #fact[Schwartz-Zippel][A nonzero polynomial of total degree $d$
   is 0 at a point with coordinates uniform in $S$ with probability
   at most $d\/abs(S)$. Evaluate modulo a prime near $10^9$ or
   $2^61 - 1$, never modulo 2 or $2^64$.]
+#full[
 - Freivalds: to check $A B = C$, compare $A (B x)$ with $C x$ for
   a random vector $x$ mod $p$, in $O(n^2)$. A wrong $C$ passes
   with probability at most $1 \/ p$.
+]
 - Matching: the Tutte matrix ($T_(u v) = x_(u v)$,
   $T_(v u) = -x_(u v)$ per edge, random $x$ mod $p$) has rank
   twice the maximum matching size (`linalg/gauss-mod`).
+#full[
+- "Does a structure exist": find a determinant or rank that is
+  nonzero iff it does, then substitute random values.
 - String hashing is the same lemma: two different strings of
   length $n$ collide for at most $n$ bases mod $p$, so pick the
   base at random (`strings/string-hash`).
-- "Does a structure exist": find a determinant or rank that is
-  nonzero iff it does, then substitute random values.
+]
 
 === Randomised algorithms
 - Frequent value (more than $n \/ k$ copies) in a range: take $t$
   random positions as candidates and count each exactly (sorted
   position lists per value, binary search). All miss with
   probability below $(1 - 1 \/ k)^t$.
-- Witnesses: if a fraction $alpha$ of the candidates prove the
-  answer, $t$ random samples all miss with probability
-  $(1 - alpha)^t <= e^(-alpha t)$.
-- Shuffle first so that bad orders become unlikely: incremental
-  minimum enclosing circle in expected $O(n)$, insertion into
-  unbalanced search trees, random pivots.
 - Random order with skipping: run each candidate $u$ in random
   order unless an earlier run covered it; run $u$ covers
   $s(u) in.rev u$. If $w in s(u)$ implies $s(w) subset.eq s(u)$
@@ -106,13 +107,19 @@ hash#cpp[ (`ds2/hash-map`)]#py[: store `x ^ R` for one random
   Example, a DAG: $s(u)$ is $u$ plus, repeatedly, each vertex with
   all its in-neighbours (at least one) in $s(u)$; the largest
   $s(u)$ in expected $O((n + m) log n)$.
-#full[
 - Colour coding: to find $k$ objects that must all differ (a path
   through $k$ distinct vertices), colour everything with $k$
   random colours and search only for solutions with distinct
   colours, by a DP over subsets of colours. A fixed solution
   survives with probability $k! \/ k^k >= e^(-k)$, so
   $c dot k^k \/ k!$ rounds fail with probability at most $e^(-c)$.
+#full[
+- Witnesses: if a fraction $alpha$ of the candidates prove the
+  answer, $t$ random samples all miss with probability
+  $(1 - alpha)^t <= e^(-alpha t)$.
+- Shuffle first so that bad orders become unlikely: incremental
+  minimum enclosing circle in expected $O(n)$, insertion into
+  unbalanced search trees, random pivots.
 - Las Vegas: retry until a random choice works (random vectors
   that form a basis, see Random matrices in _Linear algebra
   facts_; a random good pivot), checking each result exactly.

@@ -10,7 +10,6 @@
  * Time: $O(n log n)$.
  * Usage:
  *   SuffixArray S(s); // string or vector<int>
- *   // S.sa[r]: start of the suffix of rank r
  *   ll d = (ll)n * (n + 1) / 2; // distinct substrings:
  *   for (int h : S.lcp) d -= h;
  * Tweak: For large values compress them to $[1, k]$ and pass `lim =
@@ -63,6 +62,7 @@ struct SuffixArray {
     int n = sz(s) + 1; // sorts the cyclic shifts of s + [0]
     vi x(all(s)), y(n), ws(max(n, lim));
     x.push_back(0), sa = y, iota(all(sa), 0);
+
     for (int j = 0, p = 0; p < n; j = max(1, j * 2), lim = p) {
       p = j, iota(all(y), n - j);
       rep(i, 0, n)
@@ -78,6 +78,7 @@ struct SuffixArray {
         x[b] = p - 1;
       }
     }
+
     sa.erase(sa.begin()), n--, rank.resize(n);
     rep(i, 0, n) rank[sa[i]] = i;
     lcp.resize(max(n - 1, 0));

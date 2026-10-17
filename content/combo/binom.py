@@ -16,11 +16,8 @@ Usage:
   bc.C(5, 2), bc.perm(5, 2), bc.catalan(3)  # 10 20 5
   bc.multinom([2, 1, 1]), bc.inv(4)  # 12, 1/4
   Lucas(10007).C(10**18, 12345)
-Tweak: Change `MOD` for another prime. In hot loops alias the
-  lists, `f, fi = bc.fact, bc.ifact`, and inline
-  `f[n] * fi[k] % MOD * fi[n - k] % MOD`. A prime power or composite
-  modulus has no inverse factorials: use Pascal's triangle in
-  $O(n^2)$, or CRT over prime moduli.
+Tweak: In hot loops alias the lists, `f, fi = bc.fact, bc.ifact`,
+  and inline `f[n] * fi[k] % MOD * fi[n - k] % MOD`.
 Uses: numtheory/modpow
 Example:
   >>> bc = Binom(10)

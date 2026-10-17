@@ -1,12 +1,9 @@
 """
 Title: Aho-Corasick
-Description: Automaton of a set of patterns. State `v` is a node of
-  their trie, that is a prefix of some pattern; after reading a
-  text, the state is its longest suffix that is such a prefix.
+Description: Automaton of a set of patterns on their trie.
   `nxt[26 * v + c]` is the move on letter `c`, `link[v]` the longest
-  proper suffix of `v` in the trie, and `words[v]` the number of
-  patterns that end at the current position when in state `v`.
-  `count(t)` returns how often each pattern occurs in `t`.
+  proper suffix of `v` in the trie, `words[v]` the number of
+  patterns ending at the current position in state `v`.
 Precondition: Non-empty patterns of letters `'a'` to `'z'`;
   duplicates are fine.
 Time: $O(26 L)$ to build, $L$ the total pattern length; $O(|t| + L)$
@@ -19,8 +16,6 @@ Usage:
   for ch in t:
     v = ac.nxt[26 * v + ord(ch) - 97]
     total += ac.words[v]
-Tweak: Other alphabets: change every `26` and the offset 97.
-  Weighted patterns: add the weight instead of 1 to `words`.
 Example:
   >>> ac = AhoCorasick(["he", "she", "his", "hers", "he"])
   >>> ac.count("ushers")

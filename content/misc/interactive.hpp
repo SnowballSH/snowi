@@ -1,18 +1,11 @@
 /**
  * Title: Interactive I/O
- * Description: Talks to an interactive judge. `ask(x, y)` prints
- *   the query line `? x y`, flushes, and reads one integer reply;
- *   `reply()` reads the next one; `answer(x)` prints `! x`. If the
- *   judge replies `-1` (an invalid query, or too many) or closes
- *   the pipe, the program exits at once with status 0, so the
- *   verdict is Wrong Answer instead of a time limit or a runtime
- *   error. `reply` turns off the template's `cin.exceptions`.
+ * Description: `ask(x, y)` prints `? x y`, flushes and reads one
+ *   integer; `reply()` reads the next; `answer(x)` prints `! x`. A
+ *   reply of `-1` or EOF exits with status 0 (WA, not TLE or RE);
+ *   `reply` turns off the template's `cin.exceptions`.
  * Precondition: Replies are integers separated by any whitespace.
- *   Every line must be flushed (`endl` does it); debug output goes
- *   to `cerr` only.
- * Time: Each query is a round trip through the judge, measured at
- *   about 8 µs of CPU and 15 to 25 µs of wall time: $10^5$
- *   queries are fine.
+ * Time: $10^5$ queries are fine.
  * Usage:
  *   ll r = ask(u, k); // prints "? u k", reads one reply
  *   ll a = ask(i), b = reply(); // a reply with two numbers
@@ -21,7 +14,9 @@
  *   `string`; test `r == "-1"`. If `-1` is a legal reply, drop the
  *   check. To send a list, define `ostream& operator<<(ostream&,
  *   const vi&)` printing the elements with spaces before this
- *   snippet: `say` does not see one defined after it.
+ *   snippet: `say` does not see one defined after it. Sorting by
+ *   asking: `stable_sort` (merge sort, about $n log_2 n$ asks);
+ *   `sort` asks more and runs off the array on inconsistent replies.
  * Example:
  *   // Hidden x in [1, n]; "? y" replies 1 iff x <= y.
  *   int n = reply();
@@ -46,9 +41,6 @@
  *   Adaptive judges may change the hidden object as long as the
  *   replies stay consistent: answer only when one candidate is
  *   left, and do not rely on average-case (random) query counts.
- *   Sorting with a comparator that asks the judge: `stable_sort`
- *   (merge sort, about $n log_2 n$ comparisons); `sort` uses more
- *   and can run off the array if the replies are inconsistent.
  *   Local testing: an interactor reads queries on stdin, writes
  *   replies on stdout and the verdict on stderr; connect the two
  *   with a named pipe (command in Contest setup). A hang means a

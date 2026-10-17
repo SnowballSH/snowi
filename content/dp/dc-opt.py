@@ -3,13 +3,10 @@ Title: Divide and conquer optimisation
 Description: One layer of a DP,
   $"new"[i] = min_(j < i) "old"[j] + "cost"(j, i)$ for every
   `i`, when the smallest optimal `j` is non-decreasing in `i`.
-  It solves the middle `i` by scanning, then each half with the
-  `j` range cut at that optimum (explicit stack, no recursion).
-Precondition: `cost` satisfies the quadrangle inequality
-  $c(a, c) + c(b, d) <= c(a, d) + c(b, c)$ for
-  $a <= b <= c <= d$, or the smallest optimal `j` is known to
-  be non-decreasing in `i` (a monotone choice among tied `j` is
-  not enough). Unreachable states are `1 << 62`, also used for
+Precondition: `cost` satisfies the quadrangle inequality (DP
+  techniques), or the smallest optimal `j` is known to be
+  non-decreasing in `i` (a monotone choice among tied `j` is not
+  enough). Unreachable states are `1 << 62`, also used for
   `new[0]` and as a cap. Keep values below $2^63$: big ints are
   slow.
 Time: $O(n log n)$ calls to `cost` per layer; about
@@ -21,9 +18,8 @@ Usage:
   dp[0] = 0
   for _ in range(K):
     dp = dc_layer(dp, cost)  # dp[n]: K groups
-Tweak: Maximum: negate `old` and `cost` (then the reverse
-  inequality must hold). Only some `i` needed, or `j <= i`
-  allowed: change the first stack entry and the scan bound `m`.
+Tweak: Only some `i` needed, or `j <= i` allowed: change the first
+  stack entry and the scan bound `m`.
 Example:
   >>> a = [4, 1, 3, 2, 5]  # K groups, sum of squared group sums
   >>> pre = [0]

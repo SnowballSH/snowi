@@ -2,9 +2,7 @@
  * Title: Parallel binary search
  * Description: For each query `i`, finds the fewest updates `t`
  *   (from `0..T`) after which `pred(i)` holds, or `T + 1` if it
- *   never does. All the binary searches advance together: a round
- *   resets the state, applies the updates in order and tests each
- *   unfinished query at its own midpoint.
+ *   never does.
  * Precondition: `pred(i)` is monotone: once true, it stays true as
  *   more updates are applied. `reset()` restores the state before
  *   any update, `apply(t)` applies update `t` (`0 <= t < T`), and

@@ -1,18 +1,21 @@
 /**
  * Title: Dominator tree
- * Description: Lengauer-Tarjan. Vertex `d` dominates `v` if every
- *   path from `s` to `v` passes through `d`. Returns `idom`: the
- *   immediate dominator of each vertex (the closest strict
- *   dominator), with `idom[s] = s` and `idom[v] = -1` if `v` is
- *   unreachable from `s`. The edges `idom[v] -> v` form a tree
- *   rooted at `s`; the dominators of `v` are its ancestors.
+ * Description: Lengauer-Tarjan. Returns `idom`: the immediate
+ *   dominator of each vertex (the closest strict dominator), with
+ *   `idom[s] = s` and `idom[v] = -1` if `v` is unreachable from
+ *   `s`. The edges `idom[v] -> v` form a tree rooted at `s`; the
+ *   dominators of `v` are its ancestors.
  * Precondition: `adj[u]` lists the heads of the edges leaving `u`;
  *   vertices 0-indexed. Self-loops and parallel edges are fine.
  * Time: $O((n + m) log n)$, no recursion.
  * Usage:
  *   vi idom = dominator_tree(adj, s);
  * Tweak: Paths into a sink `t` instead (post-dominators): run it
- *   on the reversed graph from `t`.
+ *   on the reversed graph from `t`. A DAG needs no code: in
+ *   topological order, `idom[v]` is the LCA of the predecessors of
+ *   `v` that are reachable from `s` (binary lifting). Edges on
+ *   every path from `s` to `w`: subdivide each edge `u -> v` by a
+ *   new vertex `x`; the edge is one iff `x` dominates `w`.
  * Example:
  *   // Critical vertices: those on every s -> t path.
  *   vi idom = dominator_tree(adj, s), crit;
@@ -39,11 +42,6 @@
  *   the capital", or "for each vertex, how many become unreachable
  *   if it fails": the subtree sizes of the dominator tree. On an
  *   undirected graph use articulation points (`graph/bcc`) instead.
- *   Edges: subdivide edge `u -> v` with a new vertex `x`
- *   (`u -> x -> v`); the edge is critical for `v` iff `x`
- *   dominates `v`. For a DAG it is simpler: in topological order,
- *   `idom[v]` is the LCA of the predecessors of `v` that are
- *   reachable from `s` (binary lifting).
  * Source: Lengauer and Tarjan (1979), the simple $O(m log n)$
  *   version with path compression.
  * Status: stress-tested against removal-based brute force

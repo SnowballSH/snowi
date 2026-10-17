@@ -1,16 +1,15 @@
 /**
  * Title: Line container
  * Description: Upper envelope of lines $k x + m$ added in any order;
- *   `query(x)` returns the maximum value at `x`. Each line stores in
- *   `p` the last integer `x` where it is the maximum.
+ *   `query(x)` returns the maximum value at `x`.
  * Precondition: `query` needs at least one line. $|k|, |m| < 2^62$
  *   and every queried value $k x + m$ fits in `ll`.
  * Time: $O(log n)$ amortized per operation.
  * Usage:
  *   LineContainer lc;
  *   lc.add(k, m); ll y = lc.query(x); // max of k x + m
- * Tweak: Minimum: `add(-k, -m)` and negate the answer. Real values:
- *   `ll` becomes `double`, `inf = HUGE_VAL` and `div(a, b) = a / b`.
+ * Tweak: Real values: `ll` becomes `double`, `inf = HUGE_VAL` and
+ *   `div(a, b) = a / b`.
  * Example:
  *   // dp[j] = max over i < j of dp[i] + a[i] * b[j], with the
  *   // b[j] in any order (a monotone stack needs sorted b).

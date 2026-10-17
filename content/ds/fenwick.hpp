@@ -9,8 +9,6 @@
  *   Fenwick fw(n);
  *   fw.add(i, 5);
  *   ll s = fw.query(r) - fw.query(l); // sum of [l, r)
- * Tweak: Range add, point read: `add(l, x)`, `add(r, -x)`, value at
- *   `i` is `query(i + 1)`. Change `ll` for other abelian groups.
  * Example:
  *   // Range add + range sum with two trees b1, b2:
  *   // add x on [l, r):

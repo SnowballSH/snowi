@@ -2,13 +2,11 @@
 Title: Minkowski sum
 Description: Returns the Minkowski sum $A + B = {a + b}$ of two
   convex polygons, counter-clockwise from its smallest point (by
-  `x`, then `y`). Merges the edges of both by angle, joining
-  parallel ones.
-Precondition: Points are tuples. `a`, `b` non-empty, convex,
-  counter-clockwise and without collinear vertices, as from
-  `convex_hull` (one or two points are fine). The sum is then the
-  same kind of polygon, with at most $n + m$ vertices. Exact for
-  integers.
+  `x`, then `y`).
+Precondition: `a`, `b` non-empty, convex, counter-clockwise and
+  without collinear vertices, as from `convex_hull` (one or two
+  points are fine). The sum is then the same kind of polygon, with
+  at most $n + m$ vertices. Exact for integers.
 Time: $O(n + m)$.
 Usage:
   s = minkowski(a, b)

@@ -14,8 +14,6 @@ Usage:
   ts.implies(a, b); ts.add_clause(a, a)  # force a
   ts.at_most_one([a, ~b, c])
   val = ts.solve()  # None if unsatisfiable
-Tweak: Exactly one of `a`, `b`: `add_clause(a, b)` and
-  `add_clause(~a, ~b)`. Equal: `implies(a, b)`, `implies(b, a)`.
 Example:
   >>> ts = TwoSat(3)
   >>> ts.add_clause(0, 1); ts.add_clause(~0, 2)

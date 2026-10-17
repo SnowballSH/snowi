@@ -1,17 +1,11 @@
 /**
  * Title: Primitive root
- * Description: The smallest primitive root `g` of a prime `p`: its
- *   powers $g^0, dots, g^(p - 2)$ are all the nonzero residues.
- *   Factors $p - 1$ with Pollard rho, then tries $g = 2, 3, dots$:
- *   `g` is a primitive root iff $g^((p - 1)\/q) != 1$ for every
- *   prime $q | p - 1$.
+ * Description: The smallest primitive root `g` of a prime `p`.
  * Precondition: `p` prime, $p < 2^63$.
  * Time: One `factor(p - 1)`, at most 3 ms, plus $O(g log p)$ per
  *   prime factor; the smallest root is at most 113 for $p < 10^8$.
  * Usage:
  *   ll g = primitive_root(998244353); // 3
- * Tweak: For $p <= 10^12$ trial division of $p - 1$ up to
- *   $sqrt(p)$ is enough instead of `factor`.
  * Uses: numtheory/factor
  * Example:
  *   primitive_root(1'000'000'007); // 5

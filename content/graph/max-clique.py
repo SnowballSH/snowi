@@ -1,9 +1,6 @@
 """
 Title: Maximum clique
 Description: Returns the vertices of one maximum clique (sorted).
-  Branch and bound: a greedy colouring of the candidates bounds the
-  clique size (a clique uses each colour at most once), and branches
-  start at the highest colours.
 Precondition: `adj[u]` is an int bitmask of the neighbours of `u`,
   symmetric, without bit `u` itself.
 Time: Exponential. Random graphs with edge probability 0.9: PyPy
@@ -13,10 +10,8 @@ Usage:
   adj = [0] * n
   adj[u] |= 1 << v; adj[v] |= 1 << u
   clique = max_clique(adj)
-Tweak: Maximum independent set: run on the complement,
-  `[~adj[u] & ~(1 << u) & (1 << n) - 1 for u in range(n)]`. Masks
-  up to 62 bits stay machine words in PyPy; longer ones work but
-  are slower.
+Tweak: Masks up to 62 bits stay machine words in PyPy; longer
+  ones work but are slower.
 Example:
   >>> def graph(n, edges):
   ...   adj = [0] * n

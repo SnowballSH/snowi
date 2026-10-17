@@ -1,21 +1,9 @@
 #import "/typst/notes.typ": *
 
-Strings are 0-indexed, `s[l, r)` is a substring and $n = |s|$. A
-_border_ is a proper prefix that is also a suffix; $p$ is a
-_period_ if `s[i] == s[i + p]` for all $i < n - p$.
-
 === Borders and periods
-#fact[Duality][$p$ is a period iff $n - p$ is a border. The
-  smallest period is `n - pi[n - 1]`; the periods are $n - b$ for
-  the borders `b = pi[n - 1]`, `pi[b - 1]`, ..., 0. With the Z
-  array: $p < n$ is a period iff `z[p] == n - p`; $p = n$ always
-  is.]
-#fact[Primitive root][With smallest period $p$: if $p | n$, `s` is
-  `s[0, p)` repeated $n\/p$ times and that root is primitive;
-  otherwise `s` is not a power at all ("abaab": $p = 3$). `s`
-  equals its rotation by $k$ iff it is a power of
-  `s[0, gcd(k, n))`, so a primitive `s` differs from all its other
-  rotations.]
+#fact[Primitive root][`s` is a power iff its smallest period
+  $p < n$ divides $n$ ("abaab", $p = 3$, is not); `s` equals its
+  rotation by $k$ iff it is a power of `s[0, gcd(k, n))`.]
 #fact[Fine-Wilf][Periods $p, q$ with $p + q - gcd(p, q) <= n$ make
   $gcd(p, q)$ a period. So every period $q <= n - p$ is a multiple
   of the smallest period $p$. Tight: "abaaba" has periods 3 and 5
@@ -28,10 +16,10 @@ _period_ if `s[i] == s[i + p]` for all $i < n - p$.
   splits into $O(log n)$ progressions. Two occurrences of `t` at
   distance $d < |t|$ make $d$ a period of `t`; the occurrences in a
   window of length $2|t|$ form one progression.]
-#fact[Infinite powers][$u^infinity = v^infinity$ iff $u v = v u$
-  iff both are powers of one word. $u^infinity < v^infinity$ iff
-  $u v < v u$: sort by `a + b < b + a` to get the smallest
-  concatenation.]
+#full[#fact[Infinite powers][$u^infinity = v^infinity$ iff
+  $u v = v u$ iff both are powers of one word.
+  $u^infinity < v^infinity$ iff $u v < v u$: sort by
+  `a + b < b + a` to get the smallest concatenation.]]
 
 === Prefix function
 #fact[Failure tree][Nodes $0..n$; the parent of $L$ is
@@ -40,30 +28,27 @@ _period_ if `s[i] == s[i + p]` for all $i < n - p$.
   common border of prefixes $a$ and $b$ is the LCA of
   `pi[a - 1]` and `pi[b - 1]`. While matching a text, the
   prefixes of `s` ending at the current position are the current
-  state and its ancestors. Parents are smaller: loop over $L$
-  instead of a DFS.]
+  state and its ancestors.]
 
 === Palindromes
-#fact[Count][At most $n$ distinct palindromic substrings: each end
-  position adds at most one new one, the longest palindromic
-  suffix. With repeats: the sum of $floor((p + 1)\/2)$ over the
-  lengths $p$ in Manacher's `plen`.]
+#fact[Count][With repeats: the sum of $floor((p + 1)\/2)$ over
+  Manacher's `plen`; distinct: at most $n$ (eertree).]
 #fact[Borders][The borders of a palindrome are its palindromic
   suffixes; the lengths of the palindromic suffixes of any string
   form $O(log n)$ progressions (eertree series links).]
-#fact[Prefixes][Palindromic prefixes of lengths $y < x$ make
+#full[#fact[Prefixes][Palindromic prefixes of lengths $y < x$ make
   $x - y$ a period of `s[0, x)`. If $x < 2y$, the prefix of length
   $2y - x$ is a palindrome too and may replace $x$: positions
   $y..x - 1$ copy earlier ones. If $x >= 2y$, prefix $y$ lies in
   the first half and $x$ adds $ceil(x\/2) - y$ free positions.
-  Repeat on the two longest, batching equal steps like Euclid.]
+  Repeat on the two longest, batching equal steps like Euclid.]]
 
+#full[
 === Lyndon words
-#fact[Factorization][`s` splits uniquely into Lyndon words
-  $w_1 >= w_2 >= dots >= w_k$ in $O(n)$ (Duval). The last factor is
-  the smallest suffix; the smallest rotation starts at a factor of
-  `s + s`. A Lyndon word has no non-empty border, so it is
-  primitive.]
+#fact[Borders][A Lyndon word has no non-empty border, so it
+  is primitive; the smallest rotation starts at a factor of
+  `s + s`.]
+]
 
 === Runs
 #fact[Runs][A run is a maximal window `s[i, j)` whose smallest
@@ -77,22 +62,6 @@ _period_ if `s[i] == s[i + p]` for all $i < n - p$.
   $>= 2p$ and $p$ is its smallest period, once per distinct window
   (several $a$ find the same run). $O(log n)$ squares with
   a primitive root start at one position.]
-
-=== Suffix array and LCP
-#fact[LCP][With `lcp[i]` the LCP of the suffixes ranked $i$ and
-  $i + 1$, as in the snippet, the LCP of the suffixes ranked
-  $a < b$ is the minimum of `lcp[a, b)` (sparse table). Distinct
-  substrings: $n(n+1)\/2 - sum "lcp"[i]$. Longest repeated
-  substring: max `lcp`. Longest common substring of `s` and `t`:
-  suffix array of `s + '#' + t`, best `lcp` between neighbours
-  from different sides.]
-
-=== Hashing
-#fact[Safety][A random base modulo $2^61 - 1$ fails with
-  probability at most $n\/M$ per comparison. Overflow modulo
-  $2^64$ is broken by Thue-Morse strings; a single modulus near
-  $10^9$ fails once about $10^5$ hashes meet (birthday bound).
-  Compare lengths too.]
 
 === Wildcards and mismatches by FFT
 #fact[Wildcards][Letters are $1..26$, a wildcard is 0. The
@@ -172,8 +141,6 @@ _period_ if `s[i] == s[i + p]` for all $i < n - p$.
 - `pi[i]` belongs to the prefix ending at $i$, a border length $L$
   to the prefix of length $L$: the chain step is `k = pi[k - 1]`.
 - Some statements count the whole string as a border.
-- The smallest period $p$ need not divide $n$; `s` is a power
-  $u^k$ with $k >= 2$ iff $p < n$ and $p | n$.
 - With text appended, the smallest suffix is not always the best
   start: `a` is the smallest suffix of `aba`, yet `abac < ac`.
 - Recursion over the failure tree of `aaa...a` is $n$ deep.

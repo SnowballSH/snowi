@@ -15,9 +15,8 @@
  *   ll s = lagrange({0, 1, 5, 14}, 10); // sum_(i <= 10) i^2: 385
  *   vl c = interpolate(xs, ys); // f(t) = sum_k c[k] t^k
  * Tweak: Nodes $a, a + h, a + 2h, dots$: evaluate at $(x - a) / h$
- *   (division mod `MOD`). Many queries at arbitrary nodes:
- *   `interpolate` once, then Horner. An exact integer answer without
- *   a modulus: interpolate modulo two or three primes and combine by
+ *   (division mod `MOD`). An exact integer answer without a
+ *   modulus: interpolate modulo two or three primes and combine by
  *   CRT; never in floating point.
  * Example:
  *   // sum_(i = 1)^n i^k for n up to 1e18: degree k + 1, so k + 2

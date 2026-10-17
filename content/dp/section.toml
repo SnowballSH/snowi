@@ -2,7 +2,6 @@ title = "Dynamic programming"
 
 [[entry]]
 item = "lis"
-icpc = true
 
 [[entry]]
 item = "dc-opt"

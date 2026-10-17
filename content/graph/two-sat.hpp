@@ -15,8 +15,6 @@
  *   ts.implies(a, b); ts.add_clause(a, a); // force a
  *   ts.at_most_one({a, ~b, c});
  *   if (ts.solve()) ... ts.val[x] ...
- * Tweak: Exactly one of `a`, `b`: `add_clause(a, b)` and
- *   `add_clause(~a, ~b)`. Equal: `implies(a, b)`, `implies(b, a)`.
  * Example:
  *   // n flags, flag i at x[i][0] or x[i][1]; any two flags at
  *   // least D apart. Variable i: flag i uses x[i][1].

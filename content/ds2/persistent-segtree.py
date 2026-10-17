@@ -1,31 +1,27 @@
 """
 Title: Persistent segment tree
-Description: Point add and range sum over `[0, n)`, where every
-  update leaves the old tree intact and returns the root of a new
-  version. Versions share all untouched nodes. Root 0 is the
-  all-zero array. `kth(a, b, k)` reads version `b` minus version
-  `a` as counts and returns the smallest `i` whose count over
-  `[0, i]` exceeds `k`: the `k`-th smallest (0-indexed) value of a
-  subarray when version `i` counts the compressed values of
-  `a[:i]`.
+Description: Point add and range sum over `[0, n)`; every `add`
+  returns the root of a new version. Root 0 is the all-zero array.
+  `kth(a, b, k)` reads version `b` minus version `a` as counts and
+  returns the smallest `i` whose count over `[0, i]` exceeds `k`:
+  the `k`-th smallest (0-indexed) value of a subarray when version
+  `i` counts the compressed values of `a[:i]`.
 Precondition: 0-indexed, half-open ranges, `n >= 1`. For `kth`,
   every count of `b` minus `a` is $>= 0$ and `0 <= k <` their
   total.
 Time: $O(log n)$ per operation; $2 dot 10^5$ adds plus
-  $2 dot 10^5$ `kth` at $n = 2 dot 10^5$ take about 1.5 s (random
-  memory access dominates). Memory: each `add` creates at most
-  $ceil(log_2 n) + 1$ nodes, 24 bytes each in three flat lists.
+  $2 dot 10^5$ `kth` at $n = 2 dot 10^5$ take about 1.5 s.
+  Memory: each `add` creates at most $ceil(log_2 n) + 1$ nodes, 24
+  bytes each in three flat lists.
 Usage:
   st = PersistentSegTree(n)
   v1 = st.add(0, i, 5); v2 = st.add(v1, j, 3)
   s = st.query(v1, l, r)  # sum of [l, r) in version v1
   idx = st.kth(v1, v2, k)  # k-th unit of v2 - v1
 Tweak: Point set: `add(v, i, x - query(v, i, i + 1))`. Max or
-  min: `add` adds `delta` along the path and `query` subtracts
-  two prefix walks, both right only for sums (or xor); set the
-  new leaf, recompute the new path nodes from their children
-  bottom-up, and write a range query that combines whole nodes.
-  Starting from an array `a`: `n` adds into root 0.
+  min: set the new leaf, recompute the copied path from its
+  children, and query by combining whole nodes (`add`'s delta and
+  `query`'s prefix difference are only for sums).
 Example:
   >>> from bisect import bisect_left
   >>> a = [5, 1, 4, 1, 3, 9]

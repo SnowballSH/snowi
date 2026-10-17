@@ -1,28 +1,24 @@
 #import "/typst/notes.typ": *
 
 === Expectation
-#fact[Indicators][Linearity needs no independence: write a count as
-  a sum of indicators, $E[\#"events"] = sum_t P(t "happens")$. But
-  $E[1\/X] != 1\/E[X]$ and $E[max] != max E$.]
+#full[
 #fact[Contribution][Sum of $f$ over all $N$ objects $= N dot E[f]$ for
   a uniform object, and back. Count per element ("$P$(cell $c$ is
   empty)"), per pair ("$P(u, v$ end up inverted$)$"), or per unit of
   length (each gap is a token counted when crossed).]
+]
 #fact[Tail sum][For integer $X >= 0$: $E[X] = sum_(k >= 1) P(X >= k)$
   and $E[X^2] = sum_(k >= 1) (2k - 1) P(X >= k)$; for real $X >= 0$:
-  $E[X] = integral_0^infinity P(X > t) dif t$. Maxima and minima of
-  independent variables: \
-  $P(max <= k) = product_i P(Y_i <= k)$,
-  $P(min >= k) = product_i P(Y_i >= k)$.]
+  $E[X] = integral_0^infinity P(X > t) dif t$.]
 #fact[Second moment][For indicators $X = sum_t I_t$:
   $E[X^2] = E[X] + sum_(s != t) P(s "and" t)$; variance adds over
   pairwise uncorrelated terms. Total variance:
-  $op("Var") X = E[op("Var")(X | Y)] + op("Var")(E[X | Y])$, so a
-  mixture varies at least as much as its least varying part.
+  $op("Var") X = E[op("Var")(X | Y)] + op("Var")(E[X | Y])$.#full[
+  So a mixture varies at least as much as its least varying part.
   Mixing averages the parts' points $(E[X], E[X^2])$ and the
   variance $E[X^2] - E[X]^2$ is concave in them: the largest one
   mixes two parts adjacent on the upper hull of these points (a
-  parabola in the weight).]
+  parabola in the weight).]]
 
 === Random subsets and orders
 - Removing uniformly random elements one at a time: the $k$
@@ -47,18 +43,12 @@
   probability $lambda_i\/sum lambda_i$.
 
 === Markov chains
-- Expected cost to absorption, backwards: $E_s = c_s + sum_t
-  P_(s t) E_t$, $E = 0$ on absorbing states. Absorption
-  probabilities: the same with $c = 0$ and boundary values 1 or 0.
-- Self-loop $P_(s s) < 1$: $E_s = (c_s + sum_(t != s) P_(s t) E_t)\/
-  (1 - P_(s s))$; success probability $p$ per try: $1\/p$ tries.
-- Structure first: DAG order; tree walk, write $E_v = A_v E_"par" +
-  B_v$ bottom-up; everything jumps back to the start, write
+- Solving $E_s = c_s + sum_t P_(s t) E_t$: DAG order; tree walk,
+  write $E_v = A_v E_"par" + B_v$ bottom-up; everything jumps back to the start, write
   $E_i = a_i E_0 + b_i$ and solve one equation; states on a line
   (or one level at a time) give tridiagonal systems, solved in
-  $O(S)$ (Thomas: eliminate $x_(i - 1)$ forwards, then substitute
-  backwards#full[; Linear algebra facts]); otherwise
-  Gaussian elimination in $O(S^3)$ (`linalg/gauss-mod`).
+  $O(S)$ (_Linear algebra facts_); otherwise Gaussian
+  elimination in $O(S^3)$ (`linalg/gauss-mod`).
 - Stationary: $pi P = pi$, $sum pi = 1$ (replace one equation);
   unique for an irreducible chain; expected return time to $s$ is
   $1\/pi_s$. Random walk on an undirected graph: $pi_v = deg v\/(2m)$.
@@ -69,10 +59,8 @@
   average.
 
 === Classics
-- Coupon collector, $n$ equal coupons: $n H_n$; to see $k$ distinct:
-  $sum_(i < k) n\/(n - i)$; distinct after $m$ draws:
-  $n (1 - (1 - 1\/n)^m)$. Unequal $p_i$: min-max inclusion-exclusion
-  $sum_(T != emptyset) (-1)^(|T| + 1) \/ sum_(i in T) p_i$.
+- Coupon collector, unequal $p_i$: min-max inclusion-exclusion
+  $sum_(T != emptyset) (-1)^(|T| + 1) \/ sum_(i in T) p_i$ draws.
 - Birthday: $k$ draws from $n$ all differ with probability
   $product_(i < k) (1 - i\/n) approx e^(-k^2\/(2n))$; 50% at
   $k approx 1.18 sqrt(n)$; first repeat after about
@@ -80,11 +68,11 @@
   probability about $m^2\/(2M)$.
 - Gambler's ruin from $i$, absorbed at 0 or $N$, up with probability
   $p$, $r = (1 - p)\/p$: reaches $N$ with probability
-  $(1 - r^i)\/(1 - r^N)$. If $p = 1\/2$: probability $i\/N$ and
-  $i (N - i)$ steps on average.
+  $P_N = (1 - r^i)\/(1 - r^N)$ and stops after
+  $(i - N P_N)\/(1 - 2p)$ steps on average. If $p = 1\/2$:
+  $P_N = i\/N$ and $i (N - i)$ steps.
 - Symmetric $plus.minus 1$ walk: $P(S_(2n) = 0) = binom(2n, n)\/4^n
-  approx 1\/sqrt(pi n)$, $E|S_n| approx sqrt(2n\/pi)$; it returns to 0
-  surely, but the expected return time is infinite.
+  approx 1\/sqrt(pi n)$, $E|S_n| approx sqrt(2n\/pi)$.
 - $n$ uniform points in $[0, 1]$: the $k$-th smallest has mean
   $k\/(n + 1)$ ($E[max] = n\/(n + 1)$), all $n + 1$ gaps have mean
   $1\/(n + 1)$, and $P(max <= x) = x^n$.
@@ -96,11 +84,13 @@
 - Waiting for a pattern $s$ over an alphabet of size $A$:
   $sum A^k$ over the $k$ with `s[0, k) == s[n - k, n)`, $k = n$
   included (HH: 6 flips, HT: 4).
+#full[
 - Random translation: $integral "area"(P inter (Q + t)) dif t =
   "area"(P) "area"(Q)$ (Fubini). For $t$ uniform over the
   translations with overlap (the set $P - Q$; for convex $P$, $Q$
   a polygon from `geometry/minkowski`) the expected overlap is
   $"area"(P) "area"(Q) \/ "area"(P - Q)$.
+]
 
 === Stopping times
 #fact[Wald][$E[sum_(i = 1)^N X_i] = E[N] E[X]$ for i.i.d. $X_i$ and a
@@ -108,13 +98,17 @@
 #fact[Potential][Find $Phi$ of the state with $E[Phi_"next" | "now"] =
   Phi_"now" - 1$ while running; then the expected number of steps
   is $Phi_"start" - E[Phi_"end"]$ (optional stopping, with bounded
-  increments and $E[T] < infinity$). Pattern waiting times and
-  random acquisitions until one company is left (CF 1025G) are
-  solved this way.]
+  increments and $E[T] < infinity$).#full[ Pattern waiting times
+  and random acquisitions until one company is left (CF 1025G) are
+  solved this way.]]
 #fact[Optimal stopping][$V(s) = max("stop"(s), -c + sum_t P_(s t)
-  V(t))$ in floating point: the max needs real comparisons. Look
-  for a threshold rule, or a one-step lookahead when stopping stays
-  better once it is; then compute the value mod $p$ if asked.]
+  V(t))$: decide each max in floating point, then compute the
+  value mod $p$ if asked. If stopping stays better once it is, the
+  one-step lookahead is optimal.]
+#fact[Band][A random process of $n$ bounded steps rarely strays
+  more than a few $sqrt(n)$ from its expected path (Hoeffding), so
+  a DP over (step, state) may skip the states outside that band.
+  Grow the band until the answer stops changing.]
 #full[
 #fact[Index policy][Independent Markov chains, each with a target;
   a step advances one chosen chain at cost 1, and play stops when
@@ -135,15 +129,6 @@
   walk stopped when it leaves $C$ ($O(n)$ per step).]
 ]
 
-=== Modulo a prime
-- Never compare residues or take max or min of them; never drop
-  "tiny" probabilities. Decide the strategy first in doubles or by
-  proof.
-- Inverses of $1..n$ in $O(n)$: $"inv"(1) = 1$,
-  $"inv"(i) = (M - floor(M\/i)) dot "inv"(M mod i) mod M$. To read
-  a residue $r$ as a fraction, find a small $q$ with $r q mod M$
-  small.
-
 #full[
 === Concentration
 Markov: $P(X >= a) <= E[X]\/a$ for $X >= 0$. Chebyshev:
@@ -158,13 +143,6 @@ e^(-t^2 \/ (2 sum c_i^2))$. Union bound:
 $P(union.big A_i) <= sum P(A_i)$. A test that fails with
 probability $1\/2$ repeated 60 times fails with probability
 $2^(-60)$.
-- So a random process of $n$ bounded steps rarely strays more
-  than a few $sqrt(n)$ from its expected path: a DP over (step,
-  state) may skip the states outside that band. Grow the band
-  until the answer stops changing (400 balls $+1$ and 250 balls
-  $-1$ drawn without replacement, stop at will: error $10^(-7)$
-  with half-width 40 in the number of $+1$ balls drawn, i.e. 80
-  in the running sum).
 - Total variation $d(P, Q) = max_A |P(A) - Q(A)| = 1/2 sum_x
   |p_x - q_x|$. One sample from $P$ or $Q$ (prior $1\/2$ each) is
   classified correctly with probability at most $(1 + d)\/2$
@@ -186,8 +164,6 @@ $2^(-60)$.
   for Green's theorem, Geometry facts), with
   $E_1 (x) = integral_x^infinity e^(-u)\/u dif u$#cpp[
   (`-expint(-x)`)].
-- Biased ruin duration ($p != 1\/2$, $q = 1 - p$):
-  $i\/(q - p) - N\/(q - p) dot (1 - (q\/p)^i)\/(1 - (q\/p)^N)$.
 - Absorbing chain with transient part $Q$ and $R$ to absorbing
   states: $(I - Q)^(-1)$ holds expected visits, its row sums the
   expected steps, $(I - Q)^(-1) R$ the absorption probabilities.

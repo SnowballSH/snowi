@@ -9,8 +9,6 @@ Usage:
   fw = Fenwick(n)
   fw.add(i, 5)
   s = fw.query(r) - fw.query(l)  # sum of [l, r)
-Tweak: Range add, point read: `add(l, x)`, `add(r, -x)`, value at
-  `i` is `query(i + 1)`.
 Example:
   >>> fw = Fenwick(4)
   >>> for i, x in enumerate([3, 0, 2, 5]): fw.add(i, x)

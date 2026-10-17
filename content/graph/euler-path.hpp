@@ -12,9 +12,9 @@
  * Usage:
  *   auto [vs, es] = euler_path(n, edges, directed, src);
  *   if (vs.empty()) ... // impossible from src
- * Tweak: Circuit only: also require `vs.back() == src`. To find a
- *   start: an odd-degree vertex (undirected) or one with
- *   $"out" = "in" + 1$ (directed), else any vertex with an edge.
+ * Tweak: Circuit only: also require `vs.back() == src`. Orienting
+ *   so that every $|"in" - "out"| <= 1$: pair the odd vertices by
+ *   dummy edges, then orient along a circuit of each component.
  * Example:
  *   // De Bruijn sequence: every length-k word over {0..a-1} once.
  *   // Vertices: (k-1)-words; word w*a + c is the edge from w to
@@ -37,11 +37,9 @@
  *   sequences, and "draw without lifting the pen". Covering all
  *   edges of an undirected component with $2k$ odd vertices needs
  *   $max(1, k)$ paths: pair odd vertices with dummy edges, run a
- *   circuit, cut at the dummies. Orienting an undirected graph so
- *   that every vertex has $|"in" - "out"| <= 1$: in each component,
- *   pair its odd vertices with dummy edges and orient along an
- *   Euler circuit (one call per component: a walk never leaves
- *   its component).
+ *   circuit, cut at the dummies. For the orientation in Tweak
+ *   make one call per component: a walk never leaves its
+ *   component.
  * Source: kactl EulerWalk (CC0), with explicit degree checks.
  * Status: stress-tested against exhaustive search
  */

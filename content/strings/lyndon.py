@@ -1,13 +1,11 @@
 """
 Title: Lyndon factorization
 Description: A Lyndon word is strictly smaller than all its
-  proper suffixes, like `aab` or `abb`. `duval(s)` splits `s`
-  into Lyndon words $w_1 >= w_2 >= dots >= w_k$ (the split is
-  unique) and returns their start indices; the last factor is the
-  smallest suffix of `s`. `min_rotation(s)` returns the smallest
+  proper suffixes. `duval(s)` splits `s` into Lyndon words
+  $w_1 >= w_2 >= dots >= w_k$ (the split is unique) and returns
+  their start indices. `min_rotation(s)` returns the smallest
   `i` for which the rotation `s[i, n) + s[0, i)` is
   lexicographically smallest.
-Precondition: `s` is a `str`, `bytes` or list.
 Time: $O(n)$. PyPy: about 0.1 s for $n = 10^6$.
 Usage:
   st = duval(s)  # start of each factor

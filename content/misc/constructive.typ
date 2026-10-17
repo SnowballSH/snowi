@@ -1,5 +1,6 @@
 #import "/typst/notes.typ": *
 #let xor = sym.plus.o
+#full[
 
 Workflow: find a necessary condition (an invariant, a colouring, a
 count), brute force every small input to see whether it is also
@@ -28,12 +29,14 @@ small inputs, $n = 1, 2, 3$ included.
   of it compute signed sums; applied to all neighbours of
   $a_0, dots, a_(n - 1)$ until one value is left, it gives
   $(-1)^(n - 1) sum_i binom(n - 1, i) a_i mod 3$ (Lucas).
+]
 - Permutation parity: a swap flips it, a 3-cycle keeps it,
   reversing a block of length $L$ flips it iff $floor(L\/2)$ is
   odd. 15 puzzle: the sign of the permutation of all cells (blank
   included) times $(-1)^d$, with $d$ the blank's taxicab distance
   from its home cell, never changes; on an $m times n$ board with
   $m, n >= 2$ it is the only obstruction.
+#full[
 - Swapping the tokens on the ends of any edge of a graph reaches
   exactly the arrangements that keep every token inside its
   connected component.
@@ -182,8 +185,11 @@ small inputs, $n = 1, 2, 3$ included.
   code (bit $j$ of the total XOR is announcement $j$ XOR bit $j$
   of person $j$'s code) and gets bit $i$ from the parity.
 
+]
 === Standard constructions
+#full[
 - Gray code: _Bit tricks_.
+]
 #fact[de Bruijn][$B(k, n)$ is a cyclic word of length $k^n$ that
   contains every length-$n$ word over $k$ letters exactly once:
   the Lyndon words whose length divides $n$, concatenated in
@@ -233,6 +239,7 @@ small inputs, $n = 1, 2, 3$ included.
   zigzag paths $i, i + 1, i - 1, i + 2, i - 2, dots, i + m$
   (mod $2m$), $i = 0, dots, m - 1$. For $K_(2m + 1)$ join one new
   vertex to both ends of each path: $m$ Hamiltonian cycles.]
+#full[
 #fact[Tournament scores][Which out-degree lists occur: Landau
   (_Graph theory facts_). To build one, the vertex with the
   smallest score $s$ beats the $s$ next smallest and loses to the
@@ -275,6 +282,7 @@ vector<vector<bool>> tournament(vi s) {
         s[v] -= 1
   return beats",
 )
+]
 #fact[Permutations][Exactly $k$ inversions, which needs
   $0 <= k <= binom(n, 2)$: position $i = 0, dots, n - 1$ takes the
   unused value with exactly $c_i$ smaller unused values, where
@@ -284,6 +292,7 @@ vector<vector<bool>> tournament(vi s) {
   values, each block decreasing, one of size $b$ and none larger,
   blocks in increasing order. Always $"LIS" dot "LDS" >= n$ and
   $"LIS" + "LDS" <= n + 1$.]
+#full[
 - Appending an element raises at most one of LIS and LDS. Every
   prefix can be given its own LIS and LDS: grow a Young diagram
   one corner cell at a time and give cell (column $c$, row $r$)
@@ -355,13 +364,16 @@ transitive, and cross-multiply instead of dividing.
 - Canonical forms: show that some optimum is sorted, contiguous
   or has at most one fractional item, and search only those.
 
+]
 === Scheduling
+#full[
 - Minimise $sum_i w_i C_i$ (weighted completion times): sort by
   $t_i \/ w_i$ (Smith's rule).
 - Minimise the maximum lateness: earliest deadline first. With
   release times: at every moment run the released job with the
   earliest deadline; for unit jobs (or with preemption) this meets
   all deadlines whenever any schedule does.
+]
 - Most jobs on time: by deadline, add each job; if the total
   time exceeds its deadline, drop the longest job so far (a
   max-heap; Moore-Hodgson).
@@ -375,6 +387,7 @@ transitive, and cross-multiply instead of dividing.
   others by decreasing $b_i$ (Johnson). If job $j$ takes $W_j$ on
   each of $m$ machines in sequence (unlimited buffers), every
   order has makespan $sum_j W_j + (m - 1) max_j W_j$.
+#full[
 - Cache of size $k$ with all requests known: on a miss evict the
   item whose next request is farthest away (Belady); this
   minimises the misses.
@@ -401,3 +414,4 @@ transitive, and cross-multiply instead of dividing.
   so every feasible cutting starts an arc at one of its elements
   after the first. Try those of the shortest such segment as
   starts: $O(n)$ steps of the `nxt` pointers in total.
+]

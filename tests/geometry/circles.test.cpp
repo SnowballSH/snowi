@@ -119,6 +119,105 @@ pair<Pd, double> brute_mec(const vector<Pd>& ps) {
   return best;
 }
 
+// Area of disc (c, r) inside a simple polygon by Green's theorem, a
+// different method from circle_poly: the polygon's edges cut at the
+// circle (pieces inside the disc), then the circle's arcs between
+// crossings (arcs inside the polygon). Generic input only.
+bool in_poly(const vector<Pd>& v, Pd p) {
+  bool in = false;
+  rep(i, 0, sz(v)) {
+    Pd a = v[i], b = v[(i + 1) % sz(v)];
+    if ((a.y > p.y) != (b.y > p.y) &&
+        p.x < a.x + (b.x - a.x) * (p.y - a.y) / (b.y - a.y))
+      in = !in;
+  }
+  return in;
+}
+double green_area(Pd c, double r, vector<Pd> v) {
+  double sign = 1, area2 = 0;
+  rep(i, 0, sz(v)) area2 += v[i].cross(v[(i + 1) % sz(v)]);
+  if (area2 < 0) reverse(all(v)), sign = -1;
+  for (Pd& p : v) p = p - c;
+  double sum = 0;
+  vector<double> angles;
+  rep(i, 0, sz(v)) {
+    Pd a = v[i], d = v[(i + 1) % sz(v)] - a;
+    vector<double> ts{0, 1};
+    // |a + d t| = r: d.d t^2 + 2 a.d t + a.a - r^2 = 0.
+    double A = d.dist2(), B = 2 * a.dot(d), C = a.dist2() - r * r;
+    double disc = B * B - 4 * A * C;
+    if (disc > 0)
+      for (double sg : {-1.0, 1.0}) {
+        double t = (-B + sg * sqrt(disc)) / (2 * A);
+        if (t > 0 && t < 1) {
+          ts.push_back(t);
+          Pd q = a + d * t;
+          angles.push_back(atan2(q.y, q.x));
+        }
+      }
+    sort(all(ts));
+    rep(j, 0, sz(ts) - 1) {
+      Pd p = a + d * ts[j], q = a + d * ts[j + 1];
+      if (((p + q) / 2).dist() < r) sum += p.cross(q) / 2;
+    }
+  }
+  if (angles.empty())
+    return sign * (sum + (in_poly(v, Pd{r, 0}) ? M_PI * r * r : 0));
+  sort(all(angles));
+  rep(i, 0, sz(angles)) {
+    double lo = angles[i];
+    double hi = i + 1 < sz(angles) ? angles[i + 1] : angles[0] + 2 * M_PI;
+    if (in_poly(v, polar(r, (lo + hi) / 2))) sum += r * r * (hi - lo) / 2;
+  }
+  return sign * sum;
+}
+// Clip v to the left of every edge of the convex polygon w (both
+// orientations of v keep their signed area).
+vector<Pd> clip(vector<Pd> v, const vector<Pd>& w) {
+  rep(k, 0, sz(w)) {
+    Pd s = w[k], e = w[(k + 1) % sz(w)];
+    vector<Pd> out;
+    rep(i, 0, sz(v)) {
+      Pd cur = v[i], prev = v[(i + sz(v) - 1) % sz(v)];
+      double a = (e - s).cross(cur - s), b = (e - s).cross(prev - s);
+      if ((a < 0) != (b < 0)) out.push_back(cur + (prev - cur) * (a / (a - b)));
+      if (a >= 0) out.push_back(cur);
+    }
+    v = out;
+  }
+  return v;
+}
+double signed_area(const vector<Pd>& v) {
+  double a = 0;
+  rep(i, 0, sz(v)) a += v[i].cross(v[(i + 1) % sz(v)]);
+  return a / 2;
+}
+// Bounds from regular m-gons inside and around the circle.
+pair<double, double> ngon_bounds(Pd c, double r, const vector<Pd>& v) {
+  int m = 256;
+  vector<Pd> in, out;
+  rep(k, 0, m) {
+    in.push_back(c + polar(r, 2 * M_PI * k / m));
+    out.push_back(c + polar(r / cos(M_PI / m), 2 * M_PI * k / m));
+  }
+  double x = signed_area(clip(v, in)), y = signed_area(clip(v, out));
+  return {min(x, y), max(x, y)};
+}
+// Star-shaped (so simple) polygon around o, counter-clockwise: all
+// angular gaps below a half turn.
+vector<Pd> rnd_star(Pd o, int n, double rmax) {
+  vector<double> t(n);
+  for (bool ok = false; !ok;) {
+    for (double& x : t) x = rnd_real(0, 2 * M_PI);
+    sort(all(t));
+    ok = t[0] + 2 * M_PI - t[n - 1] < 3;
+    rep(i, 1, n) ok &= t[i] - t[i - 1] < 3;
+  }
+  vector<Pd> v;
+  for (double x : t) v.push_back(o + polar(rnd_real(0.05, rmax), x));
+  return v;
+}
+
 int main() {
   rep(it, 0, iters(3000)) {
     Pd c = rnd_pt(10), a = rnd_pt(10), b = rnd_pt(10);
@@ -212,6 +311,61 @@ int main() {
     for (Pd p : ps) CHECK((p - ctr).dist() <= rad * (1 + 1e-7) + 1e-6);
   }
 
+  // circle_poly: generic polygons against Green's theorem.
+  rep(it, 0, iters(3000)) {
+    int n = (int)rnd(3, 9);
+    Pd ctr0 = rnd_pt(5), c = rnd_pt(5);
+    vector<Pd> v = rnd_star(ctr0, n, 6);
+    if (it % 2) reverse(all(v));
+    double r = vector<double>{0.3, 1, 3, 8, 20}[it % 5] * rnd_real(0.5, 1);
+    double got = circle_poly(c, r, v), want = green_area(c, r, v);
+    CHECK(near(got, want, 1e-7));
+    reverse(all(v));
+    CHECK(near(circle_poly(c, r, v), -want, 1e-7));
+  }
+  // Degenerate integer cases (vertices on the circle, tangent edges,
+  // the center on a vertex or an edge): inside regular-polygon bounds
+  // and close to the area for a slightly larger radius.
+  int degenerate = 0;
+  rep(it, 0, iters(600)) {
+    vector<Pd> v;
+    if (it % 4 == 0) v = {{0, 0}, {6, 0}, {6, 6}, {0, 6}};
+    else
+      rep(i, 0, rnd(3, 6)) v.push_back(Pd(rnd(-5, 5), rnd(-5, 5)));
+    if (it % 8 == 4) reverse(all(v));
+    int n = sz(v);
+    // Keep simple polygons: no two non-adjacent edges touch.
+    bool simple = fabs(signed_area(v)) > 1e-9;
+    rep(i, 0, n) simple &= v[i] != v[(i + 1) % n];
+    rep(i, 0, n)
+      rep(j, i + 2, n) {
+        if (i == 0 && j == n - 1) continue;
+        Pd a = v[i], b = v[(i + 1) % n], p = v[j], q = v[(j + 1) % n];
+        double d1 = (b - a).cross(p - a), d2 = (b - a).cross(q - a);
+        double d3 = (q - p).cross(a - p), d4 = (q - p).cross(b - p);
+        if (d1 * d2 <= 0 && d3 * d4 <= 0) simple = false;
+      }
+    if (!simple) continue;
+    vector<Pd> cs{v[0], (v[0] + v[1]) / 2, {3, 3}};
+    Pd c = it % 2 ? Pd(rnd(-3, 3), rnd(-3, 3)) : cs[it / 2 % 3];
+    double r = (double)rnd(1, 5);
+    auto [lo, hi] = ngon_bounds(c, r, v);
+    double got = circle_poly(c, r, v);
+    CHECK(lo - 1e-9 <= got && got <= hi + 1e-9);
+    // A slightly larger radius makes the case generic.
+    CHECK(near(got, green_area(c, r + 1e-8, v), 1e-6));
+    degenerate++;
+  }
+  CHECK(degenerate > iters(600) / 4);
+  {
+    vector<Pd> sq{{0, 0}, {2, 0}, {2, 2}, {0, 2}};
+    CHECK(near(circle_poly(Pd{0, 0}, 1.0, sq), M_PI / 4, 1e-12));
+    CHECK(near(circle_poly(Pd{1, 1}, 1.0, sq), M_PI, 1e-12));
+    CHECK(near(circle_poly(Pd{1, 1}, 5.0, sq), 4, 1e-12));
+    CHECK(near(circle_poly(Pd{9, 9}, 1.0, sq), 0, 1e-12));
+    CHECK(near(circle_poly(Pd{1, 0}, 1.0, sq), M_PI / 2, 1e-12));
+  }
+
   int n = 100'000;
   vector<Pd> ps(n);
   rep(i, 0, n)
@@ -223,7 +377,8 @@ int main() {
     sum += sz(circle_inter(ps[i], 3.0, ps[(i + 1) % n], 4.0));
     sum += sz(tangents(ps[i], 3.0, ps[(i + 1) % n], -4.0));
   }
-  fprintf(stderr, "  mec of 1e5 + 3e5 circle ops: %.2fs (%g)\n",
+  sum += circle_poly(Pd{1, 2}, 500.0, ps);
+  fprintf(stderr, "  mec of 1e5 + 3e5 circle ops + circle_poly: %.2fs (%g)\n",
           elapsed() - start, sum);
   CHECK(rad <= 1e3 * (1 + 1e-9) && rad > 999);
   for (Pd p : ps) CHECK((p - ctr).dist() <= rad * (1 + 1e-7));

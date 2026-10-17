@@ -13,21 +13,16 @@ Precondition: Entries in `[0, MOD)`, `n` $>= 0$. `poly_inv` needs
 Time: $O(n log n)$. For $n = 5 dot 10^5$: inverse 0.55 s, log 0.95
   s, exp 1.2 s, pow 2.2 s (`conv` of that length: 0.35 s). Newton
   steps and NTT sizes round up to powers of two: $n = 2^18$ takes
-  half as long, $n = 2^18 + 1$ as long as $5 dot 10^5$. Below
-  $n approx 3000$ the $O(n^2)$ recurrences of the generating
-  functions note are simpler.
+  half as long, $n = 2^18 + 1$ as long as $5 dot 10^5$.
 Usage:
   b = poly_inv(a, n)  # a b = 1 mod x^n
   e = poly_exp(poly_log(a, n), n)  # e = a mod x^n
   q, r = poly_divmod(a, b)
-Tweak: Square root when $a_0 = 1$:
-  `poly_pow(a, (MOD + 1) // 2, n)` (an exponent in the field works
-  because $a_0 = 1$). Otherwise strip $x^v$ and the leading
-  coefficient $c$ as `poly_pow` does, take that root and multiply
-  by $x^(v \/ 2)$ and `mod_sqrt(c, MOD)` (`numtheory/mod-sqrt`);
-  there is no root if $v$ is odd or $c$ is not a square. Another
-  NTT prime: change `MOD` (and the root 3 in `ntt_roots` if
-  needed).
+Tweak: Square root: `poly_pow(a, (MOD + 1) // 2, n)` if $a_0 = 1$;
+  else strip $x^v$ and $c = a_v$ as `poly_pow` does and multiply
+  that root by $x^(v \/ 2)$ and `mod_sqrt(c, MOD)`
+  (`numtheory/mod-sqrt`): none if $v$ is odd or $c$ is not a
+  square.
 Uses: poly/ntt
 Example:
   >>> poly_inv([1, MOD - 1], 5)  # 1 / (1 - x)

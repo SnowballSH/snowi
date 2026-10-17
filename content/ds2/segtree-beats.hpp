@@ -2,9 +2,7 @@
  * Title: Segment tree beats
  * Description: Range chmin ($a_i = min(a_i, x)$), range chmax
  *   ($a_i = max(a_i, x)$) and range add, with range sum, max and
- *   min. A node keeps its max, strict second max and count of the
- *   max, and the same for the min. Chmin stops at a node where only
- *   the max class changes and fixes the sum from the count.
+ *   min.
  * Precondition: 0-indexed, half-open ranges. Values, `x` and range
  *   sums stay below $4 dot 10^18$ in absolute value.
  * Time: $O((n + q) log^2 n)$ amortized with range add, and

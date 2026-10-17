@@ -1,18 +1,16 @@
 """
 Title: Sparse table
-Description: Static range minimum in $O(1)$: `t[j][i]` is the
-  minimum of `[i, i + 2^j)`, and a query covers `[l, r)` with two
-  overlapping blocks of length $2^k$, $k = floor(log_2(r - l))$.
+Description: Static range minimum.
 Precondition: 0-indexed, `l < r`. The operation is idempotent
   (`op(x, x) = x`), associative and commutative.
 Time: $O(n log n)$ time and memory to build, $O(1)$ per query.
 Usage:
   st = SparseTable(a)
   m = st.query(l, r)  # min of [l, r)
-Tweak: Max or gcd: replace both `min`. Index of the minimum: build
-  from `(a[i] << 20) + i` and take `& (2**20 - 1)`; ties go to the
-  smallest index. Needs `n <= 2^20` and $|a_i| < 2^43$; otherwise
-  use tuples `(a[i], i)` (packed big ints run twice as slow).
+Tweak: Index of the minimum: build from `(a[i] << 20) + i` and
+  take `& (2**20 - 1)`; ties go to the smallest index. Needs
+  `n <= 2^20` and $|a_i| < 2^43$; otherwise use tuples `(a[i], i)`
+  (packed big ints run twice as slow).
 Example:
   >>> st = SparseTable([5, 2, 4, 2, 7, 1])
   >>> st.query(0, 3), st.query(2, 5), st.query(4, 5)

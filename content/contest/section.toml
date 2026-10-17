@@ -13,3 +13,7 @@ icpc = true
 note = "troubleshoot"
 title = "Troubleshooting"
 icpc = true
+
+[[entry]]
+item = "gen"
+icpc = true

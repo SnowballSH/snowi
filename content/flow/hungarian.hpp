@@ -1,19 +1,17 @@
 /**
  * Title: Hungarian algorithm
- * Description: Minimum-cost assignment: gives each of the `n` rows
- *   of the cost matrix `a` its own column, minimizing the total
- *   cost. Returns the cost and `match`, where `match[i]` is the
- *   column of row `i`.
+ * Description: Minimum-cost assignment of the `n` rows of `a` to
+ *   distinct columns. Returns the cost and `match`, where
+ *   `match[i]` is the column of row `i`.
  * Precondition: `n <= m` for an `n x m` matrix (transpose if not).
  *   Costs may be negative, with $(n + 4) max |a_(i j)| < 2^63$.
  * Time: $O(n^2 m)$.
  * Usage:
  *   vector<vector<ll>> a(n, vector<ll>(m));
  *   auto [cost, match] = hungarian(a);
- * Tweak: Maximum-weight assignment: negate every entry and the
- *   returned cost. Rows that may stay unassigned: add $n$ dummy
- *   columns of cost 0. Real costs: replace every `ll` with
- *   `double` (the `LLONG_MAX` sentinels still work).
+ * Tweak: Rows that may stay unassigned: add $n$ dummy columns of
+ *   cost 0. Real costs: replace every `ll` with `double` (the
+ *   `LLONG_MAX` sentinels still work).
  * Example:
  *   // Maximum total score, each worker on a different job:
  *   for (auto& row : a) for (ll& x : row) x = -x;

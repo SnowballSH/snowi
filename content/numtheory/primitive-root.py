@@ -1,18 +1,12 @@
 """
 Title: Primitive root
-Description: The smallest primitive root `g` of a prime `p`: its
-  powers $g^0, dots, g^(p - 2)$ are all the nonzero residues.
-  Factors $p - 1$ with Pollard rho, then tries $g = 2, 3, dots$:
-  `g` is a primitive root iff $g^((p - 1)\/q) != 1$ for every
-  prime $q | p - 1$.
+Description: The smallest primitive root `g` of a prime `p`.
 Precondition: `p` prime.
 Time: One `factor(p - 1)` plus $O(g log p)$ per prime factor; the
   smallest root is at most 113 for $p < 10^8$. PyPy: about 2 ms for
   a random $p < 2^63$.
 Usage:
   g = primitive_root(998244353)  # 3
-Tweak: For $p <= 10^12$ trial division of $p - 1$ up to
-  $sqrt(p)$ is enough instead of `factor`.
 Uses: numtheory/factor
 Example:
   >>> primitive_root(10**9 + 7), primitive_root(2**61 - 1)

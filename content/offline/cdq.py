@@ -2,10 +2,7 @@
 Title: CDQ divide and conquer
 Description: 3D dominance counting: `cnt[i]` is the number of
   points `j != i` with $a_j <= a_i$, $b_j <= b_i$ and
-  $c_j <= c_i$; equal points count each other. In sorted order
-  every such `j` unequal to `i` comes first. The recursion halves
-  the order and lets the left half count into the right half by a
-  sweep over $b$ with a Fenwick tree over $c$.
+  $c_j <= c_i$; equal points count each other.
 Precondition: Points are tuples (or lists) of three comparable
   values; `c` is compressed inside.
 Time: $O(n log^2 n)$, recursion depth $log_2 n$. In PyPy,

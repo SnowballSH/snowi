@@ -7,8 +7,6 @@ Usage:
   d = DSU(n)
   d.join(a, b)  # False if already in the same set
   d.same(a, b); d.find(a); d.size(a)
-Tweak: For per-set data (sum, min, edge count), keep lists indexed
-  by root and merge them into `a` inside `join`.
 Example:
   >>> d = DSU(5)
   >>> d.join(0, 1), d.join(3, 4), d.join(1, 0), d.join(1, 4)

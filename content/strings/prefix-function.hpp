@@ -1,19 +1,15 @@
 /**
  * Title: Prefix function (KMP)
  * Description: `pi[i]` is the length of the longest proper border
- *   of `s[0, i]`: a proper prefix that is also a suffix.
+ *   of `s[0, i]`.
  *   `kmp_match(s, pat)` lists the start of every occurrence of `pat`
- *   in `s`, overlapping ones included. The smallest period of `s` is
- *   `p = n - pi[n - 1]`; `s` is a power of `s[0, p)` iff `p` divides
- *   `n`.
+ *   in `s`, overlapping ones included.
  * Precondition: `pat` is non-empty.
  * Time: $O(n)$; `kmp_match` $O(|s| + |"pat"|)$.
  * Usage:
  *   vi pi = prefix_function(s);
  *   int per = n - pi[n - 1]; // smallest period, n >= 1
  *   vi occ = kmp_match(s, pat); // start positions
- * Tweak: Works on any sequence with `==`, e.g. `vector<int>`; no
- *   separator value is needed.
  * Example:
  *   // Prefix automaton: nxt[k][c] is the matched length after
  *   // reading c with k characters of s matched (k <= n).

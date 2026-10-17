@@ -1,9 +1,9 @@
 """
 Title: Fast Fourier transform
 Description: `fft_conv(a, b)` multiplies polynomials with real
-  coefficients in floats: `c[k]` is $sum_(i + j = k) a_i b_j$.
-  `fft(re, im)` evaluates the complex vector `re + i im` in place at
-  the powers of $omega = e^((2 pi i) / n)$, in bit-reversed order, and
+  coefficients in floats. `fft(re, im)` evaluates the complex
+  vector `re + i im` in place at the powers of
+  $omega = e^((2 pi i) / n)$, in bit-reversed order, and
   `ifft(re, im)` undoes it.
 Precondition: `len(re)` is a power of two. Results round exactly
   while $norm(a) norm(b) < 5 dot 10^14$ (Euclidean norms), which
@@ -14,8 +14,6 @@ Precondition: `len(re)` is a power of two. Results round exactly
 Time: $O(n log n)$. A $2^18 times 2^18$ product takes about 0.2 s.
 Usage:
   c = [round(x) for x in fft_conv(a, b)]
-Tweak: Complex inputs: `fft` both, multiply pointwise, `ifft`.
-  Squaring needs one forward transform.
 Example:
   >>> [round(x) for x in fft_conv([1, 2, 3], [4, 5])]
   [4, 13, 22, 15]

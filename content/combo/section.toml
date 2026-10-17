@@ -12,3 +12,4 @@ icpc = true
 [[entry]]
 note = "genfunc"
 title = "Generating functions"
+icpc = true

@@ -1,9 +1,8 @@
 /**
  * Title: Implicit treap
  * Description: A sequence with insert and erase at any position,
- *   range reverse, range sum and access by index, all by splitting
- *   and merging a treap keyed by position. `split(x, k)` cuts tree
- *   `x` into its first `k` elements and the rest; `merge(a, b)`
+ *   range reverse, range sum and access by index. `split(x, k)`
+ *   returns the first `k` elements and the rest; `merge(a, b)`
  *   concatenates. Node 0 is the empty tree.
  * Precondition: 0-indexed positions, half-open ranges `[l, r)`,
  *   `0 <= i <= size()` for `insert`, `i < size()` otherwise.

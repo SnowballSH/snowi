@@ -1,11 +1,9 @@
 /**
  * Title: Point and vector
- * Description: 2D point or vector with coordinates of type `T`.
- *   `a.cross(b)` is positive when `b` is counter-clockwise of `a`,
- *   and `o.cross(a, b)` is positive when `o -> a -> b` turns left.
- *   `angle_less` orders vectors by polar angle, starting at the
- *   positive x-axis and going counter-clockwise; it is exact for
- *   integers. `sgn` is the sign as -1, 0 or 1.
+ * Description: 2D point or vector of type `T`. `o.cross(a, b) > 0`
+ *   iff `o -> a -> b` turns left. `angle_less`: polar angle order
+ *   from the positive x-axis, counter-clockwise, exact for
+ *   integers.
  * Precondition: `P<ll>` is exact while products of two coordinate
  *   differences fit: $|x|, |y| <= 10^9$ gives cross products up to
  *   $8 dot 10^18$. `unit` and `rotate` need floating `T`.
@@ -15,10 +13,8 @@
  *   P<ll> o{}, a{3, 1}, b(x, y); // (x, y) also converts types
  *   ll c = a.cross(b), turn = o.cross(a, b), d2 = (a - b).dist2();
  *   sort(all(vecs), angle_less<ll>);
- * Tweak: Use `P<double>` or `P<long double>` for real coordinates
- *   (`dist` and `angle` then return that type). To compare sums or
- *   products of cross products with coordinates near $10^9$, use
- *   `P<__int128>`.
+ * Tweak: To compare sums or products of cross products with
+ *   coordinates near $10^9$, use `P<__int128>`.
  * Example:
  *   // Sort points around c by angle, ties by distance:
  *   sort(all(v), [&](P<ll> a, P<ll> b) {

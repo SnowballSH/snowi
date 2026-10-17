@@ -10,10 +10,10 @@ Description: `side_of(s, e, p)` is 1 if `p` is left of the
   line `ab` (positive on the left), `seg_dist` the distance to
   segment `ab`. `line_proj` projects `p` onto line `ab`, or
   reflects it across the line when `refl` is true.
-Precondition: Points are tuples `(x, y)`; the two points defining a
-  line differ. With integer input every decision is exact; computed
-  points and distances are floats (the points of `line_inter` and
-  `seg_inter` are the exact ones, correctly rounded).
+Precondition: The two points defining a line differ. With integer
+  input every decision is exact; computed points and distances are
+  floats (the points of `line_inter` and `seg_inter` are the exact
+  ones, correctly rounded).
 Time: $O(1)$.
 Usage:
   side_of(a, b, p), on_segment(a, b, p)

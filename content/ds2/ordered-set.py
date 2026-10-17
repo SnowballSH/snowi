@@ -1,8 +1,7 @@
 """
 Title: Ordered set
-Description: Sorted multiset with indexing, for PyPy (which has no
-  balanced tree): elements are kept in sorted buckets of about
-  $sqrt(n)$ elements. `s[k]` is the `k`-th smallest (0-indexed,
+Description: Sorted multiset with indexing, in sorted buckets of
+  about $sqrt(n)$ elements. `s[k]` is the `k`-th smallest (0-indexed,
   negative counts from the end); `bisect_left(x)` counts elements
   `< x`, `bisect_right(x)` those `<= x`.
 Precondition: Elements are comparable with `<` (ints, tuples,
@@ -15,9 +14,6 @@ Usage:
   x in s; s.count(x); len(s); list(s)
   k = s.bisect_left(x)  # elements < x
   s[k]; s[-1]; s.pop(0)  # k-th smallest, max, pop the min
-Tweak: Set instead of multiset: `if x not in s: s.add(x)`. Keys
-  with a custom order: store tuples `(key, x)`. Speed: `RATIO`
-  trades scanning buckets against moving elements in a bucket.
 Example:
   >>> s = SortedList([5, 1, 3, 3])
   >>> s.add(4); s.discard(1), s.discard(7)

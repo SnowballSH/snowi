@@ -12,9 +12,6 @@
  *   vector<vi> g(n);
  *   g[u].push_back(v), g[v].push_back(u);
  *   auto [k, mate] = general_matching(g);
- * Tweak: Bipartite graphs: `flow/hopcroft-karp` is faster.
- *   Weighted matching in a general graph needs the much longer
- *   weighted blossom algorithm; for $n <= 20$ use a bitmask DP.
  * Example:
  *   // Players alternately move a token to an unvisited
  *   // neighbour; whoever cannot move loses. The first player

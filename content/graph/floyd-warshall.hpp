@@ -16,8 +16,6 @@
  * Tweak: Transitive closure: `bitset` rows and
  *   `if (r[i][k]) r[i] |= r[k]` in the same loop order (64 times
  *   faster).
- *   Bottleneck (minimax) paths: `max(d[i][k], d[k][j])` instead of
- *   the sum, no negative-cycle pass.
  * Example:
  *   // Shortest cycle in a directed graph: run it with the diagonal
  *   // left at LLONG_MAX (drop the first loop), then

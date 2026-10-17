@@ -92,6 +92,23 @@ def check_content(selector: str | None) -> list[str]:
         for path in sorted(CONTENT.rglob("*")):
             if path.suffix in (".hpp", ".cpp", ".py", ".typ") and path not in listed:
                 problems.append(f"{path.relative_to(ROOT)}: not listed in section.toml")
+        problems += icpc_dependency_problems(sections)
+    return problems
+
+
+def icpc_dependency_problems(sections: list) -> list[str]:
+    """An item printed in a language's ICPC packet needs its Uses printed there too."""
+    entries = {e.id: e for section in sections for e in section.entries}
+    problems = []
+    for entry in entries.values():
+        for lang, snippet in entry.snippets.items():
+            if lang not in entry.icpc:
+                continue
+            for dep in snippet.uses:
+                if dep not in entries or lang not in entries[dep].icpc:
+                    problems.append(
+                        f"{entry.id}: in the {lang} ICPC packet but uses {dep}, which is not"
+                    )
     return problems
 
 

@@ -4,27 +4,22 @@ Below `p` is a prime, $v_p (n)$ the exponent of `p` in `n`, and
 $d(n)$, $sigma(n)$ the number and the sum of the divisors of `n`.
 
 === Congruences
-#fact[Fermat, Euler][$a^(p - 1) equiv 1 thick (mod p)$ if
-  $p divides.not a$; $a^(phi(m)) equiv 1 thick (mod m)$ if
-  $gcd(a, m) = 1$. For any `a` and $e >= log_2 m$:
+#fact[Euler][For any `a` and $e >= log_2 m$:
   $a^e equiv a^(e mod phi(m) + phi(m)) thick (mod m)$; apply it
   recursively to power towers.]
-#fact[Wilson][$(p - 1)! equiv -1 thick (mod p)$, while
-  $(n - 1)! equiv 0 thick (mod n)$ for composite $n > 4$.]
-#fact[Bézout, CRT][$a x + b y = c$ is solvable iff
-  $gcd(a, b) | c$, and $a x equiv c thick (mod m)$ has
-  $gcd(a, m)$ solutions modulo `m` if $gcd(a, m) | c$, none
-  otherwise. The system $x equiv r_i thick (mod m_i)$ is
-  solvable iff $r_i equiv r_j thick (mod gcd(m_i, m_j))$ for all
-  pairs, and then unique modulo the lcm (`numtheory/euclid`). A
-  problem modulo $n = product p_i^(e_i)$ splits into independent
-  problems modulo each $p_i^(e_i)$.]
+#full[#fact[CRT][$x equiv r_i thick (mod m_i)$ is solvable iff
+  $r_i equiv r_j thick (mod gcd(m_i, m_j))$ for all pairs; a
+  problem modulo $product p_i^(e_i)$ splits into one per
+  $p_i^(e_i)$.]]
 
 === Orders and primitive roots
-#fact[Order][For $gcd(a, m) = 1$, $op("ord")_m (a)$, the least
-  $e >= 1$ with $a^e equiv 1 thick (mod m)$, divides every such `e`,
-  hence $phi(m)$; $op("ord")(a^k) = op("ord")(a) \/
-  gcd(k, op("ord")(a))$.]
+#full[#fact[Order][For $gcd(a, m) = 1$: $op("ord")(a^k) = op("ord")(a) \/
+  gcd(k, op("ord")(a))$.]]
+#fact[Carmichael][$lambda(m)$, the least `e` with
+  $a^e equiv 1$ for all `a` coprime to `m`: $lambda(p^k) = phi(p^k)$
+  for odd `p`, $lambda(2) = 1$, $lambda(4) = 2$,
+  $lambda(2^k) = 2^(k - 2)$ for $k >= 3$, and the lcm over the prime
+  powers of `m`.]
 #fact[Primitive roots][They exist only modulo 1, 2, 4, $p^k$ and
   $2 p^k$ (odd `p`), $phi(phi(m))$ of them; modulo $2^k$, $k >= 3$,
   the units are $plus.minus 5^j$. Modulo `p` with
@@ -38,8 +33,8 @@ $d(n)$, $sigma(n)$ the number and the sum of the divisors of `n`.
   nonzero square#full[ (root: `numtheory/mod-sqrt`)]. It is
   multiplicative in `a`; $(-1\/p) = 1$ iff $p equiv 1 thick (mod 4)$ and
   $(2\/p) = 1$ iff $p equiv plus.minus 1 thick (mod 8)$.]
-#fact[Reciprocity][For odd primes $p != q$, $(p\/q) (q\/p) = -1$ iff
-  `p` and `q` are both $3 mod 4$.]
+#full[#fact[Reciprocity][For odd primes $p != q$, $(p\/q) (q\/p) = -1$
+  iff `p` and `q` are both $3 mod 4$.]]
 #fact[Sums of squares][$n = x^2 + y^2$ iff every prime
   $equiv 3 thick (mod 4)$ divides `n` an even number of times; there
   are $4 (d_1 (n) - d_3 (n))$ ordered signed pairs, $d_i$ counting
@@ -78,7 +73,6 @@ $d(n)$, $sigma(n)$ the number and the sum of the divisors of `n`.
 ]
 
 === Factorials and binomials
-Legendre's $v_p (n!)$, Kummer and Lucas: see Counting formulas.
 #fact[Modulo $p^k$][Only multiples of `p` lack inverses: write
   each factor as $p^v u$ with $p divides.not u$, add and subtract
   the exponents `v` as integers and multiply the units
@@ -91,16 +85,14 @@ Legendre's $v_p (n!)$, Kummer and Lucas: see Counting formulas.
   v_2 (a + b) + v_2 (n) - 1$; for odd `n` it is $v_2 (a - b)$.]
 
 === Multiplicative functions
-For $n = product p_i^(e_i)$: $phi(n) = n product_i (1 - 1\/p_i)$,
+#full[For $n = product p_i^(e_i)$: $phi(n) = n product_i (1 - 1\/p_i)$,
 $d(n) = product_i (e_i + 1)$,
 $sigma(n) = product_i (p_i^(e_i + 1) - 1)\/(p_i - 1)$, and
 $mu(n) = (-1)^k$ if `n` is a product of `k` distinct primes, else 0.
 `numtheory/sieve` gives $phi$ and $mu$ up to $10^7$; its Tweak
-adds $d$ and $sigma$.#py[ In PyPy keep only the tables you need:
-all of them take about 340 MB at $10^7$.]
+adds $d$ and $sigma$.]
 #fact[Totients][$phi(m n) = phi(m) phi(n) dot g\/phi(g)$ with
-  $g = gcd(m, n)$; e.g. $phi(3k) = phi(4k)$ when $gcd(k, 6) = 1$.
-  For $g | n$, $phi(n\/g)$ of the $x in [0, n)$ have
+  $g = gcd(m, n)$. For $g | n$, $phi(n\/g)$ of the $x in [0, n)$ have
   $gcd(x, n) = g$.#full[ Jordan's $J_k (n) = n^k product_(p | n)
   (1 - p^(-k))$ counts the $k$-tuples modulo `n` whose gcd with
   `n` is 1; $sum_(d | n) J_k (d) = n^k$, and for $d | n$ exactly
@@ -112,6 +104,19 @@ all of them take about 340 MB at $10^7$.]
   $phi = mu * op("id")$, $1 * 1 = d$, $op("id") * 1 = sigma$.
   Möbius inversion: $g = f * 1 <=> f = g * mu$; over multiples,
   $g(d) = sum_(d | m) f(m) <=> f(d) = sum_(d | m) mu(m\/d) g(m)$.]
+#fact[Prefix sums][If $h = f * g$ and the prefix sums of $g$ and
+  $h$ are easy, $g(1) S_f (n) = S_h (n) - sum_(d = 2)^n g(d)
+  S_f (floor(n\/d))$ over floor blocks, memoised on the values
+  $floor(n\/i)$ and sieved up to $n^(2\/3)$: $O(n^(2\/3))$ (Du).
+  $phi$: $g = 1$, $h = op("id")$; $mu$: $g = 1$, $h = epsilon$.]
+#fact[Min_25][Multiplicative $f$ with $f(p)$ a polynomial in $p$:
+  $G(v) = sum_(p <= v) f(p)$ for all $v = floor(n\/i)$ from one
+  `numtheory/prime-count` table per monomial. Then $S(v, j)$, the
+  sum of $f(i)$ over $2 <= i <= v$ with no prime factor below
+  $p_j$, is $G(v) - G(p_(j - 1)) + sum_(k >= j, p_k^2 <= v)
+  sum_(e >= 1, p_k^(e + 1) <= v) (f(p_k^e) S(floor(v\/p_k^e),
+  k + 1) + f(p_k^(e + 1)))$, and $sum_(i <= n) f(i) = f(1) +
+  S(n, 1)$. Recurse without memo (depth $O(log n)$).]
 #fact[gcd sums][Write $[gcd(i, j) = 1] = sum_(d | i, d | j) mu(d)$
   or $gcd(i, j) = sum_(d | i, d | j) phi(d)$ and sum over `d` first:
   the pairs $i <= n$, $j <= m$ with $gcd(i, j) = 1$ number
@@ -120,28 +125,11 @@ all of them take about 340 MB at $10^7$.]
   phi(n\/d)$, and the $i <= n$ coprime to $n >= 2$ sum to
   $n phi(n)\/2$. As $gcd(x, s - x) = gcd(x, s)$, the coprime
   pairs $x + y = s$ with $x, y >= 1$ number $phi(s)$, $s >= 2$.]
-#fact[Floor blocks][$floor(n\/i)$ takes at most $2 sqrt(n)$ values
-  and is constant for $i in [l, floor(n\/floor(n\/l))]$, so
-  $sum_(i <= n) f(i) g(floor(n\/i))$ costs $O(sqrt(n))$ given prefix
-  sums of `f`. With two quotients end each block at the smaller of
-  the two ends. Since $floor(floor(n\/a)\/b) = floor(n\/(a b))$,
-  recursions on $floor(n\/i)$ stay inside these values.]
-#lang-code(
-  cpp: "for (ll l = 1, r; l <= n; l = r + 1) {
-  r = n / (n / l); // n / i is the same for i in [l, r]
-}",
-  py: "l = 1
-while l <= n:
-  r = n // (n // l)  # n // i is the same for i in [l, r]
-  l = r + 1",
-)
-#fact[Divisors][$sum_(i <= n) d(i) = sum_(k <= n) floor(n\/k)$ and
-  $sum_(i <= n) sigma(i) = sum_(k <= n) k floor(n\/k)$. The largest
-  $d(n)$: the table in Numbers, estimates and numerics.]
+#fact[Floor blocks][$floor(floor(n\/a)\/b) = floor(n\/(a b))$, so
+  recursions on $floor(n\/i)$ stay inside its at most $2 sqrt(n)$
+  values.]
 
 === Primes
-#fact[Gaps][There is a prime in $(n, 2n]$ (Bertrand). Largest gaps
-  and $pi(n)$: Numbers, estimates and numerics.]
 #fact[Near powers of ten][The largest prime below $10^k$ is
   $10^k - delta$, for $k = 1, dots, 18$: $delta =$ 3, 3, 3, 27, 9, 17,
   9, 11, 63, 33, 23, 11, 29, 27, 11, 63, 3, 11. The smallest above is
@@ -168,6 +156,11 @@ while l <= n:
   $a = a_0 = floor(sqrt(D))$ repeat $m <- d a - m$,
   $d <- (D - m^2)\/d$, $a <- floor((a_0 + m)\/d)$: exact integers,
   periodic after $a_0$.]
+#fact[Pell][$x^2 - D y^2 = 1$ for a non-square $D$: the smallest
+  solution is the first convergent $h_i\/k_i$ of $sqrt(D)$ with
+  $h_i^2 - D k_i^2 = 1$; all solutions are $x_j + y_j sqrt(D) =
+  (x_1 + y_1 sqrt(D))^j$. Values explode: $D = 61$ needs
+  $x_1 = 1766319049$.]
 
 === Miscellany
 #fact[Frobenius][For coprime $a, b >= 1$ the largest integer that
@@ -181,16 +174,29 @@ while l <= n:
   $gcd(m, n) = 1$ and $m - n$ odd, each exactly once; the others are
   their multiples. About $N\/(2 pi)$ primitive triples have
   hypotenuse $<= N$.]
-#fact[Zeckendorf][Every $n >= 1$ is uniquely a sum of
-  non-consecutive Fibonacci numbers $1, 2, 3, 5, 8, dots$; take the
-  largest one $<= n$ greedily.]
-#fact[Remainders][$x mod y < x\/2$ for $1 <= y <= x$, so a value
-  changes at most $log_2 x + 1$ times under $x <- x mod a_i$, and
-  a remainder $c < x$ needs $x > 2c$.]
+#full[#fact[Remainders][$x mod y < x\/2$ for $1 <= y <= x$, so a
+  value changes at most $log_2 x + 1$ times under $x <- x mod a_i$,
+  and a remainder $c < x$ needs $x > 2c$.]]
 #fact[Differences][Adding $|x - y|$ for members `x`, `y` until
   nothing changes turns a set of positive integers into exactly
   the multiples of its gcd up to its maximum.]
+#fact[Floor sums of degree 2][For $i = 0..n$ and
+  $q_i = floor((a i + b)\/c)$ ($a, b >= 0$, $c >= 1$) let
+  $f = sum q_i$, $g = sum i q_i$, $h = sum q_i^2$, and
+  $S_1 = n (n + 1)\/2$, $S_2 = n (n + 1)(2n + 1)\/6$. If $a >= c$
+  or $b >= c$, with $a = alpha c + a'$, $b = beta c + b'$ and
+  $f', g', h'$ of $(a', b', c, n)$: $f = f' + alpha S_1 +
+  beta (n + 1)$, $g = g' + alpha S_2 + beta S_1$, $h = h' +
+  2 beta f' + 2 alpha g' + alpha^2 S_2 + beta^2 (n + 1) +
+  2 alpha beta S_1$. Otherwise let $M = floor((a n + b)\/c)$; if
+  $M = 0$ all are 0, else with $f', g', h'$ of
+  $(c, c - b - 1, a, M - 1)$: $f = n M - f'$,
+  $g = (M n (n + 1) - h' - f')\/2$, $h = n M (M + 1) - 2 g' -
+  2 f' - f$. Depth $O(log)$ like Euclid#cpp[; use `__int128`].]
 #full[
+#fact[Zeckendorf][Every $n >= 1$ is uniquely a sum of
+  non-consecutive Fibonacci numbers $1, 2, 3, 5, 8, dots$; take the
+  largest one $<= n$ greedily.]
 #fact[Digit sums][A positive multiple of $b^s - 1$ has base-`b`
   digit sum at least $s (b - 1)$; in binary, at least `s` ones.
   Proof: while the top digit sits at $b^e$, $e >= s$, subtract
@@ -210,11 +216,6 @@ while l <= n:
   $w_i = floor((q (i + 1) + theta)\/n) - floor((q i + theta)\/n)$
   for some $0 <= theta < n$: the first `i` letters hold
   $floor((q i + theta)\/n)$ ones.]
-#fact[Pell][$x^2 - D y^2 = 1$ for a non-square $D$: the smallest
-  solution is the first convergent $h_i\/k_i$ of $sqrt(D)$ with
-  $h_i^2 - D k_i^2 = 1$; all solutions are $x_j + y_j sqrt(D) =
-  (x_1 + y_1 sqrt(D))^j$. Values explode: $D = 61$ needs
-  $x_1 = 1766319049$.]
 #fact[Continuants][The numerator $K(a_1, dots, a_n)$ of
   $[a_1; a_2, dots, a_n]$ satisfies $K(a_1, dots, a_n) =
   K(a_n, dots, a_1)$. A rational has exactly two expansions,
@@ -226,24 +227,6 @@ while l <= n:
   $f_0 = f_1 = 1$, $f_(i + 1) = a_i f_i + f_(i - 1)$; then
   $sum_i a_i f_i = f_n + f_(n + 1) - 2$ (telescoping), and
   $x + y$ does not change when the sequence is reversed.]
-#fact[Carmichael][$lambda(m)$, the least `e` with
-  $a^e equiv 1$ for all `a` coprime to `m`: $lambda(p^k) = phi(p^k)$
-  for odd `p`, $lambda(2) = 1$, $lambda(4) = 2$,
-  $lambda(2^k) = 2^(k - 2)$ for $k >= 3$, and the lcm over the prime
-  powers of `m`.]
-#fact[Floor sums of degree 2][For $i = 0..n$ and
-  $q_i = floor((a i + b)\/c)$ ($a, b >= 0$, $c >= 1$) let
-  $f = sum q_i$, $g = sum i q_i$, $h = sum q_i^2$, and
-  $S_1 = n (n + 1)\/2$, $S_2 = n (n + 1)(2n + 1)\/6$. If $a >= c$
-  or $b >= c$, with $a = alpha c + a'$, $b = beta c + b'$ and
-  $f', g', h'$ of $(a', b', c, n)$: $f = f' + alpha S_1 +
-  beta (n + 1)$, $g = g' + alpha S_2 + beta S_1$, $h = h' +
-  2 beta f' + 2 alpha g' + alpha^2 S_2 + beta^2 (n + 1) +
-  2 alpha beta S_1$. Otherwise let $M = floor((a n + b)\/c)$; if
-  $M = 0$ all are 0, else with $f', g', h'$ of
-  $(c, c - b - 1, a, M - 1)$: $f = n M - f'$,
-  $g = (M n (n + 1) - h' - f')\/2$, $h = n M (M + 1) - 2 g' -
-  2 f' - f$. Depth $O(log)$ like Euclid; use `__int128`.]
 
 === Recognition
 - Answer modulo a composite: solve modulo each prime power, then

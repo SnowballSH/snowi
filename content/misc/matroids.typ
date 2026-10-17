@@ -1,5 +1,6 @@
 #import "/typst/notes.typ": *
 
+#full[
 A matroid is a "can these coexist?" rule for which greedy by weight
 is always optimal. Recognise one, and Kruskal's proof covers your
 greedy; with two such rules at once, use matroid intersection.
@@ -45,19 +46,23 @@ greedy; with two such rules at once, use matroid intersection.
   newer vector and reduce the older one (`linalg/xor-basis`);
   graphs: an edge closing a cycle evicts the oldest edge on it
   (`tree/link-cut`).
+]
 
 === Examples
-#table(
+#context table(
   columns: 3,
-  [*Matroid*], [*Independent sets*], [*Test*],
-  [uniform], [at most $k$ elements], [count],
-  [partition], [at most $c_j$ of colour $j$], [counts],
-  [graphic], [forests], [`ds/dsu`],
-  [linear], [independent vectors], [`linalg/xor-basis`, `linalg/gauss-mod`],
+  table.header[*Matroid*][*Independent sets*][*Test*],
+  ..if variant.get() == "full" {(
+    [uniform], [at most $k$ elements], [count],
+    [partition], [at most $c_j$ of colour $j$], [counts],
+    [graphic], [forests], [DSU],
+    [linear], [independent vectors], [Gaussian elimination],
+  )} else {()},
   [transversal], [vertices of one side matchable together], [`flow/hopcroft-karp`],
   [scheduling], [unit jobs that all meet their deadlines], [for all $D$: at most $D$ jobs due by $D$],
-  [cographic], [edges whose removal keeps every component connected], [`ds/dsu` on the rest],
+  [cographic], [edges whose removal keeps every component connected], [DSU on the rest],
 )
+#full[
 - Scheduling is transversal (job $i$ fits slots $1, dots, d_i$), and
   for prefix neighbourhoods Hall's condition is the prefix test.
   Most profit: by deadline, push profits into a min-heap and pop
@@ -69,9 +74,10 @@ greedy; with two such rules at once, use matroid intersection.
   are. The openings of a
   bracket sequence of length $2n$ are exactly the $n$-sets with at
   least $i$ among the first $2i - 1$ positions.
+]
 - Not matroids: matchings of a general graph as edge sets,
   knapsack, paths, independent sets of a graph ("no two adjacent").
-  Check (3) on two tiny sets before trusting a greedy.
+
 
 === Matroid intersection
 Find the largest (or heaviest) $S$ independent in two matroids
@@ -81,8 +87,7 @@ $M_1$ and $M_2$ on the same ground set. $S$ grows by one per round:
   $M_2$. Sources: $y in.not S$ with $S + y$ independent in $M_1$;
   sinks: $y$ with $S + y$ independent in $M_2$.
 - Take a *shortest* path from a source to a sink (BFS) and flip
-  membership along it. A longer path can break independence. No
-  path means $S$ is maximum.
+  membership along it. No path means $S$ is maximum.
 - At most $r + 1$ rounds of $O(r n)$ oracle calls: $O(r^2 n)$ calls
   for $n = |E|$ and answer size $r$.
 - Edmonds: $max |S| = min_(A subset.eq E) (r_1 (A) + r_2 (E without A))$.
@@ -95,13 +100,13 @@ $M_1$ and $M_2$ on the same ground set. $S$ grows by one per round:
   is, or $x$ lies on the path in $S$ between the ends of $y$.
   Partition: $y$'s colour has room, or $x$ has $y$'s colour.
   Linear: $S + y$ is independent, or $x$ has a nonzero coefficient
-  when $y$ is written in terms of $S$. Transversal (the right
+  when $y$ is written in terms of $S$.#full[ Transversal (the right
   vertices matched by a matching $M$ of $S$): search from $y$ to
   its left neighbours, from each matched one to its partner in
   $M$, and on; $S + y$ is independent iff the search reaches a
   free left vertex, and otherwise $S - x + y$ is iff it reaches
   $x$. Scheduling: the slack tree in _Designing a segment tree
-  node_.
+  node_.]
 - Pairs: bipartite matching (one partition per side); rainbow or
   colour-capped spanning forest (graphic, colours); spanning
   arborescence (graphic, in-degree $<= 1$ and 0 at the root); a
@@ -192,9 +197,10 @@ of the $M_j$ against "each $e$ used at most once".
 - Two linear matroids with vectors $u_i$ and $v_i$ over a large
   prime field: with random nonzero $a_i, b_i$, the rank of the
   vectors $(a_i u_i, b_i v_i)$ is, with high probability, the most
-  elements in disjoint $I_1 in M_1$, $I_2 in M_2$. Then plain
-  elimination and the latest basis apply.
+  elements in disjoint $I_1 in M_1$, $I_2 in M_2$.#full[ Then plain
+  elimination and the latest basis apply.]
 
+#full[
 === Recognition
 - "Choose a subset of largest weight with no cycle / independent
   vectors / all matchable / all on time / at most $c_j$ per
@@ -212,3 +218,4 @@ of the $M_j$ against "each $e$ used at most once".
   weights) differs from a maximum-weight independent set; loops
   (self-loop edges, zero vectors) are in no basis; break ties by
   index when a canonical basis is needed.
+]

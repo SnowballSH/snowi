@@ -1,13 +1,11 @@
 """
 Title: Modular arithmetic
-Description: Python has modular power built in: `pow(b, e, m)`, and
-  `pow(a, -1, m)` for the inverse when `gcd(a, m) = 1`. `MOD` is the
-  modulus other snippets assume.
+Description: `MOD` and the Fermat inverse that other snippets use;
+  `pow(a, -1, m)` inverts modulo any `m` coprime to `a`.
 Precondition: `MOD` prime for the Fermat inverse `modinv`.
 Time: $O(log e)$.
 Usage:
   x = pow(3, 10**12, MOD); y = modinv(x)
-Tweak: Change `MOD`. Keep values reduced: big ints are slow in PyPy.
 Example:
   >>> modinv(2) * 2 % MOD
   1

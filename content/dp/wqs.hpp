@@ -14,10 +14,9 @@
  * Time: $O(log("hi" - "lo"))$ calls to `solve`.
  * Usage:
  *   ll best = wqs(k, -C, C, solve); // |slopes| <= C
- * Tweak: Maximum of concave $F$: let `solve` minimise
- *   `-value + lam * count` and negate the result. Ties toward more
- *   items: search the largest `lam` with count `>= k`. At most `k`
- *   items: `lo = 0`.
+ * Tweak: Ties toward more items: search the largest `lam` with
+ *   count `>= k`. At most `k` items: `lo = 0`. Smallest count in
+ *   the solver: minimise $v dot 2^20 + c$ as one `ll` ($|v| < 2^42$).
  * Example:
  *   // Largest sum of exactly k pairwise non-adjacent a[i].
  *   // Pairs compare (value, count): min breaks ties toward
@@ -43,11 +42,10 @@
  *   Where $F$ is straight, many counts tie at one `lam`; a solver
  *   that breaks ties inconsistently (one comparison on values
  *   alone) makes the search overshoot to a `lam` where `k` is not
- *   optimal. Packing `v * 2^20 + c` into one integer makes every
- *   `min` tie-correct (in `ll` only while $|v| < 2^42$).
- *   Concavity sources: min-cost flow (`k` units), matroids
- *   (spanning tree with `k` white edges), partitions with a
- *   quadrangle-inequality cost (`dp/dc-opt`), exchange arguments.
+ *   optimal (see Tweak). Concavity sources: min-cost flow (`k`
+ *   units), matroids (spanning tree with `k` white edges),
+ *   partitions with a quadrangle-inequality cost (`dp/dc-opt`),
+ *   exchange arguments.
  *   If unsure, print $F$ from a brute force and check
  *   $2 F(k) <= F(k - 1) + F(k + 1)$. Real-valued slopes: 60 rounds
  *   of bisection on a `double` `lam`. All $F(k)$ at once: query

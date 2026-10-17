@@ -1,9 +1,6 @@
 /**
  * Title: Maximum clique
  * Description: Returns the vertices of one maximum clique (sorted).
- *   Branch and bound: a greedy colouring of the candidates bounds
- *   the clique size (a clique uses each colour at most once), and
- *   branches start at the highest colours.
  * Precondition: `adj[u][v] = adj[v][u] = 1` for each edge;
  *   `adj[v][v] = 0`. At most 128 vertices (the bitset size).
  * Time: Exponential. Random graphs with edge probability 0.9:
@@ -13,8 +10,6 @@
  *   vector<MaxClique::B> adj(n);
  *   adj[u][v] = adj[v][u] = 1;
  *   vi clique = MaxClique(adj).solve();
- * Tweak: More vertices: enlarge `B`. Maximum independent set: run
- *   on the complement (`adj[u][v] = !g[u][v]` for `u != v`).
  * Example:
  *   // Most mutually compatible items; cmp(i, j) is symmetric.
  *   vector<MaxClique::B> adj(n);

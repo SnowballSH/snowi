@@ -1,13 +1,10 @@
 /**
  * Title: Subset transforms
- * Description: For arrays indexed by bit masks:
- *   `bit_transform(a, '|', 0)` replaces $a_S$ by the subset sum
- *   $sum_(T subset.eq S) a_T$ (zeta), `'&'` by the superset sum and
- *   `'^'` by the Walsh-Hadamard sum $sum_T (-1)^(|S inter T|) a_T$;
- *   `inv = 1` undoes it (for `'|'`: Möbius, inclusion-exclusion).
- *   `bit_conv(a, b, op)` returns $c_S = sum a_i b_j$ over the pairs
- *   with `i op j == S`; `subset_conv` takes only disjoint pairs
- *   (`i | j == S`, `i & j == 0`).
+ * Description: On arrays indexed by masks, `bit_transform` with
+ *   `'|'` gives subset sums $sum_(T subset.eq S) a_T$ (zeta; `inv`:
+ *   Möbius), `'&'` superset sums, `'^'` Walsh-Hadamard
+ *   $sum_T (-1)^(|S inter T|) a_T$. `bit_conv`: $c_S = sum a_i b_j$
+ *   over `i op j == S`; `subset_conv` only over disjoint `i`, `j`.
  * Precondition: `a` and `b` have the same length $2^n$ (pad with
  *   zeros), entries in `[0, MOD)`; results are modulo `MOD`.
  * Time: $O(n 2^n)$ for the transforms and `bit_conv`; $O(n^2 2^n)$
@@ -21,8 +18,7 @@
  *   `if (inv && op == '^') for (ll& x : a) x /= n;` and drop
  *   `% MOD` in `bit_conv`. Max, min or OR over subsets instead of a
  *   sum: `v = max(v, u)` in the `'|'` line (`u = max(u, v)` for
- *   `'&'`), delete the last two lines, no inverse. $k$-fold power:
- *   transform, raise each entry to the $k$-th power, invert.
+ *   `'&'`), delete the last two lines, no inverse.
  * Example:
  *   // Number of k-tuples of masks whose OR is exactly S:
  *   bit_transform(cnt, '|', 0);

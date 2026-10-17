@@ -1,16 +1,13 @@
 """
 Title: Point and vector
-Description: Points and vectors are plain tuples `(x, y)`, which
-  PyPy handles fast; these functions do the arithmetic.
-  `cross(a, b)` is positive when `b` is counter-clockwise of `a`,
-  and `cross3(o, a, b)` is positive when `o -> a -> b` turns left.
-  `angle_sort` sorts vectors by polar angle, starting at the
-  positive x-axis and going counter-clockwise; `angle_cmp` is the
-  same order as a three-way comparison. Both are exact for integers.
-Precondition: Integer input is exact (Python ints never overflow);
-  keep it integer as long as possible. Extra tuple fields after
-  `x, y` are ignored, so `(x, y, i)` carries an index along. Angle
-  order: no zero vectors; equal directions tie.
+Description: Points and vectors are plain tuples `(x, y)`.
+  `cross3(o, a, b) > 0` iff `o -> a -> b` turns left. `angle_sort`:
+  polar angle order from the positive x-axis, counter-clockwise;
+  `angle_cmp` is the same order as a three-way comparison. Both are
+  exact for integers.
+Precondition: Extra tuple fields after `x, y` are ignored, so
+  `(x, y, i)` carries an index along. Angle order: no zero vectors;
+  equal directions tie.
 Time: $O(1)$ each; `angle_sort` $O(n log n)$.
 Usage:
   o, a, b = (0, 0), (3, 1), (x, y)
@@ -18,9 +15,7 @@ Usage:
   d2 = dist2(a, b)  # squared distance
   angle_sort(vecs)  # in place
 Tweak: Real distance: `math.sqrt(dist2(a, b))` (`math.dist` would
-  also count extra tuple fields); angle: `math.atan2(y, x)`.
-  Quarter turn counter-clockwise: `(-y, x)`. Rotation by `t`:
-  `(x*cos(t) - y*sin(t), x*sin(t) + y*cos(t))`.
+  also count extra tuple fields).
 Example:
   >>> v = [(1, 0), (0, -2), (-1, 0), (1, 1), (2, 2)]
   >>> angle_sort(v); v

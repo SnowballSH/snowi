@@ -1,13 +1,9 @@
 /**
  * Title: Centroid decomposition
- * Description: Repeatedly removes a centroid (a vertex whose
- *   removal leaves parts of at most half the piece) and recurses
- *   into the parts. `par[v]` is the parent of `v` in the centroid
- *   tree (-1 for the first centroid), `level[v]` its depth there,
- *   and `dist[k][v]` the distance in the tree from `v` to its
- *   centroid ancestor at level `k` (for `k <= level[v]`). The
- *   path between `u` and `v` passes through their lowest common
- *   centroid ancestor `c`, so `dist(u, v) = dist(u, c) + dist(c, v)`.
+ * Description: `par[v]` is the parent of `v` in the centroid tree
+ *   (-1 for the first centroid), `level[v]` its depth there, and
+ *   `dist[k][v]` the distance in the tree from `v` to its
+ *   centroid ancestor at level `k` (for `k <= level[v]`).
  * Precondition: `adj` holds both directions of the $n - 1$ edges of
  *   a tree on vertices `0..n-1`, $n >= 1$.
  * Time: $O(n log n)$ time and memory, iterative; at most

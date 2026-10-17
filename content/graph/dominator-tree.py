@@ -1,7 +1,6 @@
 """
 Title: Dominator tree
-Description: Lengauer-Tarjan. Vertex `d` dominates `v` if every path
-  from `s` to `v` passes through `d`. Returns `idom`: the immediate
+Description: Lengauer-Tarjan. Returns `idom`: the immediate
   dominator of each vertex (the closest strict dominator), with
   `idom[s] = s` and `idom[v] = -1` if `v` is unreachable from `s`.
   The edges `idom[v] -> v` form a tree rooted at `s`; the dominators
@@ -13,7 +12,9 @@ Time: $O((n + m) log n)$, no recursion; PyPy needs about 1 s for
 Usage:
   idom = dominator_tree(adj, s)
 Tweak: Paths into a sink `t` instead (post-dominators): run it on
-  the reversed graph from `t`.
+  the reversed graph from `t`. A DAG needs no code: in topological
+  order, `idom[v]` is the LCA of the predecessors of `v` that are
+  reachable from `s` (binary lifting).
 Example:
   >>> adj = [[1, 2], [3], [3], [4, 1], [], [4]]
   >>> idom = dominator_tree(adj, 0); idom
@@ -43,9 +44,7 @@ Notes: Think of it for "which vertices (or edges) must every route
   fails": the subtree sizes of the dominator tree. On an undirected
   graph use articulation points (`graph/bcc`) instead. Edges:
   subdivide edge `u -> v` with a new vertex `x` (`u -> x -> v`); the
-  edge is critical for `v` iff `x` dominates `v`. For a DAG it is
-  simpler: in topological order, `idom[v]` is the LCA of the
-  predecessors of `v` that are reachable from `s` (binary lifting).
+  edge is critical for `v` iff `x` dominates `v`.
 Source: Lengauer and Tarjan (1979), the simple $O(m log n)$ version
   with path compression.
 Status: stress-tested against removal-based brute force

@@ -15,8 +15,6 @@ Usage:
   floyd_warshall(d, INF)
 Tweak: Transitive closure: rows as int bitmasks,
   `if r[i] >> k & 1: r[i] |= r[k]` in the same loop order.
-  Bottleneck (minimax) paths: `max(d[i][k], d[k][j])` instead of the
-  sum, no negative-cycle pass.
 Example:
   >>> INF = 1 << 62
   >>> d = [[INF] * 4 for _ in range(4)]

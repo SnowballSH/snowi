@@ -1,5 +1,6 @@
 #import "/typst/notes.typ": *
 
+#full[
 When no clean $O(log n)$ structure exists, split the work into a
 part that is cheap per item and a part that is cheap per group,
 and balance the two. Pick the block size by equating the costs
@@ -8,7 +9,9 @@ few times $10^8$ simple steps per second, PyPy a few times fewer.
 Offline orders (sorting by a threshold, last occurrences, reversed
 time) are in _Offline techniques_.
 
+]
 === Blocks
+#full[
 #fact[Range update, range query][Cut the array into blocks of
   $B approx sqrt(n)$. An operation touches $O(n / B)$ whole blocks
   through a per-block summary and lazy tag, and $O(B)$ single
@@ -18,6 +21,7 @@ time) are in _Offline techniques_.
   also tabulate its effect for each of the $O(B^2)$ contiguous
   ranges of its own elements or operations, when a query always
   uses such a range.]
+]
 #fact[Sorted blocks][Range add and "count values `>= x` in
   `[l, r)`": each block keeps a sorted copy and an add tag; a whole
   block answers by binary search for $x - "tag"$ in $O(log B)$. In
@@ -27,6 +31,7 @@ time) are in _Offline techniques_.
   $B approx sqrt(n log n)$ gives $O(sqrt(n log n))$ per
   operation; a plain re-sort costs $O(B log B)$ and wants
   $B approx sqrt(n)$, for $O(sqrt(n) log n)$.]
+#full[
 #fact[Periodic rebuild][Keep a static structure (prefix sums,
   sorted array, a built tree) plus a list of the last $B$
   updates. A query asks the static part and scans the list; after
@@ -41,6 +46,7 @@ time) are in _Offline techniques_.
   $O(sqrt(m))$ per operation; all triangles in $O(m sqrt(m))$
   (_Graph theory facts_). The same split works for values by
   frequency: at most $n / D$ values occur more than $D$ times.]
+]
 #fact[Small and large parameters][Queries with a step, modulus or
   length $d$: for $d <= sqrt(n)$ precompute a table per $d$
   ($O(n sqrt(n))$ in total), for larger $d$ walk the
@@ -62,6 +68,7 @@ time) are in _Offline techniques_.
   $O(2^b) = O(sqrt(V))$ for keys below $V = 4^b$.]
 
 === Monotone stack and queue
+#full[
 #fact[Next greater element][Scan left to right with a stack of
   indices whose values decrease; an element pops everything
   smaller, and it is the answer for each popped index. Each index
@@ -89,6 +96,7 @@ for i, x in enumerate(a):
   them (sums, the longest gap) in $O(log n)$. Prefix minima use
   "next smaller"; cyclic arrays use the doubled array; tree paths:
   Records in _Tree techniques_.]
+]
 #fact[Two smallest][In a permutation, let $a$ and $b$ hold the
   smallest and second smallest values of `[l, r]`. Then $a$ is
   the nearest position left or right of $b$ with a value below
@@ -96,6 +104,16 @@ for i, x in enumerate(a):
   the nearest positions outside $[min(a, b), max(a, b)]$ with
   values below $p_b$, exactly $(min(a, b) - p)(q - max(a, b))$
   intervals have this pair.]
+#fact[Queue of any monoid][For gcd, matrix products or other
+  folds without a deque trick, use two stacks. Push onto the back
+  stack, which keeps the fold of all its elements. Pop from the
+  front stack, whose entries store the fold from themselves down
+  to its bottom; when it is empty, move the back stack over,
+  recomputing those folds. The window fold is
+  `op(front top fold, back fold)`, amortized $O(1)$ per
+  operation. With two pointers this finds, for every `l`, the
+  largest `r` whose fold still satisfies a monotone condition.]
+#full[
 #fact[Sliding window minimum][A deque of indices with increasing
   values: pop the back while it is not smaller than the new value,
   pop the front once it leaves the window. $O(n)$ for all windows;
@@ -123,15 +141,6 @@ for i, x in enumerate(a):
 #fact[Aggregates on the stack][An entry may carry an aggregate of
   the indices it absorbed, such as the least DP value under a
   shared range maximum: Block maximum in _DP techniques_.]
-#fact[Queue of any monoid][For gcd, matrix products or other
-  folds without a deque trick, use two stacks. Push onto the back
-  stack, which keeps the fold of all its elements. Pop from the
-  front stack, whose entries store the fold from themselves down
-  to its bottom; when it is empty, move the back stack over,
-  recomputing those folds. The window fold is
-  `op(front top fold, back fold)`, amortized $O(1)$ per
-  operation. With two pointers this finds, for every `l`, the
-  largest `r` whose fold still satisfies a monotone condition.]
 #fact[Cursor][A sequence edited at a moving cursor: keep the part
   left of the cursor and the part right of it as two stacks;
   moving the cursor pops one and pushes the other. Any structure
@@ -143,7 +152,9 @@ for i, x in enumerate(a):
   is the minimum, the first occurrence, or the crossing pair; the
   monotone stack or a sort gives those counts.]
 
+]
 === Small to large
+#full[
 #fact[Merging sets][Always insert the smaller container into the
   larger. An element only moves into a container at least twice
   its old one, so it moves $O(log n)$ times: $O(n log n)$ moves,
@@ -158,6 +169,7 @@ for (auto [x, c] : b) a[x] += c; // sets: a.insert(all(b))",
 for x, c in b.items():  # sets: a |= b
   a[x] = a.get(x, 0) + c",
 )
+]
 #fact[Shorter side][For each `s`, the subarrays where `a[s]` is
   the maximum are `l` in `(L_s, s]`, `r` in `[s, R_s)`.
   Enumerating only the shorter of the two sides for every `s` costs
@@ -165,11 +177,13 @@ for x, c in b.items():  # sets: a |= b
   one counting query per enumerated end.]
 
 === Union-find tricks
+#full[
 #fact[Skip pointers][Paint (or delete) all unpainted cells of
   arbitrary ranges, each cell once: a DSU where `find(i)` is the
   first unpainted cell `>= i`; painting `i` joins it to `i + 1`.
   $O(n alpha(n))$ in total. The same gives "next alive
   neighbour" after deletions.]
+]
 #fact[One DSU per mask][Edges carry masks $w$ of $B$ bits and
   questions use only the edges whose mask contains $m$: keep a DSU
   $D(m)$ for every $m$. Insert edge $(u, v, w)$ into $D(w)$, then
@@ -179,16 +193,15 @@ for x, c in b.items():  # sets: a |= b
   visits: $O(q + B 2^B n)$ finds in total.]
 
 === Bitsets and their costs
-#fact[Word parallelism][A bitset operation on $N$ bits costs
-  $N / 64$ word steps. One shift-or of $10^6$ bits takes about
-  0.05 ms in C++ (`bitset`) and 0.2 ms in PyPy (a big int).
-  Typical uses: subset sums (_DP techniques_), reachability
-  in a DAG ($O(n m / 64)$: OR the successors' sets in reverse
-  topological order), common neighbours and triangles
-  ($O(n^3 / 64)$ with row ANDs), Gaussian elimination mod 2,
-  shift-and string matching. To rebuild a subset sum, record for
-  each sum the item that first made it reachable (the bits of
-  `nb & ~b`); walking back from the target uses each item once.]
+#fact[Word parallelism][One shift-or of $10^6$ bits takes about
+  #cpp[0.05 ms (`bitset`)]#py[0.2 ms (a big int)].#full[ DAG
+  reachability: OR the successors' sets in reverse topological
+  order, $O(n m / 64)$. Typical uses: subset sums (_DP
+  techniques_), common neighbours and triangles ($O(n^3 / 64)$
+  with row ANDs), Gaussian elimination mod 2, shift-and string
+  matching.] To rebuild a subset sum, record for each sum the item
+  that first made it reachable (the bits of `nb & ~b`); walking
+  back from the target uses each item once.]
 #fact[Too many bits][If $n$ bitsets of $N$ bits do not fit
   (reachability to $10^5$ targets), take the targets in chunks of
   $64 k$ bits with one pass over the graph per chunk: the same
@@ -197,9 +210,8 @@ for x, c in b.items():  # sets: a |= b
   that moment.]
 #cpp[#fact[C++][`bitset<N>` needs a compile-time `N`: use the
   maximum, or a `template<int N>` that recurses to the next power
-  of two. `count()` is a popcount; `_Find_first()` and
-  `_Find_next(i)` walk the set bits in $O(N / 64 + "count")$.
-  `vector<bool>` is packed too but has no word-level operations.]]
+  of two. `_Find_first()` and `_Find_next(i)` walk the set bits
+  in $O(N / 64 + "count")$.]]
 #py[#fact[PyPy][A big int is the bitset: `b | b << w`, `&`, `^` run
   about 4 times slower than C++ bitsets. Masks keep the size
   bounded: `b = (b | b << w) & M`. Popcount (no `bit_count`
