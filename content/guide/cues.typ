@@ -31,6 +31,7 @@ techniques_, _DP techniques_.
   [$plus.minus 1$ walk inside a strip, Kadane], [reflection sum; sticky walk],
   [product of many small polynomials], [divide and conquer + NTT],
   [paths under a monotone staircase], [D&C over columns, NTT],
+  [paths touching each staircase run], [chain of rectangles: first hits],
   [$f_n$ from a convolution of earlier $f$], [online (CDQ) convolution],
   [huge $m$ ($10^9$), only comparisons], [polynomial: `poly/lagrange`],
   [a DP dimension that only adds up], [evaluate at $n + 1$ points],
@@ -47,13 +48,14 @@ techniques_, _DP techniques_.
 )
 
 === Probability
-_Probability and expectation_.
+_Probability and expectation_, _Counting formulas_ (monotone paths).
 #cues(
   ["expected number of ..."], [sum of probabilities per item],
   [expected maximum or time], [$E[X] = sum_(k >= 1) P(X >= k)$],
   [random process until it stops], [DP backwards from the end],
   [random walk with cycles], [equations; tridiagonal on a line],
   ["output $p q^(-1)$ modulo ..."], [count outcomes, divide once],
+  [a coin picks one of two neighbours], [odd or even: a monotone path],
   [random removals, shuffled deck], [a uniform random permutation],
   ["may stop at any time"], [optimal stopping, a threshold],
   [DP over $n$ random steps too wide], [keep a band of a few $sqrt(n)$],
@@ -78,6 +80,7 @@ _Number theory facts_, _Numbers, estimates and numerics_.
   [$x^2 equiv a$ modulo a prime], [`numtheory/mod-sqrt`],
   [$sum_i floor((a i + b) \/ m)$], [`numtheory/floor-sum`],
   [$f_(i + 1) = a_i f_i + f_(i - 1)$, resistors], [continued fractions, Euclid],
+  [domino tilings of a chain of squares], [Snake graphs: a continuant],
   [subtract the smaller, many rounds], [subtractive Euclid: one division],
   ["is a square modulo $p$"], [Legendre symbol: one bit],
   [power towers, huge exponents], [exponent mod $phi(m)$, $+ phi(m)$],
@@ -182,6 +185,7 @@ _Designing a segment tree node_ (saturating maps).
   [best with $c$ units from two parts], [concave: merge the slopes],
   [minimum over a sliding window], [monotone deque],
   [DP pays the maximum of each block], [stack of groups: Block maximum],
+  [merge two neighbours, most steps], [fewest segments that collapse: DP],
   [longest chain, increasing subsequence], [`dp/lis`; Dilworth],
   [choose a subset and its order], [exchange argument, sort, then DP],
   [subset sums, $n S <= 10^(10)$], [bitset: $O(n S \/ 64)$],
@@ -199,6 +203,7 @@ decomposition and small tricks_, _Technique finder_ (step 4).
   [range answer by a left-to-right scan], [node = composed function],
   ["after each update, print the DP"], [(min, +) matrices, `ds/segtree`],
   ["first position where ..."], [descend the segment tree],
+  [largest in a group among keys $<= x$], [Best in a group: descent],
   [range add, sums of squares, history], [linear tags (matrices)],
   [range adds of linear functions], [second differences, summed twice],
   [prefix maxima of a range, updates], [Prefix maxima: $O(log^2 n)$],
@@ -228,6 +233,7 @@ decomposition and small tricks_, _Technique finder_ (step 4).
   [no $O(log n)$ node, many updates], [sqrt blocks, periodic rebuild],
   [queries with a step or modulus $d$], [tables for small $d$, walk large],
   [paint ranges, each cell once], [skip pointers (DSU)],
+  [items wait for a value to fall below $t$], [Wake-up lists: a heap per value],
 )
 
 === Trees
@@ -239,6 +245,7 @@ _Tree techniques_, _Counting formulas_.
   ["for every vertex as the root"], [`tree/rerooting`],
   [all children but one, modulo $p$], [prefix and suffix products],
   [count paths or distances], [`tree/centroid`, FFT of depths],
+  [min over every other vertex of a path], [per centroid, two parities],
   [nearest marked vertex, updates], [centroid ancestors],
   [queries on $k$ vertices, $sum k$ bounded], [`tree/virtual-tree`],
   ["only edges of weight $<= x$"], [Kruskal reconstruction tree],
@@ -250,6 +257,9 @@ _Tree techniques_, _Counting formulas_.
   [cover or match greedily on a tree], [deepest vertex first],
   [pairs of leaves routed along paths], [Leaf pairings: edge loads],
   [LCA under any root, three paths meet], [the median of three vertices],
+  [$sum_x w_x d(x, s)$, best meeting point $s$], [Weighted medians: convex],
+  [two meeting points, plus $c dot d(a, b)$], [Weighted medians: on their path],
+  [greedy walk on a tree must reach $r$], [$x$ against its grandparent],
   [parents before children, orders], [Tree orders: $n! \/ product "size"$],
   [trees with given degrees], [Prüfer: degrees $>= 1$, sum $2n - 2$],
   [XOR with the children, $t$ times], [$binom(t, d)$ odd iff $d subset.eq t$],
@@ -264,6 +274,7 @@ decomposition and small tricks_ (bitsets).
   [edges from a vertex to a range], [segment-tree graph],
   [each item takes one of its two ends], [edge per item; $E <= V$ per part],
   [fewest deletions to separate], [min cut: `flow/dinic`],
+  [count all minimum cuts, $s$-$t$ or global], [All minimum cuts: residual SCCs],
   [taking $x$ forces $y$, max profit], [project selection],
   [assign with capacities], [bipartite flow, Hall],
   [lower and upper bounds per edge], [flow with lower bounds],
@@ -281,6 +292,7 @@ decomposition and small tricks_ (bitsets).
   ["differ by exactly 1 on each edge"], [bipartite: parity = colour],
   [closed walks of length mod $k$], [SCC period: labels mod $k$],
   [state = vertex plus extra info], [BFS or Dijkstra on pairs],
+  [$v$ takes the label of $A_v$, in label order], [Sequential overwrite, then shifts],
   [nearest of many sources], [multi-source Dijkstra, owners],
   [times set by earlier events], [Dijkstra in time order],
   [shortest cycle, chordless cycle], [BFS from every vertex],
@@ -297,7 +309,7 @@ decomposition and small tricks_ (bitsets).
 
 === Games and interaction
 _Game theory_, `misc/interactive`, _Linear algebra facts_ (least
-squares).
+squares), _Constructive problems and invariants_ (set replies).
 #cues(
   [sum of independent games], [Grundy values, XOR],
   [huge numbers, simple moves], [brute force table, period],
@@ -309,6 +321,7 @@ squares).
   [chance moves, cycles of states], [value iteration],
   [hidden position, adaptive opponent], [play against the candidate set],
   [query limit near $log_2$(candidates)], [halving: `misc/interactive`],
+  [set replies, limit near the depth], [one question per level],
   [replies linear in hidden numbers], [a linear system (least squares)],
   [sort with comparison queries], [#cpp[`stable_sort`]#py[`cmp_to_key`]: the judge compares],
   [hidden vertex in a tree], [centroid search],
@@ -328,16 +341,20 @@ _Randomisation and hashing_, _Probability and expectation_
 )
 
 === Constructions
-_Constructive problems and invariants_.
+_Constructive problems and invariants_, _Number theory facts_ (tilings).
 #cues(
   ["print any, or $-1$"], [necessary condition, brute force],
   [reach B from A by moves], [invariant: parity, sum mod $k$, gcd],
+  [any order of moves seems to work], [Commuting moves: then greedy],
+  [operations sort a root path or prefix], [insertions: Commuting moves],
   [tokens that cannot pass each other], [their order never changes],
   [the input is only $n$ (and $k$)], [brute force $n <= 8$, pattern],
   [a construction for every $n$], [induction, periodic blocks],
   [budget of $floor(k\/3)$ changes], [3 classes, take the smallest],
   [grid cells, no two touching], [4 classes $(i mod 2, j mod 2)$],
+  [colours must identify a walk on a grid], [neighbours differ: $floor((x plus.minus y)\/2)$ bits],
   [exactly $k$ of something], [gadgets that add up; subset sum],
+  [exactly $X$ ways, $X$ huge], [double-and-add: $(p, 1) -> (2 p + b, 1)$],
   [regular: "each in exactly 3"], [Hall, perfect matchings],
   [a process that repairs violations], [decreasing potential],
   [fair split, envy-free up to one item], [envy-cycle elimination],

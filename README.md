@@ -78,7 +78,7 @@ fonts/                Inconsolata (OFL), the code font
 
 `CONTRIBUTING.md` specifies the snippet header format, the code style
 and the test conventions. `docs/DESIGN.md` explains the design choices,
-`docs/COVERAGE.md` the coverage of the training set.
+`docs/COVERAGE.md` the coverage of the training sets.
 
 ## Using a snippet
 

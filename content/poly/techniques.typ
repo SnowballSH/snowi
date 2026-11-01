@@ -126,6 +126,10 @@ only adds under merges replaced by a variable $z$. Further:
   the coefficients $n - 1, dots, m - 1$ of $a b$ exactly (wrapped
   terms land below $n - 1$), at half the NTT length of the full
   product.
+- Binomial kernel: $sum_(i < h) f_i binom(h - 1 - i + t, t)$ for
+  $t = 0..w$ is $1\/t!$ times coefficient $h - 1 + t$ of $U F$ with
+  $U_i = f_i \/ (h - 1 - i)!$ and $F_m = m!$, $m < h + w$: a middle
+  product, cyclic length $h + w$.
 - $[y^n] E(y) B(y)^n$ for every $n < N$, $deg B = d$: divide and
   conquer over $n$. For $[l, r)$ only the coefficients of $E B^l$
   with exponents in $[d l - (d - 1) r, r)$ matter. Recurse left on

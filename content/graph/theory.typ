@@ -268,6 +268,18 @@ vertex cover, minimum edge cover.
 - Sources added one at a time (unweighted): BFS from each new
   source, pushing only strict improvements; a vertex is pushed at
   most $d_1 (v) + 1$ times in total, $d_1$ = distance to the first.
+- Sequential overwrite on a functional graph $v -> A_v$, labels
+  $l(v) in {1, dots, n}$: for $p = 1, dots, n$ in turn, all nodes
+  labelled $p$ at that moment take the label of $A_v$ at once, read
+  before any write of that turn. After this round $l'(v) = l(w)$,
+  with $w$ the first node after $v$ on its forward path entered by
+  a non-descent, $l(w) >= l("previous node")$. Every later round is
+  the plain shift $l(v) <- l(A_v)$, so after round $t >= 1$ node $v$
+  holds $l'(A^(t - 1)(v))$. Label $p$ survives round 1 iff some
+  node labelled $p$ has a predecessor with label $<= p$. A cycle
+  loses labels only then (same test along the cycle) and rotates
+  after, so it can keep many forever: 1, 1, 2, 3 along a 4-cycle
+  keeps all three. Turn games on pointers: one round, then jumps.
 
 === Cues
 - Implicit dense graphs (XOR MST, Manhattan MST, "cheapest

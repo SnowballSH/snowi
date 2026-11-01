@@ -31,7 +31,9 @@
  *   the $s$-$t$ max flow for any fixed $s$ ($n - 1$ flows), and
  *   the lightest edge of a Gomory-Hu tree. Directed graphs have
  *   no Stoer-Wagner: take the minimum of the flows from a fixed
- *   $s$ to every $t$ and back, $2(n - 1)$ flows.
+ *   $s$ to every $t$ and back, $2(n - 1)$ flows. To count or
+ *   list every global minimum cut: see All minimum cuts in the
+ *   modelling note.
  * Source: Stoer and Wagner (1997); kactl GlobalMinCut (CC0).
  * Status: stress-tested against enumeration of all cuts
  */

@@ -223,6 +223,20 @@ count is $[n = 0]$; the U, L binomials assume $k >= 1$.
   staircase does not cut passes the counts on its left and bottom
   edges to its right and top edges by convolutions with binomials,
   $O(N log^2 N)$ in all.
+- Monotone paths along a chain of rectangles, each sharing a whole
+  side with the next, the shared sides of a rectangle meeting at a
+  corner: pass first hits along. If $f_s$ paths first meet a side
+  at its point $s$ of $0..h$, numbered along the path, the next
+  side, of length $w$, gets $"out"_0 = sum_(s <= h) f_s$ and
+  $"out"_t = sum_(s < h) f_s binom(h - 1 - s + t, t)$ for $t >= 1$,
+  a binomial kernel (_Polynomial techniques_): near-linear in the
+  side lengths even if the area is quadratic. Paths from start to
+  end of a staircase that touch every run are the paths in the
+  chain spanned by consecutive runs: take $f_0 = 1$ on the first
+  run and sum the last vector. A coin that picks one of two
+  neighbouring positions picks an odd or an even index, so a play
+  that empties an array is a monotone path to $(O, E)$, its sums
+  over odd and even indices.
 - Colourings of the $m$ cells (or edges) of an $n times n$ torus up
   to translation: $1/n^2 sum_(d | n) J_2 (d) k^(m\/d)$. Exactly
   $J_2 (d)$ shifts have order $d$ (Jordan's totient: Totients in
