@@ -227,6 +227,27 @@ adds $d$ and $sigma$.]
   $f_0 = f_1 = 1$, $f_(i + 1) = a_i f_i + f_(i - 1)$; then
   $sum_i a_i f_i = f_n + f_(n + 1) - 2$ (telescoping), and
   $x + y$ does not change when the sequence is reversed.]
+#fact[Snake graphs][Chain $d$ square tiles, tile $i$ sharing edge
+  $e_i$ with tile $i + 1$ ($e_0$, $e_d$ outer edges of the end
+  tiles). Sign $e_0, dots, e_d$ with $a_1$ times $+$, $a_2$ times
+  $-$, and so on, so $d = sum a_i - 1$; a tile whose two edges
+  differ in sign is straight, equal signs make a turn. While tiles
+  meet only in the $e_i$ it has exactly $K(a_1, dots, a_n)$ perfect
+  matchings (Çanakçı, Schiffler), so mirroring the tail beyond any
+  $e_i$ keeps the count if the tail still meets the rest only there.]
+#fact[Exactly $X$ tilings by a snake][Proven rails, 4 rows but up to
+  182 columns: Exactly $X$ domino tilings, _Constructive problems and
+  invariants_. Smaller, about 10 rows by 55 columns, and only tested:
+  $2 times 2$ blocks of cells, each sharing
+  two cells with the next, form a snake with $K$ domino tilings if
+  no other cells touch: $2 d + 2$ cells, $3 d + 1$ adjacent pairs.
+  Mirroring folds it into few rows; opposite vertical runs need 3
+  east moves between them. For $X >= 2$ scan $Y < X$ coprime to $X$
+  outward from $2 X \/ (1 + sqrt(5))$ until the fold fits, not just
+  until $sum a_i$ is small (turn tiles between short east runs all
+  climb one way): $X \/ Y$ starts with many 1s (straight tiles), and
+  $d$ is its Stern-Brocot depth with $1\/1$ at 0. Empirical: each
+  tested $X < 2^30$ fitted 10 rows with at most 85 tiles.]
 
 === Recognition
 - Answer modulo a composite: solve modulo each prime power, then

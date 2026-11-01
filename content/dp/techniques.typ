@@ -175,6 +175,18 @@ that depend on whether a neighbour is larger.
   nodes) and take the two smallest fronts. A group of $c$ equal
   minimum weights $v$ merges at once into $floor(c\/2)$ nodes of
   weight $2 v$, keeping the odd one.
+- Replacing two neighbours by one: the number of operations is $N$
+  minus the final length, so most operations means fewest segments
+  in a partition into segments that collapse to one element.
+  Describe a segment by the grammar of its merge tree (which pairs
+  can start, which elements get absorbed). Example: $a, b$ with
+  $a + b >= X$ become $Y$. A segment of length $>= 2$ collapses iff
+  it splits into seed pairs ($a + b >= X$) and single elements with
+  $a + Y >= X$, with at least one seed, exactly one if $2 Y < X$.
+  Collapsing is usually not hereditary ($X = 3$, $Y = 2$: $1, 1, 2$
+  collapses, $1, 1$ does not), and taking the longest collapsing
+  prefix fails too: run an automaton DP over prefixes (closed, open
+  without a seed, open with one). Merges with costs: `dp/knuth`.
 - L1 isotonic regression, $min sum |a_i - b_i|$ over
   non-decreasing $b$ (`dp/slope-trick`), equals the largest
   $sum (a_i - a_j)$ over sets of disjoint pairs $i < j$.
@@ -215,4 +227,17 @@ that depend on whether a neighbour is larger.
   more than $r s$ values contain an increasing subsequence of
   length $r + 1$ or a decreasing one of length $s + 1$
   (Erdős-Szekeres).
+- Shortest block of $A$ to remove so that a left-to-right scan
+  succeeds: each letter $a$ sends the state to $f_a (j)$, with $f_a$
+  non-decreasing and $f_a (j) >= j$; success is $j <= T$ at the end.
+  With $"pre"[l]$ the state after $l$ letters and $"suf"[r]$ the
+  largest state from which the letters from $r$ on succeed ($-1$ if
+  none), removing $[l, r)$ works iff $"pre"[l] <= "suf"[r]$. Both
+  arrays never decrease: two pointers, $O(n)$. $"suf"[n] = T$, and
+  $"suf"[r]$ is the largest $j$ with $f_(A_r) (j) <= "suf"[r + 1]$.
+  Examples: embedding the rest in $s$ ($j$: letters of $s$ used);
+  two queues, loser out, where $B$ must win: $j$ is the players of
+  $B$ gone and $T = m - 1$, as both queues empty is a draw. The same
+  rules run from the right can fail once a duel may remove either
+  player or both: invert the step instead.
 ]

@@ -58,7 +58,9 @@ vertices, all $n^2$ pairs): keep it, cut its cost with step 4.
 - Contribution: how often each element or pair counts (linearity);
   a DP can carry (count, sum) pairs per state.
 - Think in runs and intervals: maximal equal blocks, gaps, cuts.
-  A reachable or feasible set that is an interval is two numbers.
+  A reachable or feasible set that is an interval is two numbers,
+  and winning states that form a prefix are one threshold (removing
+  a block from a scan: _DP techniques_).
 - Split: rules that separate by coordinate or by bit are solved
   one coordinate or bit at a time (counts multiply, costs add).
 - Permutations: cycles; fewest swaps to sort is $n - "cycles"$.
@@ -68,6 +70,9 @@ vertices, all $n^2$ pairs): keep it, cut its cost with step 4.
 - Fix one dimension (the maximum, the first element), solve the rest.
 - Offline: reorder queries; reverse time (deletions become inserts).
 - Backwards: run the process from the end, where choices are forced.
+  To remove one block so a scan still succeeds, compare the state
+  after each prefix with the largest state that succeeds from each
+  suffix (_DP techniques_).
 - Small-to-large: merge the smaller set into the larger.
 - Pattern: print brute force answers for small inputs, guess, prove.
 - Put the update on the edge: store differences (between neighbours,

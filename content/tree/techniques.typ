@@ -92,6 +92,23 @@ for i in range(n - 1, -1, -1):  # children before parents
 #fact[Centroid][With weights $w >= 0$ on the vertices, a vertex
   whose removal leaves parts of weight at most $W \/ 2$ minimises
   $sum_x w_x d(x, v)$ (unit weights: the sum of distances).]
+#full[
+#fact[Weighted medians][The medians, minimisers of
+  $F(s) = sum_x w_x d(x, s)$ ($w >= 0$, lengths $> 0$), are exactly
+  the vertices of Centroid. Crossing an edge from side $A$ to side
+  $B$ changes $F$ by its length times $W(A) - W(B)$, which never
+  falls along a path: $F$ is convex on paths and never rises towards
+  a median. If $W > 0$ the medians form a path. Moving each vertex
+  to its nearest one in a subtree never increases a distance, nor
+  $F$ if the subtree holds a median. So
+  $F_1(a) + F_2(b) + c dot d(a, b)$, $c >= 0$, has its closest
+  optimal pair on the path between any medians $m_1$, $m_2$. Walk
+  $a$ from $m_1$ and $b$ from $m_2$ along it, each while its next
+  step costs it at most $c$ per unit of length. If they stop apart
+  that is the pair; if they meet or cross, $a = b$ at the minimum of
+  $F_1 + F_2$ on the stretch both walked. This works for any $G$,
+  $H$ convex on a path, from minimisers $a_0 <= b_0$.]
+]
 #fact[Binary-tree split][At most two children per vertex and
   $W >= 2$ marked vertices, none an ancestor of another (say leaves,
   or one depth): some subtree holds between $W \/ 3$ and $2 W \/ 3$.
@@ -227,12 +244,34 @@ for w, u, v in sorted(es):
   below contributes iff $binom(t, d)$ is odd, iff $d$ is a submask
   of $t$ (Lucas). Split $t$ into high and low bits and lift over
   levels.
+- A walk goes to its largest unvisited neighbour, ties your way, and
+  stops at the root $r$. It reaches $r$ from every start iff
+  $w_x <= w_g$ for every $x$ of depth $>= 2$ with grandparent $g$
+  ($<$ if ties go against you): the start at $y$ needs the parent of
+  $y$ at least every child of $y$. Lowering values to fit, the best
+  $w'_x$ is the minimum of $w$ on every other vertex of the path
+  from $x$ to $r$, starting at $x$ (all roots: `tree/centroid`).
+- Per centroid $c$: to count paths of length at most $K$ no second
+  sort is needed, since one stable pass over the piece's sorted
+  list, appending each vertex to its part's list, leaves every part
+  sorted. With integer lengths the least weight on the path from
+  $r$ to $c$ at even distance from $x$ is one of two values kept
+  per $r$, the minima by the parity of $d(y, c)$: take the one
+  matching $d(c, x)$.
 - $x mod a_i$ along a path changes $x$ only $O(log x)$ times (each
   change at least halves it): jump to the next $a_i <= x$ with a
   path-minimum descent (binary lifting, or a link-cut tree when
   edges change).
 - $n$ up to $10^6$: flat arrays, BFS orders, fast input, an
   $O(1)$ LCA (`tree/lca-rmq`).
+- Shuffled labels make long paths jump around memory.#cpp[
+  Relabelling in BFS or DFS order and rebuilding `adj` vertex by
+  vertex in that order made `tree/centroid` 2.5 to 5 times faster
+  on paths and 1.4 to 2 times on random trees, $n$ from
+  $2 dot 10^5$ to $10^6$, with no gain on a star. Rebuilt from the
+  edge list, paths gain about 2 times, random trees at most 1.3.]#py[
+  `tree/centroid` relabels in BFS order inside, which gains 1.5 to
+  2 times on paths and little on random trees at $n = 2 dot 10^5$.]
 
 === Pitfalls
 - The depth reaches $n$: work in BFS or DFS order, never by

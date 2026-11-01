@@ -96,6 +96,16 @@ small inputs, $n = 1, 2, 3$ included.
   objects some class gets at least $ceil(N\/4)$ and some at most
   $floor(N\/4)$. A budget of $floor(k\/3)$ changes means 3 classes:
   use the smallest.
+- Neighbour-distinct colouring, $1 <= x <= N$, $1 <= y <= M$:
+  $c(x, y) = (floor((x + y)\/2) mod 2, floor((x - y)\/2) mod 2)$
+  gives the four neighbours of every cell four different colours,
+  so a start cell and a colour sequence fix a walk. Even without
+  the start, the colours of a Hamiltonian path fix it, unless
+  $c(x, y) = c(N + 1 - x, M + 1 - y)$ everywhere: then every such
+  path looks like its rotation by 180 degrees. For $N M > 1$ this
+  happens iff $(N mod 4, M mod 4)$ is $(0, 3)$ or $(2, 1)$. Use
+  $x + y + 1$ on those boards only; on all boards it just moves the
+  trap to $(1, 0)$ and $(3, 2)$.
 - Bipartite graphs: every closed walk has even length, and
   $"dist"(u, v)$ is even iff $u$ and $v$ have the same colour. An
   odd cycle is the only obstruction to a 2-colouring. So when all
@@ -122,6 +132,12 @@ small inputs, $n = 1, 2, 3$ included.
   halves. One counting pass per halving finds a missing value
   in $O(log n)$ passes and $O(1)$ memory (the counter can stop at
   the half's size).
+- Three parts: positive items in any order, sum $S$, each at most
+  $S\/2$. The longest prefix with sum at most $S\/2$, the next item
+  alone and the rest all have sum at most $S\/2$ (the prefix and
+  that item together exceed it), so no sort is needed. The rest is
+  empty only if the last item is $S\/2$. So the fewest groups of
+  sum at most $S\/2$ is 3, or 2 if a subset sums to exactly $S\/2$.
 
 === Building the answer
 - Brute force first: all objects for $n <= 8$, or a BFS over the
@@ -158,9 +174,47 @@ small inputs, $n = 1, 2, 3$ included.
   largest that fits ($binom(m, 2)$, powers of two), a bitset
   subset sum over the gadget sizes, or independent gadgets whose
   counts multiply (7 gadgets with 4 states give $4^7$).
+- Exactly $X$ ways, $X$ huge: double-and-add. Carry two counts
+  $(p, q)$ from $(0, 1)$ and give each bit $b$ of $X$, top bit first,
+  a gadget that sends them to $(2 p + b q, q)$. The last $p$ is $X$,
+  by induction for every $X$, with $O(log X)$ gadgets and no search.
+  Paths in a DAG: $p$, $q$ are the path counts of two vertices, the
+  new $p$ vertex has two paths from the old one and, if $b = 1$, an
+  edge from the old $q$ vertex; the new $q$ vertex has an edge from
+  the old one.
+#fact[Exactly $X$ domino tilings][Double-and-add on two rails, rows
+  0 and 2 of 4. One cell on the bottom rail, then a block per bit,
+  then one cell on the top rail:
+  ```
+  b = 0   b = 1
+  ####    ######
+  ....    .##...
+  ####    ##..##
+  ##..    .####.
+  ```
+  Rows 1 and 3 cannot cross a cut between blocks, and an odd number
+  of cells lies left of each cut, so exactly one rail crosses it.
+  With $p$, $q$ the tilings of the left part where the top, bottom
+  rail crosses, the first cell gives $(0, 1)$, each block gives
+  $(2 p + b q, q)$ (check its 4 crossing counts by hand) and the last
+  cell keeps $p$. Width: 182 columns for $X < 2^30$. The snake in
+  _Number theory facts_ is smaller but only tested.]
 - Read the budget: $floor(k\/3)$ means 3 classes, $2 log_2 n$
   means two queries per halving (or doubling) step, $3 n$ means
   $O(1)$ moves per element.
+- Interactive, a set-valued reply can answer one independent
+  question per level at once: if each element's answer lies in the
+  next level and labels are already classified by level, the reply
+  splits back into per-level answers. If every label is some
+  element's answer, asking the newest level whole gives the next
+  level: the labels never seen before. A limit near the depth, far
+  below the total number of questions, signals this: a perfect
+  binary tree of depth $d$ with hidden inner labels takes $d$
+  parent-set queries, not $d (d + 1) \/ 2$ as one level at a time.
+- Interactive, adaptive judge: a deterministic strategy whose
+  transcript is injective in the hidden object cannot be beaten:
+  the replies fit some object, and they are then that object's own
+  transcript, query count included.
 - "Minimise $d$" with tiny answers: prove $d <= c$ by a
   construction, then characterise $d = 1$, $d = 2$, ... one by one.
 - Two runs (encode, then decode after the judge shuffles or
@@ -363,6 +417,18 @@ transitive, and cross-multiply instead of dividing.
   $x = a - b$.
 - Canonical forms: show that some optimum is sorted, contiguous
   or has at most one fractional item, and search only those.
+#fact[Commuting moves][If every run of moves ends and, of any two
+  available moves, each stays available after the other and both
+  orders give the same state, then all maximal runs end in the same
+  state after the same number of moves, so any greedy order is
+  correct. With only local confluence (the two results meet again
+  after some moves) the end state is still unique but the length
+  is not, and termination is needed (Newman's lemma).]
+- To use it, show that valid moves read and write disjoint state,
+  for example one forced next pointer per position. A target must
+  have no valid move left: another order can skip a state that has
+  one. Sorting a root path equals sorting each prefix in turn, top
+  to bottom, so such operations split into single-vertex insertions.
 
 ]
 === Scheduling

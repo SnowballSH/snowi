@@ -41,6 +41,7 @@
  *   Adaptive judges may change the hidden object as long as the
  *   replies stay consistent: answer only when one candidate is
  *   left, and do not rely on average-case (random) query counts.
+ *   Set replies, transcripts: see the constructive note.
  *   Local testing: an interactor reads queries on stdin, writes
  *   replies on stdout and the verdict on stderr; connect the two
  *   with a named pipe (command in Contest setup). A hang means a

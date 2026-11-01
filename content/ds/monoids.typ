@@ -79,6 +79,16 @@ T op(T a, T b) {
   from the new `c1`. Answer `c1 != c ? v1 : v2`. Or sort the
   elements by colour and query prefix and suffix structures
   around the block of `c`.]
+#full[
+#fact[Best in a group][Elements in static groups, with changing
+  keys: the largest value in group $g$ among keys $<= x$. Lay each
+  group contiguously in one array, sorted by value descending, with
+  a min segment tree on the keys. The first position of $g$'s range
+  with key $<= x$, found by descent (`max_right(l, m > x)`; none if
+  it is past the range), holds the answer, and a key change is one
+  point update. Example: the tallest child whose owner is $<= x$,
+  a group being the children of one vertex.]
+]
 
 === Lazy tags
 #fact[Linear tags][If an update applies the same linear map to

@@ -46,6 +46,7 @@ Notes: Count first: $N$ hidden possibilities and $k$ possible
   Adaptive judges may change the hidden object as long as the
   replies stay consistent: answer only when one candidate is
   left, and do not rely on average-case (random) query counts.
+  Set replies, transcripts: see the constructive note.
   Sorting with a comparator that asks the judge:
   `sorted(a, key=cmp_to_key(cmp))` (from `functools`) uses about
   $n log_2 n$ comparisons. Local testing: an interactor reads

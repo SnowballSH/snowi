@@ -192,6 +192,23 @@ for x, c in b.items():  # sets: a |= b
   submask). A visit joins or stops, and a join spawns at most $B$
   visits: $O(q + B 2^B n)$ finds in total.]
 
+#full[
+=== Heap tricks
+#fact[Wake-up lists][Waiters watch values that only fall; each
+  fires once its value drops below its threshold. Keep a max-heap
+  of thresholds per value and after an update pop all above the new
+  value. Each entry is popped once, so $U$ updates and $R$
+  registrations cost $O(U + R log R)$ however small the steps, where
+  rescanning $W$ waiters is $O(U W)$. A popped waiter with another
+  condition re-registers on it, and here is the trap: test the
+  current value first and move on if it has already passed, because
+  a push is only seen at that heap's next update, if there is one.
+  Met conditions stay met, so $R$ is at most the number of
+  conditions, not of waiters; a fresh threshold on every wake-up
+  can reach $R = U W$, with no gain. Values that only rise:
+  min-heaps.]
+]
+
 === Bitsets and their costs
 #fact[Word parallelism][One shift-or of $10^6$ bits takes about
   #cpp[0.05 ms (`bitset`)]#py[0.2 ms (a big int)].#full[ DAG
