@@ -5,12 +5,12 @@ Description: Point add and range sum over `[0, n)`; every `add`
   `kth(a, b, k)` reads version `b` minus version `a` as counts and
   returns the smallest `i` whose count over `[0, i]` exceeds `k`:
   the `k`-th smallest (0-indexed) value of a subarray when version
-  `i` counts the compressed values of `a[:i]`.
+  `j` counts the compressed values of `a[:j]`.
 Precondition: 0-indexed, half-open ranges, `n >= 1`. For `kth`,
   every count of `b` minus `a` is $>= 0$ and `0 <= k <` their
   total.
 Time: $O(log n)$ per operation; $2 dot 10^5$ adds plus
-  $2 dot 10^5$ `kth` at $n = 2 dot 10^5$ take about 1.5 s.
+  $2 dot 10^5$ `kth` at $n = 2 dot 10^5$ take about 2 s.
   Memory: each `add` creates at most $ceil(log_2 n) + 1$ nodes, 24
   bytes each in three flat lists.
 Usage:

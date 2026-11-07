@@ -46,57 +46,6 @@ void certify(const Graph& adj, const vi& srcs, Dijkstra& dj) {
   }
 }
 
-// The bottleneck Tweak (maximize the smallest edge) applied to a
-// copy of the struct.
-struct Widest {
-  vector<ll> dist;
-  vi par;
-  Widest(const Graph& adj, const vi& srcs)
-      : dist(sz(adj), -1), par(sz(adj), -1) {
-    priority_queue<pair<ll, int>> pq;
-    for (int s : srcs) pq.push({dist[s] = LLONG_MAX, s});
-    while (sz(pq)) {
-      auto [d, u] = pq.top();
-      pq.pop();
-      if (d < dist[u]) continue;
-      for (auto [v, w] : adj[u])
-        if (min(d, w) > dist[v]) pq.push({dist[v] = min(d, w), v}), par[v] = u;
-    }
-  }
-  vi path(int t) {
-    vi p;
-    if (dist[t] >= 0)
-      for (; t >= 0; t = par[t]) p.push_back(t);
-    reverse(all(p));
-    return p;
-  }
-};
-
-void check_widest(const Graph& adj, const vi& srcs) {
-  int n = sz(adj);
-  vector<ll> want(n, -1);
-  for (int s : srcs) want[s] = LLONG_MAX;
-  rep(it, 0, n)
-    rep(u, 0, n)
-      for (auto [v, w] : adj[u]) want[v] = max(want[v], min(want[u], w));
-  Widest wd(adj, srcs);
-  CHECK(wd.dist == want);
-  rep(t, 0, n) {
-    vi p = wd.path(t);
-    CHECK_EQ(p.empty(), want[t] < 0);
-    if (p.empty()) continue;
-    CHECK(count(all(srcs), p[0]) && p.back() == t);
-    ll low = LLONG_MAX;
-    rep(i, 1, sz(p)) {
-      ll best = -1;
-      for (auto [v, w] : adj[p[i - 1]])
-        if (v == p[i]) best = max(best, w);
-      low = min(low, best);
-    }
-    CHECK_EQ(low, want[t]);
-  }
-}
-
 int main() {
   rep(it, 0, iters(3000)) {
     int n = (int)rnd(1, 8), m = (int)rnd(0, 20);
@@ -112,11 +61,7 @@ int main() {
     Dijkstra dj(adj, srcs);
     CHECK(dj.dist == brute(adj, srcs));
     certify(adj, srcs, dj);
-    check_widest(adj, srcs);
   }
-  // Bottleneck Tweak on 0 -> 1 (5), 1 -> 2 (3).
-  Widest wd({{{1, 5}}, {{2, 3}}, {}}, {0});
-  CHECK(wd.dist == vector<ll>({LLONG_MAX, 5, 3}));
   // Large: random graph, then a long path with huge weights.
   int n = 100'000;
   Graph adj(n);

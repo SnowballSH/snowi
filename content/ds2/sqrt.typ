@@ -56,12 +56,12 @@ time) are in _Offline techniques_.
   then propagate once, `D[i] += D[i - d]`, $O(n)$ per small $d$.
   If the weights grow by a factor $q$ per step, propagate with
   `D[i] += q * D[i - d]` and put $-x q^c$ at `s + c d`.]
-#fact[Split the bits][Keys of $2 b$ bits where an update and a
-  query must meet on all keys, and the cost splits into a high
+#fact[Split the bits][Keys of $2 b$ bits where a query must look
+  at every stored key and the cost splits into a high
   and a low half (XOR distance $(y xor x)$, subset or superset
   tests): an update fills one row `T[hi(x)][*]` over all
   $2^b$ low halves, a query scans all $2^b$ rows at its own low
-  half. Example, min over stored $(x, "val")$ of
+  half. For the min over stored $(x, "val")$ of
   $"val" + (y xor x)$: update
   `T[hi(x)][l] = min(.., val + (lo(x) ^ l))` for all `l`; query
   `min over h of T[h][lo(y)] + ((hi(y) ^ h) << b)`. Both cost
@@ -100,9 +100,9 @@ for i, x in enumerate(a):
 #fact[Two smallest][In a permutation, let $a$ and $b$ hold the
   smallest and second smallest values of `[l, r]`. Then $a$ is
   the nearest position left or right of $b$ with a value below
-  $p_b$, so at most $2 n$ pairs $(a, b)$ occur. With $p$ and $q$
+  $p_b$, so at most $2 n$ pairs $(a, b)$ occur. With $L$ and $R$
   the nearest positions outside $[min(a, b), max(a, b)]$ with
-  values below $p_b$, exactly $(min(a, b) - p)(q - max(a, b))$
+  values below $p_b$, exactly $(min(a, b) - L)(R - max(a, b))$
   intervals have this pair.]
 #fact[Queue of any monoid][For gcd, matrix products or other
   folds without a deque trick, use two stacks. Push onto the back
@@ -198,14 +198,15 @@ for x, c in b.items():  # sets: a |= b
   fires once its value drops below its threshold. Keep a max-heap
   of thresholds per value and after an update pop all above the new
   value. Each entry is popped once, so $U$ updates and $R$
-  registrations cost $O(U + R log R)$ however small the steps, where
-  rescanning $W$ waiters is $O(U W)$. A popped waiter with another
-  condition re-registers on it, and here is the trap: test the
-  current value first and move on if it has already passed, because
-  a push is only seen at that heap's next update, if there is one.
-  Met conditions stay met, so $R$ is at most the number of
-  conditions, not of waiters; a fresh threshold on every wake-up
-  can reach $R = U W$, with no gain. Values that only rise:
+  registrations cost $O(U + R log R)$ however small the steps,
+  while rescanning all $W$ waiters costs $O(U W)$. A popped waiter
+  with another condition registers that one next; first test it
+  against the current value and, if it already holds, move on at
+  once: a pushed threshold is only checked at that value's next
+  update, which may never come. Met conditions stay met, so each
+  condition registers at most once and $R$ is at most the number of
+  conditions; a fresh threshold on every wake-up can reach
+  $R = U W$, no better than rescanning. Values that only rise:
   min-heaps.]
 ]
 

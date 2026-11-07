@@ -7,7 +7,7 @@ Description: `conv(a, b)` multiplies polynomials modulo `MOD`.
 Precondition: `MOD` $= 998244353 = 119 dot 2^23 + 1$ with primitive
   root 3. Entries in `[0, MOD)`. `len(a)` is a power of two, at most
   $2^23$, so `conv` needs `len(a) + len(b) - 1` $<= 2^23$.
-Time: $O(n log n)$. A $2^18 times 2^18$ product takes about 0.2 s.
+Time: $O(n log n)$. A $2^18 times 2^18$ product takes about 0.6 s.
 Usage:
   c = conv(a, b)  # len(a) + len(b) - 1 entries
 Tweak: Other primes: the table in Polynomial techniques.

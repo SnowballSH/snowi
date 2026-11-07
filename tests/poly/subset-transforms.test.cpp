@@ -110,10 +110,11 @@ int main() {
       CHECK(x == c);
     }
   }
-  // AND convolution of the all-ones mask with itself (Notes).
-  vl f(8);
-  f[7] = 1;
-  CHECK(bit_conv(f, f, '&') == f);
+  // Identities from the Notes: [S = all] for AND, [S = 0] for OR.
+  vl f(8), e(8), g = rnd_vec(8, 1, MOD - 1);
+  f[7] = e[0] = 1;
+  CHECK(bit_conv(f, g, '&') == g && bit_conv(e, g, '|') == g);
+  CHECK(bit_conv(f, g, '|') != g); // OR is not AND
   // Large: n = 2^16 transforms, 2^14 subset convolution, checked
   // at sampled masks.
   int L = 16, n = 1 << L;

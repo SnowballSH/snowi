@@ -112,6 +112,11 @@ int main() {
   // Two triangles joined by an edge: the blossom must be entered.
   CHECK_EQ(solve(6, {{0, 1}, {1, 2}, {2, 0}, {2, 3}, {3, 4}, {4, 5}, {5, 3}}),
            3);
+  { // Both sides of a blossom must be shrunk: shrinking only the
+    // scanned vertex's side finds 2 pairs with these exact lists.
+    vector<vi> g = {{5, 3}, {2, 5}, {1, 4, 3}, {2, 5, 0}, {2}, {1, 0, 3}};
+    CHECK_EQ(general_matching(g).first, 3);
+  }
   rep(it, 0, iters(4000)) {
     int n = (int)rnd(0, 13);
     int m = (int)rnd(0, n * (n + 1) / 2 + 2);

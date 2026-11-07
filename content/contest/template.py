@@ -1,6 +1,6 @@
 """
 Title: Contest template
-Description: `main()` makes locals fast in PyPy.
+Description: Code in `main()` runs a bit faster.
 Usage:
   x = nxt()  # next int token
 Status: run on sample input by tests/contest/test_template.py

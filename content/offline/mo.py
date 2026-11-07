@@ -3,8 +3,8 @@ Title: Mo's algorithm
 Description: Offline subarray queries `[l, r)`: `add(i)` /
   `remove(i)` move `a[i]` into or out of the window; `answer(q)`
   runs when it equals `qs[q]`.
-Precondition: $0 <= l <= r <= n < 2^21$. `add` and `remove` act on
-  either end of the window. The window grows before it shrinks,
+Precondition: $0 <= l <= r <= n < 2^21$. `add` and `remove` are
+  called at both ends. The window grows before it shrinks,
   so its left end never passes its right end.
 Time: $O(n sqrt(q))$ calls of `add` and `remove` with block size
   $n / sqrt(q)$, plus $O(q log q)$ to sort. In PyPy, distinct
@@ -52,6 +52,9 @@ Notes: Think of it when queries are offline, the answer does not
   moving `t` swaps the stored value at the update's position, and
   if that position is in the window removes the old value and
   adds the new one; the total is $O(n^(5/3))$ for $n approx q$.
+  Side-dependent answers (inversions): track `[L, R)` yourself;
+  `add(i)` is on the left iff `L < R` and `i < L` (an add to an
+  empty window gives `[i, i + 1)`), `remove(i)` iff `i == L`.
 Source: Mo Tao; kactl (CC0); Hilbert order by gepardo.
 Status: stress-tested against brute force; moves bounded
 """

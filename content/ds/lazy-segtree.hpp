@@ -1,6 +1,6 @@
 /**
  * Title: Lazy segment tree
- * Description: Range apply and range fold. Nodes `S` form a monoid
+ * Description: Range apply, range query. Nodes `S` form a monoid
  *   under `op` with identity `e`; tags `F` act on nodes through
  *   `mapping(f, s)` and compose by `composition(f, g)` = "`g`, then
  *   `f`", with identity `id`. Default: range add, range min.
@@ -37,11 +37,11 @@
  *   // st.query(l, r).sum
  * Notes: Check the three laws on paper before coding: tags compose,
  *   act on a whole node in $O(1)$, and distribute over `op`. Sums
- *   need `len`; products of tags must stay in a small family. The
+ *   need `len`; composed tags must stay in one small family. The
  *   new tag goes on the outside: `composition(new, old)`. If a tag
  *   cannot update a node's summary without looking inside (chmin
  *   with sum, `%=` with sum), use segment tree beats. `max_right`
- *   finds e.g. the first index after `l` with value `<= x` under
+ *   finds e.g. the first index `>= l` with value `<= x` under
  *   range adds: `pred = v > x` on the min. Leaves past `n` hold `e`
  *   and never receive a tag other than `id`, so `e = LLONG_MAX`
  *   cannot overflow.

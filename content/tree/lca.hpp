@@ -41,10 +41,10 @@
  *   highest ancestor with a property that is monotone along the
  *   root path (value below `x`, Kruskal reconstruction trees): for
  *   `k` from the top, jump while `up[k][v]` still satisfies it.
- *   Memory is $n log_2 n$ ints (80 MB at $n = 10^6$): for huge `n`
- *   or $10^6$ queries use tree/lca-rmq ($O(1)$ query) or `HLD::lca`
- *   ($O(n)$ memory). For a forest, join one vertex of each tree to
- *   a new root `n` and test reachability separately.
+ *   Memory is $n log_2 n$ ints (80 MB at $n = 10^6$): for $10^6$
+ *   queries use tree/lca-rmq ($O(1)$ query); when memory is tight,
+ *   `HLD::lca` ($O(n)$ memory). For a forest, join one vertex of
+ *   each tree to a new root `n` and test reachability separately.
  * Source: Folklore binary lifting; cp-algorithms.
  * Status: stress-tested against naive parent walking
  */

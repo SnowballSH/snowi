@@ -1,7 +1,7 @@
 #import "/typst/notes.typ": *
 
 === Borders and periods
-#fact[Primitive root][`s` is a power iff its smallest period
+#fact[Powers][`s` is a power iff its smallest period
   $p < n$ divides $n$ ("abaab", $p = 3$, is not); `s` equals its
   rotation by $k$ iff it is a power of `s[0, gcd(k, n))`.]
 #fact[Fine-Wilf][Periods $p, q$ with $p + q - gcd(p, q) <= n$ make
@@ -37,17 +37,20 @@
   suffixes; the lengths of the palindromic suffixes of any string
   form $O(log n)$ progressions (eertree series links).]
 #full[#fact[Prefixes][Palindromic prefixes of lengths $y < x$ make
-  $x - y$ a period of `s[0, x)`. If $x < 2y$, the prefix of length
+  $x - y$ a period of `s[0, x)`. To count strings over $m$ letters
+  whose prefixes of given lengths are all palindromes
+  ($m^"free"$), take the two longest, $y < x$. If $x < 2y$, the
+  prefix of length
   $2y - x$ is a palindrome too and may replace $x$: positions
   $y..x - 1$ copy earlier ones. If $x >= 2y$, prefix $y$ lies in
   the first half and $x$ adds $ceil(x\/2) - y$ free positions.
-  Repeat on the two longest, batching equal steps like Euclid.]]
+  Repeat, batching equal steps like Euclid.]]
 
 #full[
 === Lyndon words
 #fact[Borders][A Lyndon word has no non-empty border, so it
-  is primitive; the smallest rotation starts at a factor of
-  `s + s`.]
+  is primitive; the smallest rotation starts where a Lyndon
+  factor of `s + s` starts.]
 ]
 
 === Runs
@@ -120,7 +123,7 @@
 - Deleting one letter: every letter of a run of equal letters
   gives the same string. Deleting from a run followed by a smaller
   letter beats deleting from any later run; from a run followed
-  by a larger letter (or the last run) it loses to them. The
+  by a larger letter it loses to every later run. The
   smallest result deletes from the first run followed by a
   smaller letter, else from the last run.
 - Strings over $m$ letters with a given `pi`: build the generic

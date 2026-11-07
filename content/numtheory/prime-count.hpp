@@ -14,7 +14,7 @@
  *   $p (S(floor(v\/p)) - S(p - 1))$. Any completely multiplicative
  *   weight works the same way, e.g. one table per power $p^k$.
  * Example:
- *   // n <= 1e11 with exactly 4 divisors: p^3 or p q with p < q
+ *   // count k <= n with exactly 4 divisors: p^3 or p q, p < q
  *   ll ans = 0;
  *   for (ll p = 2; p <= pc.r; p++)
  *     if (pc(p) > pc(p - 1))

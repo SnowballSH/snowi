@@ -6,8 +6,8 @@ Description: All-pairs shortest paths; weights may be negative.
   from `i`, `-INF` if a negative cycle on the way makes it
   arbitrarily small.
 Precondition: `d` is $n times n$; keep the lightest of parallel
-  edges. `INF` is larger than any distance, at most $2^62$ to keep
-  PyPy on machine ints.
+  edges. `INF` $> n dot max|w|$, at most $2^62$ to keep PyPy on
+  machine ints.
 Time: $O(n^3)$; PyPy needs about 0.3 s for $n = 400$.
 Usage:
   d = [[INF] * n for _ in range(n)]

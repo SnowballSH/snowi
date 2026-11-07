@@ -1,6 +1,6 @@
 /**
  * Title: Segment tree
- * Description: Bottom-up point assign and range fold over a monoid.
+ * Description: Bottom-up point assign, range query over a monoid.
  *   The largest `r` with `pred(query(l, r))` true is
  *   `max_right(l, pred)`, and the smallest such `l` is
  *   `min_left(r, pred)`.

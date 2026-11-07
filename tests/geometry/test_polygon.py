@@ -229,6 +229,29 @@ check_eq(lib.area2(comb), 2 * 18)  # 6 x 4 minus two 1 x 3 notches
 check_eq(lib.centroid(lib.polygon_cut(comb, (1, 0), (1, 1))), (0.5, 2.0))
 check_eq(len(lib.polygon_cut(comb, (0, 0), (0, 1))), 2)
 
+
+def even_odd(v, p):
+  """1 / 0 / -1 by the even-odd rule: ray to +x, half-open in y."""
+  n = len(v)
+  if any(exact_on(v[i - 1], v[i], p) for i in range(n)):
+    return 0
+  cnt = 0
+  for i in range(n):
+    a, b = v[i - 1], v[i]
+    if (a[1] > p[1]) != (b[1] > p[1]):
+      num = (a[0] - p[0]) * (b[1] - a[1]) + (p[1] - a[1]) * (b[0] - a[0])
+      cnt += (num > 0) == (b[1] > a[1])  # crossing right of p
+  return 1 if cnt % 2 else -1
+
+
+for _ in range(iters(1000)):  # self-intersecting polygons
+  C = rnd(1, 4)
+  v = [rnd_pt(C) for _ in range(rnd(3, 8))]
+  for x in range(-C - 1, C + 2):
+    for y in range(-C - 1, C + 2):
+      want = even_odd(v, (x, y))
+      check_eq(lib.in_polygon(v, (x, y)), want, f"{v} {(x, y)}")
+
 check_eq(lib.area2([]), 0)
 check_eq(lib.in_polygon([], (0, 0)), -1)
 check_eq(lib.in_polygon([(1, 1)], (1, 1)), 0)

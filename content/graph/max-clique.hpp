@@ -4,7 +4,7 @@
  * Precondition: `adj[u][v] = adj[v][u] = 1` for each edge;
  *   `adj[v][v] = 0`. At most 128 vertices (the bitset size).
  * Time: Exponential. Random graphs with edge probability 0.9:
- *   $n = 128$ in about 0.05 s, $n = 150$ (larger `B`) about 1 s.
+ *   $n = 128$ in about 0.1 s, $n = 150$ (larger `B`) about 1 s.
  *   Sparser graphs are much faster.
  * Usage:
  *   vector<MaxClique::B> adj(n);

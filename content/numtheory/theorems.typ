@@ -235,19 +235,22 @@ adds $d$ and $sigma$.]
   meet only in the $e_i$ it has exactly $K(a_1, dots, a_n)$ perfect
   matchings (Çanakçı, Schiffler), so mirroring the tail beyond any
   $e_i$ keeps the count if the tail still meets the rest only there.]
-#fact[Exactly $X$ tilings by a snake][Proven rails, 4 rows but up to
-  182 columns: Exactly $X$ domino tilings, _Constructive problems and
-  invariants_. Smaller, about 10 rows by 55 columns, and only tested:
+#fact[Exactly $X$ tilings by a snake][A proven construction on two
+  rails, 4 rows by up to 182 columns, is Exactly $X$ domino tilings
+  in _Constructive problems and invariants_. This one is smaller,
+  about 10 rows by 55 columns, but only tested:
   $2 times 2$ blocks of cells, each sharing
   two cells with the next, form a snake with $K$ domino tilings if
   no other cells touch: $2 d + 2$ cells, $3 d + 1$ adjacent pairs.
   Mirroring folds it into few rows; opposite vertical runs need 3
   east moves between them. For $X >= 2$ scan $Y < X$ coprime to $X$
   outward from $2 X \/ (1 + sqrt(5))$ until the fold fits, not just
-  until $sum a_i$ is small (turn tiles between short east runs all
-  climb one way): $X \/ Y$ starts with many 1s (straight tiles), and
-  $d$ is its Stern-Brocot depth with $1\/1$ at 0. Empirical: each
-  tested $X < 2^30$ fitted 10 rows with at most 85 tiles.]
+  until $sum a_i$ is small (vertical runs with fewer than 3 east
+  moves between them must all climb the same way): $X \/ Y$ starts
+  with many 1s (straight tiles), and $d$ is its Stern-Brocot depth
+  with $1\/1$ at 0. Empirical: every $X < 1.2 dot 10^7$, the top
+  $1.5 dot 10^6$ values below $2^30$ and random samples in between
+  fitted 10 rows with at most 85 tiles.]
 
 === Recognition
 - Answer modulo a composite: solve modulo each prime power, then

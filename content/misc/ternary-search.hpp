@@ -14,7 +14,7 @@
  *   `golden`: 102 calls; each shrinks the interval by 0.618.
  * Usage:
  *   ll x = ternary(0, n - 1, [&](ll i) { return cost(i); });
- *   double t = golden(0, 1e9, [&](double x) { return g(x); });
+ *   double t = golden(0, 1e9, [&](double y) { return g(y); });
  * Tweak: In both, `f` may return any type with `<` and `<=` (`ll`,
  *   `double`, `pair`).
  * Example:

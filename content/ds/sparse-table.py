@@ -1,8 +1,8 @@
 """
 Title: Sparse table
 Description: Static range minimum.
-Precondition: 0-indexed, `l < r`. The operation is idempotent
-  (`op(x, x) = x`), associative and commutative.
+Precondition: 0-indexed, `l < r`. The operation is associative
+  and idempotent, `op(x, x) = x`: min, max, gcd, bitwise and/or.
 Time: $O(n log n)$ time and memory to build, $O(1)$ per query.
 Usage:
   st = SparseTable(a)

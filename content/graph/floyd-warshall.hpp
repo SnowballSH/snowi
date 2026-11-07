@@ -6,8 +6,7 @@
  *   `j` is unreachable from `i`, `LLONG_MIN` if a negative cycle on
  *   the way makes it arbitrarily small.
  * Precondition: `d` is $n times n$; keep the lightest of parallel
- *   edges. Distances without negative cycles stay below $2^62$ in
- *   absolute value.
+ *   edges; $n dot max|w| < 2^62$ (no overflow).
  * Time: $O(n^3)$.
  * Usage:
  *   vector<vector<ll>> d(n, vector<ll>(n, LLONG_MAX));

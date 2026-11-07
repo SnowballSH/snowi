@@ -212,7 +212,7 @@ int main() {
   Pd g3 = centroid(t3);
   CHECK(fabs(g3.x - (B + 8 / 3.0)) < 1e-6 &&
         fabs(g3.y - (B + 17 / 3.0)) < 1e-6);
-  // The Example: cut a rectangle at 1e9 in half, then area2 (exact
+  // Cut a rectangle at 1e9 in half, then area2 (exact
   // here: every cut point is a half-integer).
   rep(it, 0, iters(5000)) {
     Pd o = to_d(rnd_pt(1'000'000'000)), m = o + Pd{0.5 * rnd(1, 199), 0};
@@ -242,6 +242,29 @@ int main() {
   Pd half_sq = centroid(polygon_cut(to_d(comb), Pd{1, 0}, Pd{1, 1}));
   CHECK(near(half_sq.x, 0.5) && near(half_sq.y, 2)); // x <= 1 part
   CHECK(polygon_cut(to_d(comb), Pd{0, 0}, Pd{0, 1}).size() == 2);
+
+  // Self-intersecting polygons: even-odd rule, by a ray to +x.
+  auto even_odd = [](const vector<Pl>& v, Pl p) {
+    int n = sz(v), cnt = 0;
+    rep(i, 0, n)
+      if (exact_on(v[i], v[(i + 1) % n], p)) return 0;
+    rep(i, 0, n) {
+      Pl a = v[i], b = v[(i + 1) % n];
+      if ((a.y > p.y) == (b.y > p.y)) continue;
+      LL num = (LL)(a.x - p.x) * (b.y - a.y) +
+               (LL)(p.y - a.y) * (b.x - a.x); // (cross x - p.x) * dy
+      cnt += (num > 0) == (b.y > a.y);
+    }
+    return cnt % 2 ? 1 : -1;
+  };
+  rep(it, 0, iters(3000)) {
+    vector<Pl> v(rnd(3, 8));
+    ll C = rnd(1, 4);
+    for (Pl& p : v) p = rnd_pt(C);
+    rep(x, -C - 1, C + 2)
+      rep(y, -C - 1, C + 2)
+        CHECK_EQ(in_polygon(v, Pl{x, y}), even_odd(v, Pl{x, y}));
+  }
 
   // Empty and one-vertex polygons.
   CHECK_EQ(area2(vector<Pl>{}), 0LL);

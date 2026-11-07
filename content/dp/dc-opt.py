@@ -49,6 +49,9 @@ Notes: The quadrangle inequality says crossing intervals cost
   $"dp"[i] = min_(j < i) "dp"[j] + "cost"(j, i)$ on a single
   array, where `dp[j]` is still unknown: use CDQ divide and
   conquer on `i`, or a deque of candidates with binary search.
+  All `K` layers in $O(n^2)$: Knuth's bound
+  $"opt"_(k - 1)[i] <= "opt"_k [i] <= "opt"_k [i + 1]$, `i`
+  filled downwards.
 Source: Classic; cp-algorithms "Divide and Conquer DP".
 Status: stress-tested against an $O(n^2)$ DP
 """

@@ -91,7 +91,7 @@ int main() {
       }
     CHECK(got == want);
   }
-  // Tweak: weighted sums along links need ll.
+  // words is ll: totals over a long text exceed int.
   static_assert(is_same_v<decltype(AhoCorasick::words), vector<ll>>);
   // Edge cases: one letter, empty text, every letter.
   CHECK(AhoCorasick({"a"}).count("") == vi{0});

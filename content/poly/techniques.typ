@@ -42,7 +42,8 @@ while (sz(q) > 1) {
   q.push_back(conv(q[0], q[1]));
   q.pop_front(), q.pop_front();
 }",
-  py: "q = deque(P)  # multiply all polynomials in P
+  py: "from collections import deque
+q = deque(P)  # multiply all polynomials in P
 while len(q) > 1:
   q.append(conv(q.popleft(), q.popleft()))",
 )
@@ -169,7 +170,7 @@ only adds under merges replaced by a variable $z$. Further:
 )
 - Sizes: $n = 20$ gives $n 2^n = 2 dot 10^7$ (easy) and
   $n^2 2^n = 4 dot 10^8$ (subset convolution: 1 s and 200 MB in
-  C++, 3.5 s and 450 MB in PyPy). Enumerating all submasks of all
+  C++, 7 s and 450 MB in PyPy). Enumerating all submasks of all
   masks is $3^n$: $4 dot 10^7$ at $n = 16$, $3.5 dot 10^9$ at
   $n = 20$.
 - The XOR inverse divides by $2^n$: fine modulo an odd prime,

@@ -8,7 +8,7 @@
  *   and `PARENT` trees are shallow (depth about 1100 and 40 at
  *   $n = 2 dot 10^5$): also test `PATH` and `CATERPILLAR`.
  * Precondition: `tree`, `graph`: `n >= 1`. `array(n, lo, hi,
- *   true)`: `hi - lo + 1 >= n`. `graph(n, m)`: `m <= n(n-1)/2`,
+ *   true)`: `hi - lo + 1 >= n`. `graph`, `dag`: `m <= n(n-1)/2`,
  *   and `m >= n - 1` if connected.
  * Time: $O((n + m) log n)$.
  * Usage:
@@ -32,11 +32,13 @@
  *   e = g.mix(e, n);
  *   int T = g.rnd(1, 3); // multi-test: print T, then T cases
  * Notes: `UNIFORM` and `PARENT` trees (rooted at vertex 0) miss
- *   deep-recursion crashes and the worst cases of HLD and
- *   small-to-large merging: use `PATH` and `CATERPILLAR` also as
- *   spanning trees of `graph`. `PARENT` hangs each vertex below a
- *   random earlier one; `CATERPILLAR` is a path with leaves on it.
- *   Small value ranges and alphabets force ties, hash collisions
+ *   deep-recursion crashes and the inputs where a wrong heavy child
+ *   (HLD) or merge direction (small to large) is slow: use `PATH`
+ *   and `CATERPILLAR`, also as spanning trees of `graph`; a
+ *   binary tree (Example) has the most light edges. `PARENT`
+ *   hangs each vertex below a random earlier one; `CATERPILLAR`
+ *   is a path with leaves on it.
+ *   Small value ranges and alphabets force ties, repeated keys
  *   and periodic strings.
  *   Keep `n` tiny (about 8) so the brute force is fast and a
  *   failing input is short to read. Multi-test input: print `T`,

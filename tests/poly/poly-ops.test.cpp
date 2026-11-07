@@ -151,6 +151,9 @@ int main() {
     CHECK(poly_exp({0}, n) == trunc({1}, n));
     CHECK(poly_pow({0}, 0, n) == trunc({1}, n));
     CHECK(poly_pow({0, 3}, 5, n) == vl(n));
+    vl late(12);
+    late[11] = 7; // v = 11: v k overflows ll for k = 1e18
+    CHECK(poly_pow(late, (ll)1e18, n) == vl(n));
   }
   // The header's partition example against Euler's pentagonal
   // recurrence p(m) = sum_(k >= 1) (-1)^(k + 1) (p(m - k(3k - 1)/2)

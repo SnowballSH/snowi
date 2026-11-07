@@ -15,9 +15,9 @@ Example:
   >>> s = "abaaba"; plen = manacher(s)
   >>> plen
   [1, 0, 3, 0, 1, 6, 1, 0, 3, 0, 1]
-  >>> plen[1 + 4 - 1] >= 4 - 1, plen[0 + 3 - 1] >= 3  # s[1, 4)
-  (False, True)
-  >>> sum((x + 1) // 2 for x in plen)  # palindromic substrings
+  >>> [plen[l + r - 1] >= r - l for l, r in ((1, 4), (0, 3))]
+  [False, True]
+  >>> sum((x + 1) // 2 for x in plen)  # palindromes, with repeats
   11
   >>> max(r for r in range(1, len(s) + 1) if plen[r - 1] >= r)
   6

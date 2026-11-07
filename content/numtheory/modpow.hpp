@@ -6,7 +6,7 @@
  * Time: $O(log e)$.
  * Usage:
  *   ll x = modpow(3, 1'000'000'000'000LL), y = modinv(x);
- * Tweak: For a modulus above $2^31$ multiply through `__int128`.
+ * Tweak: For a modulus above $2^31$ multiply in `__int128`.
  * Status: stress-tested against repeated multiplication
  */
 #pragma once

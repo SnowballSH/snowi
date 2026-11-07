@@ -72,6 +72,13 @@ void check_pair_attacks() {
   CHECK(sz(crafted) > n - 10);
   CHECK(sz(high) > n - 10);
   CHECK(h(pair<ll, ll>(1LL << 40, 3)) != h(pii(0, 3)));
+  // Nor a linear combiner: (a, C - K * a) all collide under
+  // a * K + b.
+  for (ll K : {31LL, 1'000'003LL}) {
+    set<size_t> lin;
+    rep(a, 0, n) lin.insert(h(pair<ll, ll>(a, 12345 - K * a)));
+    CHECK(sz(lin) > n - 10);
+  }
 }
 
 int main() {

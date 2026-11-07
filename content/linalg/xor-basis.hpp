@@ -16,8 +16,8 @@
  *   ll v = xb.kth(k); // xb.rank: basis size
  *   PrefixXorBasis pb;
  *   rep(r, 0, n) pb.insert(a[r], r); // then pb.max_xor(l)
- * Tweak: Set `B` to the bit width: at most 63 with `ll`, and 30 for
- *   `int` input is faster.
+ * Tweak: Set `B` to the bit width: at most 63 with `ll`, 30 for
+ *   values below $2^30$.
  * Example:
  *   // Range max-XOR queries [l, r], offline by r.
  *   sort(all(qs), [](auto& p, auto& q) { return p.r < q.r; });

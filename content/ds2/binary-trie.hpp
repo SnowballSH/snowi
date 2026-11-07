@@ -10,8 +10,9 @@
  * Precondition: $0 <= x, y < 2^B$; `add(y, -1)` needs `y` stored;
  *   `kth` needs `0 <= k < size()`; `count_less` takes any
  *   $k >= 0$.
- * Time: $O(B)$ per operation. Memory: up to $n B$ nodes of 12
- *   bytes (72 MB for $2 dot 10^5$ values with $B = 30$).
+ * Time: $O(B)$ per operation. Memory: at most
+ *   $n (B + 2 - log_2 n)$ nodes of 12 bytes (35 MB for $2 dot 10^5$
+ *   values with $B = 30$).
  * Usage:
  *   BinaryTrie tr;
  *   tr.add(y, 1); tr.add(y, -1); // insert, erase one copy

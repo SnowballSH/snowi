@@ -70,11 +70,12 @@
   then mirrors.
 - Pairing: split the moves into pairs and answer each move with
   its partner.
-- Strategy stealing: if an extra move never hurts, the first
-  player wins (Chomp, Hex). It shows who wins, not how.
+- Strategy stealing: if an extra move never hurts and there are
+  no draws, the first player wins (Chomp, Hex). It shows who
+  wins, not how.
 ]
-- Fixed length: if every play has the same number of moves (the
-  final state is forced, whatever the order), only that number
+- Fixed length: if every play has the same number of moves (each
+  move adds one item to a forced final set), only that number
   matters. Writing $abs(x - y)$ for two numbers on the board until
   nothing is new (Differences in _Number theory facts_) takes
   $M \/ g - n$ moves from $n$ distinct positive numbers with gcd
@@ -88,6 +89,9 @@
 - Games with chance: value of a chance node = probability-weighted
   average; a cycle in the states gives an equation (solve it) or
   value iteration until changes are below $10^(-12)$.
+- Players collect points (both play optimally): with $f(s)$ the
+  mover's points minus the other's from $s$ on,
+  $f(s) = max("gain" - f(s'))$ over moves $s -> s'$.
 - Hidden information that the opponent need not commit to (a
   hider that only has to stay consistent with the answers): play
   against the set of positions still possible; the hider becomes
@@ -110,7 +114,8 @@ the brute force, print tables over each parameter, guess, then
 check the guess against the brute force on every small case.
 Reduce objects to a small invariant first: if only "is the
 product a square mod $p$" matters, each number is one Legendre bit
-($a^((p - 1) \/ 2) mod p = plus.minus 1$, multiplicative), so the
+($a^((p - 1) \/ 2) mod p = plus.minus 1$, multiplicative; a
+multiple of $p$ makes the product 0, a square), so the
 state is a few counts and a parity; tabulate those.
 #lang-code(
   cpp: "// g[n] for n < N; opts(n, g) lists the values of the moves

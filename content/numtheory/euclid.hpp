@@ -29,8 +29,8 @@
  *   divide everything by `g` and multiply by `inv_mod(a/g, m/g)`.
  *   Use CRT when the modulus is composite (solve modulo each prime
  *   power, then combine) or when a quantity is known modulo several
- *   periods. Multiplying `x` by `c / g` above can overflow `ll`; use
- *   `__int128` or reduce `x` modulo $b/g$ first.
+ *   periods. Multiplying `x` by `c / g` above can overflow `ll`; do it
+ *   in `__int128` (reducing `x` modulo $b/g$ first does not help).
  * Source: kactl Euclid and CRT (CC0); AtCoder Library inv_mod/crt
  *   (CC0).
  * Status: stress-tested against brute-force search

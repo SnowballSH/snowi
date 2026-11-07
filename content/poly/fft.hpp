@@ -5,9 +5,9 @@
  *   values at the powers of $omega = e^((2 pi i) / n)$: `a[k]`
  *   becomes $sum_j a_j omega^(j k)$.
  * Precondition: `sz(a)` is a power of two. Results round exactly
- *   while $norm(a) norm(b) < 5 dot 10^14$ (Euclidean norms), which
- *   holds if $n dot max abs(a_i) dot max abs(b_j) < 5 dot 10^14$ for
- *   the longer length $n$, e.g. $2^19$ values up to $3 dot 10^4$.
+ *   while $norm(a) norm(b) < 4 dot 10^14$ (Euclidean norms), which
+ *   holds if $n dot max abs(a_i) dot max abs(b_j) < 4 dot 10^14$ for
+ *   the longer length $n$, e.g. $2^18$ values up to $3 dot 10^4$.
  *   Small results do not help: with mixed signs the error still
  *   follows the inputs. Beyond, use `conv_mod`.
  * Time: $O(n log n)$. A $2^19 times 2^19$ product takes about 0.15 s.
@@ -21,7 +21,10 @@
  *   error grows with $norm(a)^2 + norm(b)^2$, so $2^e$ (exact in
  *   floating point) evens out the norms; without it weights times a
  *   0/1 mask round wrongly. Roots come from `polar` directly rather
- *   than repeated multiplication, which keeps them accurate. Cues:
+ *   than repeated multiplication, which keeps them accurate. The
+ *   bound is empirical: the worst case found (unbalanced
+ *   magnitudes, a result just past a power of two) rounds within
+ *   0.41 at $4 dot 10^14$ and fails near $4.7 dot 10^14$. Cues:
  *   integer convolutions whose exact values exceed the NTT modulus
  *   (counts of pair sums, wildcard string matching via
  *   $sum (x - y)^2 x y$), real-valued signals.

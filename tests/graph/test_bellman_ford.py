@@ -54,6 +54,26 @@ def check_par(n, edges, s, bf):
     check_eq(par[s], -1)
 
 
+def neg_cycle(n, edges):
+  """The Tweak: dist all 0, n plain rounds, then walk par back."""
+  dist, par, x = [0] * n, [-1] * n, -1
+  for _ in range(n):
+    x = -1
+    for a, b, w in edges:
+      if dist[a] + w < dist[b]:
+        dist[b], par[b], x = dist[a] + w, a, b
+  if x < 0:
+    return []
+  for _ in range(n):
+    x = par[x]
+  cyc, y = [x], par[x]
+  while y != x:
+    check(len(cyc) < n)
+    cyc.append(y)
+    y = par[y]
+  return cyc[::-1]
+
+
 kinds = [0, 0, 0]
 for _ in range(iters(2000)):
   n, m = rnd(1, 7), rnd(0, 14)
@@ -66,6 +86,17 @@ for _ in range(iters(2000)):
   want = brute(n, edges, s)
   check_eq(bf.dist, want)
   check_par(n, edges, s, bf)
+  # A cycle exists iff a super-source reaches a negative cycle.
+  cyc = neg_cycle(n, edges)
+  sup = edges + [(n, v, 0) for v in range(n)]
+  check_eq(bool(cyc), -INF in brute(n + 1, sup, n))
+  if cyc:
+    k = len(cyc)
+    lws = [
+      min(w for a, b, w in edges if a == cyc[i] and b == cyc[(i + 1) % k])
+      for i in range(k)
+    ]
+    check(sum(lws) < 0)
   for d in want:
     kinds[(d == INF) + 2 * (d == -INF)] += 1
 check(min(kinds) > sum(kinds) // 10, f"unbalanced cases {kinds}")

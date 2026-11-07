@@ -30,7 +30,7 @@ Example:
   ...         for p, q in zip(sq, sq[1:] + sq[:1]))
   >>> (area2(sq) - b + 2) // 2  # lattice points inside (Pick)
   9
-Notes: Pick's theorem: a polygon with lattice vertices has area
+Notes: Pick's theorem: a simple lattice polygon has area
   $A = I + B/2 - 1$, where $I$ counts the lattice points strictly
   inside and $B = sum gcd(|Delta x|, |Delta y|)$ over the edges
   counts those on the boundary. Input given clockwise flips the sign

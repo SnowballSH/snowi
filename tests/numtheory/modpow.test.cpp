@@ -9,6 +9,8 @@ int main() {
     ll e1 = rnd(0, (ll)1e18), e2 = rnd(0, (ll)1e18);
     CHECK_EQ(modpow(b, e1) * modpow(b, e2) % MOD, modpow(b, e1 + e2));
     if (b) CHECK_EQ(b * modinv(b) % MOD, 1LL);
+    ll big = rnd(0, LLONG_MAX); // unreduced base
+    CHECK_EQ(modpow(big, e), modpow(big % MOD, e));
   }
   CHECK_EQ(modpow(0, 0), 1LL);
   CHECK_EQ(modpow(MOD + 2, 1), 2LL);

@@ -17,9 +17,9 @@
  *   gp_hash_table<ll, int, SafeHash> g; // faster
  *   unordered_map<pii, int, SafeHash> grid; // any pair
  * Tweak: Tuples: nest pairs (`pair<pii, ll>`) or chain through
- *   the seeded `(*this)` as the pair overload does. Preset the size
- *   of a `gp_hash_table` with the constructor arguments
- *   `({}, {}, {}, {}, {1 << 20})`.
+ *   the seeded `(*this)` as the pair overload does. For $10^6$ keys
+ *   presize a `gp_hash_table` with `({}, {}, {}, {}, {1 << 21})`:
+ *   it grows when half full.
  * Notes: Use it on judges with hacks (Codeforces) or when keys are
  *   structured (multiples of a power of two, grid coordinates):
  *   `gp_hash_table` hashes with a mask, so even ordinary keys like

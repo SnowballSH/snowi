@@ -2,8 +2,8 @@
  * Title: Primitive root
  * Description: The smallest primitive root `g` of a prime `p`.
  * Precondition: `p` prime, $p < 2^63$.
- * Time: One `factor(p - 1)`, at most 3 ms, plus $O(g log p)$ per
- *   prime factor; the smallest root is at most 113 for $p < 10^8$.
+ * Time: One `factor(p - 1)` plus $O(g log p)$ per prime factor;
+ *   the smallest root is at most 113 for $p < 10^8$.
  * Usage:
  *   ll g = primitive_root(998244353); // 3
  * Uses: numtheory/factor

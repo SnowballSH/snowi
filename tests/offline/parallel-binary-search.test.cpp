@@ -108,8 +108,31 @@ void stress_dsu(int maxn, int maxT, int maxQ) {
   CHECK(res == want);
 }
 
+// Tweak: k-th smallest of a[l, r), updates over sorted positions.
+void stress_kth(int maxn, int maxQ) {
+  int n = (int)rnd(1, maxn), Q = (int)rnd(0, maxQ);
+  vi a(n), L(Q), R(Q), K(Q), pos(n);
+  for (int& x : a) x = (int)rnd(-5, 5);
+  rep(i, 0, Q) {
+    L[i] = (int)rnd(0, n - 1), R[i] = (int)rnd(L[i] + 1, n);
+    K[i] = (int)rnd(1, R[i] - L[i]);
+  }
+  iota(all(pos), 0);
+  sort(all(pos), [&](int x, int y) { return a[x] < a[y]; });
+  Fenwick fw(n);
+  Calls c;
+  vi res = run(
+      n, Q, [&] { fw = Fenwick(n); }, [&](int t) { fw.add(pos[t], 1); },
+      [&](int i) { return fw.query(R[i]) - fw.query(L[i]) >= K[i]; }, c);
+  rep(i, 0, Q) {
+    vi b(a.begin() + L[i], a.begin() + R[i]);
+    sort(all(b));
+    CHECK_EQ(a[pos[res[i] - 1]], b[K[i] - 1]);
+  }
+}
+
 int main() {
-  { // The Python doctest's METEORS case; Q = 0; T = 0.
+  { // Q = 0; T = 0.
     Calls c;
     vi empty = run(5, 0, [] {}, [](int) {}, [](int) { return true; }, c);
     CHECK(empty.empty() && c.resets == 0);
@@ -121,6 +144,7 @@ int main() {
   rep(it, 0, iters(300)) stress_meteors(30, 100, 30, 1'000'000'000);
   rep(it, 0, iters(2000)) stress_dsu(7, 12, 8);
   rep(it, 0, iters(200)) stress_dsu(30, 200, 50);
+  rep(it, 0, iters(2000)) stress_kth(12, 8);
   // Large: the Usage, T = Q = 1e5 point adds and prefix checks.
   elapsed();
   int n = 100'000, T = 100'000, Q = 100'000;

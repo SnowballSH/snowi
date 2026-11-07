@@ -1,6 +1,6 @@
 """
 Title: Lazy segment tree
-Description: Range apply and range fold. Nodes form a monoid under
+Description: Range apply, range query. Nodes form a monoid under
   `op` with identity `e`; tags act on nodes through `mapping(f, s)`
   and compose by `composition(f, g)` = "`g`, then `f`", with
   identity `id`.
@@ -14,12 +14,13 @@ Usage:
   st.apply(l, r, 5); st.query(l, r); st.query_all()
   st.set(i, 7); st.get(i)
   r = st.max_right(l, lambda v: v > x)
-Tweak: Range sum needs the length: nodes `(sum, len)`, leaves
-  `(a_i, 1)`, `mapping` returns `(s[0] + f * s[1], s[1])`. Assign:
+Tweak: Range sum: nodes `(sum, len)`, leaves `(a_i, 1)`,
+  `mapping` returns `(s[0] + f * s[1], s[1])`. Assign:
   `id = None`, `mapping` returns `s if f is None else f`,
   `composition` `g if f is None else f`. Pack `(sum, len)` as
-  `(sum << 20) + len` while $|"sum"| < 2^43$: `op = add`,
-  `mapping(f, s) = s + (f * (s & M) << 20)`, `M = 2**20 - 1`.
+  `(sum << 20) + len` while $|"sum"| < 2^43$ and $n < 2^20$:
+  `op = add`, `mapping(f, s) = s + (f * (s & M) << 20)`,
+  `M = 2**20 - 1`.
 Example:
   >>> MOD = 998244353  # range affine a_i = b a_i + c, range sum
   >>> def op(x, y):  # node: (sum, len)
@@ -35,13 +36,13 @@ Example:
   ([11, 15, 7, 9], (22, 2))
 Notes: Check the three laws on paper before coding: tags compose,
   act on a whole node in $O(1)$, and distribute over `op`. Sums
-  need `len`; products of tags must stay in a small family. The
+  need `len`; composed tags must stay in one small family. The
   new tag goes on the outside: `composition(new, old)`. If a tag
   cannot update a node's summary without looking inside (chmin
   with sum, `%=` with sum), use segment tree beats. Point apply is
   `apply(i, i + 1, f)`. `max_right` finds e.g. the first index
-  after `l` with value `<= x` under range adds: `pred = v > x` on
-  the min.
+  `>= l` with value `<= x` under range adds: `pred = v > x` on
+  the min. Use an int `INF` such as `1 << 62`, not `math.inf`.
 Source: AtCoder Library lazy_segtree (CC0).
 Status: stress-tested against brute force
 """

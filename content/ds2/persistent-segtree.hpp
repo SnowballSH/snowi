@@ -5,8 +5,8 @@
  *   array. `kth(a, b, k)` reads version `b` minus version `a` as
  *   counts and returns the smallest `i` whose count over `[0, i]`
  *   exceeds `k`: the `k`-th smallest (0-indexed) value of a
- *   subarray when version `i` counts the compressed values of
- *   `a[0, i)`.
+ *   subarray when version `j` counts the compressed values of
+ *   `a[0, j)`.
  * Precondition: 0-indexed, half-open ranges, `n >= 1`. For `kth`,
  *   every count of `b` minus `a` is $>= 0$ and `0 <= k <` their
  *   total.

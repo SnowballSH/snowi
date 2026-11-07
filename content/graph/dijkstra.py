@@ -15,7 +15,7 @@ Usage:
   dj = Dijkstra(adj, [s])  # or several sources
   d = dj.dist[t]; p = dj.path(t)
 Tweak: Heap keys are ints `d * n + v` (1.5 times faster than
-  tuples; big ints past $2^63$). Float weights: tuples.
+  tuples while below $2^63$). Float weights: tuples.
 Example:
   >>> adj = [[(1, 4), (2, 1)], [(3, 1)], [(1, 2), (3, 5)], [], []]
   >>> dj = Dijkstra(adj, [0])
@@ -33,7 +33,7 @@ Notes: Think of it for "minimum total cost/time" with non-negative
   time modulo $k$): run on pairs (vertex, state) numbered
   `v * K + state`. Weights 0 and 1 only: 0-1 BFS with a deque (push
   front on weight 0, back on weight 1) is $O(n + m)$. Edge
-  `(u, v, w)` lies on some shortest `s`-`t` path iff
+  `(u, v, w)` lies on some shortest `s`-`t` walk iff
   $d_s (u) + w + d_t (v) = d_s (t)$ (run from `s` and, reversed, from
   `t`). Count shortest paths by DP over the tight edges
   ($d(u) + w = d(v)$) in topological order: increasing `dist` is one

@@ -10,8 +10,8 @@ Precondition: Entries in `[0, MOD)`, `n` $>= 0$. `poly_inv` needs
   $a_0 != 0$, `poly_log` needs $a_0 = 1$, `poly_exp` needs
   $a_0 = 0$; `poly_pow` takes any `a` and $k >= 0$. `poly_divmod`
   needs `b[-1]` $!= 0$. Lengths up to $2^22$ (NTT size).
-Time: $O(n log n)$. For $n = 5 dot 10^5$: inverse 0.55 s, log 0.95
-  s, exp 1.2 s, pow 2.2 s (`conv` of that length: 0.35 s). Newton
+Time: $O(n log n)$. For $n = 5 dot 10^5$: inverse 1.8 s, log 3.1
+  s, exp 3.9 s, pow 7 s (`conv` of that length: 1.2 s). Newton
   steps and NTT sizes round up to powers of two: $n = 2^18$ takes
   half as long, $n = 2^18 + 1$ as long as $5 dot 10^5$.
 Usage:

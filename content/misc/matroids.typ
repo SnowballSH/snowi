@@ -75,7 +75,7 @@ greedy; with two such rules at once, use matroid intersection.
   bracket sequence of length $2n$ are exactly the $n$-sets with at
   least $i$ among the first $2i - 1$ positions.
 ]
-- Not matroids: matchings of a general graph as edge sets,
+- Not matroids: matchings as edge sets (even bipartite),
   knapsack, paths, independent sets of a graph ("no two adjacent").
 
 
@@ -193,7 +193,7 @@ of the $M_j$ against "each $e$ used at most once".
 - Nash-Williams, Tutte: a graph has $k$ edge-disjoint spanning trees
   iff every partition of $V$ into $p$ parts has at least $k(p - 1)$
   edges between parts. Its edges split into $k$ forests iff every
-  vertex set $X$ spans at most $k(|X| - 1)$ edges.
+  vertex set $X != emptyset$ spans at most $k(|X| - 1)$ edges.
 - Two linear matroids with vectors $u_i$ and $v_i$ over a large
   prime field: with random nonzero $a_i, b_i$, the rank of the
   vectors $(a_i u_i, b_i v_i)$ is, with high probability, the most

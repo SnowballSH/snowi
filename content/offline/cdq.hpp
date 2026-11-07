@@ -7,8 +7,8 @@
  * Time: $O(n log^2 n)$.
  * Usage:
  *   vi cnt = dominance(pts); // pts: vector<array<int, 3>>
- * Tweak: Strict `<` in `b`: use `<` in the sweep; in `c`:
- *   `query(c[x])`. Then equal points never count each other, so
+ * Tweak: Strict in `b`: `<` in the sweep; in `c`:
+ *   `query(c[idx[i]])`. Then equal points never count each other, so
  *   drop the final loop. Strict in `a` only: make it `b` or `c`.
  *   Weights: add and undo `wt` instead of 1, with `ll` counts;
  *   copies of a point get `cnt[last] + wt[last] - wt[i]`. DP over

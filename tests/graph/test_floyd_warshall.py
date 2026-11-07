@@ -85,6 +85,25 @@ d = [[10**18, -1], [5, 10**18]]
 lib.floyd_warshall(d, 10**18)
 check_eq(d, [[0, -1], [5, 0]])
 
+# Weights at the bound n * max|w| < INF: restricted paths can be much
+# longer than every distance and must not be lost as unreachable.
+chain = [[INF] * 5 for _ in range(5)]
+for i, x in enumerate([1, 1, 1, -1]):
+  chain[i][i + 1] = x * ((INF - 1) // 5)
+lib.floyd_warshall(chain, INF)
+check_eq(chain[0][4], 2 * ((INF - 1) // 5))
+for _ in range(iters(500)):
+  n = rnd(2, 6)
+  big = (INF - 1) // n
+  w = [[INF] * n for _ in range(n)]
+  for _ in range(rnd(1, 12)):
+    a, b = rnd(0, n - 1), rnd(0, n - 1)
+    x = rnd(big - 9, big) if rnd(0, 1) else rnd(-big, big)
+    w[a][b] = min(w[a][b], x)
+  d = [row[:] for row in w]
+  lib.floyd_warshall(d, INF)
+  check_eq(d, brute(w))
+
 # Large, positive weights: certify against the edges directly.
 n = 400
 w = [[INF] * n for _ in range(n)]

@@ -9,8 +9,8 @@ Precondition: Arithmetic modulo the prime `MOD`; values in
   `[0, MOD)`. `lagrange`: `y` not empty, `len(y)` $<=$ `MOD`, any
   integer `x`. `interpolate`: the `xs` are distinct and in
   `[0, MOD)`.
-Time: $O(n)$ for `lagrange`, 0.1 s for $n = 10^6$; $O(n^2)$ for
-  `interpolate`, 0.6 s for $n = 5000$.
+Time: $O(n)$ for `lagrange`, 0.2 s for $n = 10^6$; $O(n^2)$ for
+  `interpolate`, 2 s for $n = 5000$.
 Usage:
   s = lagrange([0, 1, 5, 14], 10)  # sum_(i <= 10) i^2: 385
   c = interpolate(xs, ys)  # f(t) = sum_k c[k] t^k

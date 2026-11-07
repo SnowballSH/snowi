@@ -8,7 +8,7 @@
  *   $k >= 0$. Entries of `s` and `c` are below `MOD` in absolute
  *   value, so a hand-written `c = {2, -1}` is fine. A recurrence of
  *   order $L$ is found from $2L$ terms; give a margin, as fewer
- *   terms give a shorter wrong answer.
+ *   terms can give a wrong answer.
  * Time: $O(n^2)$ for $n$ terms; $O(L^2 log k)$ for `linear_rec`.
  *   About 0.4 s for $L = 1000$ and $k = 10^18$, 0.3 s for $n = 10^4$.
  * Usage:
