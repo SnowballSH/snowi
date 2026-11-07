@@ -62,8 +62,8 @@ T op(T a, T b) {
   copies of the value just below.]
 #fact[Prefix maxima][Records of a range, or
   $sum_i max(a_l, dots, a_i)$, under point updates. Node `v` keeps
-  its max and `R[v] = f(right, max(left))`, where `f(u, h)` is the
-  answer for `u` entered with running maximum `h`. `f` follows one
+  its max and `R[v] = f(right, max(left))`, where `f(v, h)` is the
+  answer for `v` entered with running maximum `h`. `f` follows one
   child: if `h >= max(left)`, the left part is all `h` (no
   records) and recurse right; else return `f(left, h) + R[v]`.
   So `f` is $O(log n)$, a pull-up calls it once ($O(log^2 n)$ per
@@ -131,8 +131,8 @@ T op(T a, T b) {
   accumulators, `b = op(t[--r], b)`. Swapping them passes tests
   with max or sum and fails with matrices.
 - $-infinity$ arithmetic: `LLONG_MIN + x` overflows. Use
-  `-INF = LLONG_MIN / 4` and clamp with `max(-INF, ...)`, or `int`
-  with `min(INF, ...)`.
+  `-INF = LLONG_MIN / 4` and clamp with `max(-INF, ...)`; for
+  (min, +), `INF = LLONG_MAX / 4` and `min(INF, ...)`.
 - The identity really must be neutral: the all-zero matrix is not
   the (max, +) identity, and padding leaves hold `e`.
 - In C++ a member function named `max` hides `std::max` inside the
@@ -147,9 +147,9 @@ T op(T a, T b) {
   add part.
 
 === More patterns
-- "Count positions with value `> 0`" under range add when the
-  global minimum is known to be 0: compare with the node minimum
-  instead, a predicate that survives lazy adds.
+- "Count positions with value `> 0`" under range add, values
+  staying $>= 0$: count the values equal to the node minimum
+  instead (Min and its count); that count survives lazy adds.
 - "Best total with exactly $k$ items" on a range, $g(k)$ concave:
   a node stores the whole sequence $g$ and merges by (max, +)
   convolution, which for concave sequences merges the sorted

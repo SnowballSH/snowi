@@ -11,8 +11,8 @@
  * Tweak: Real values: `ll` becomes `double`, `inf = HUGE_VAL` and
  *   `div(a, b) = a / b`.
  * Example:
- *   // dp[j] = max over i < j of dp[i] + a[i] * b[j], with the
- *   // b[j] in any order (a monotone stack needs sorted b).
+ *   // dp[j] = max over i < j of dp[i] + a[i] * b[j], with a[i]
+ *   // and b[j] in any order (a monotone hull needs sorted a).
  *   LineContainer lc;
  *   lc.add(a[0], dp[0]);
  *   rep(j, 1, n) {

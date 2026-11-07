@@ -32,5 +32,24 @@ int main() {
   rep(i, 1, n) CHECK(c.join(i - 1, i));
   rep(i, 0, n) CHECK(!c.join(0, i));
   CHECK_EQ(c.size(0), n);
+  { // Union by size keeps depth <= log2 n before any compression,
+    // and find makes the deepest vertex a child of the root.
+    int m = 1 << 12;
+    DSU u(m);
+    rep(i, 1, m) {
+      if (i % 2) u.join(i, 0);
+      else u.join(0, i);
+    }
+    rep(x, 0, m) {
+      int depth = 0;
+      for (int y = x; u.e[y] >= 0; y = u.e[y]) depth++;
+      CHECK(depth <= 12);
+    }
+    DSU w(m); // doubling: m - 1 is 12 deep until a find
+    for (int len = 1; len < m; len *= 2)
+      for (int i = 0; i + len < m; i += 2 * len) w.join(i, i + len);
+    CHECK_EQ(w.find(m - 1), 0);
+    CHECK_EQ(w.e[m - 1], 0);
+  }
   puts("OK ds/dsu");
 }

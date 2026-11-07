@@ -29,7 +29,7 @@ Notes: Use it whenever a search or divide and conquer must undo
   unions: offline dynamic connectivity (segment tree over time),
   Mo's algorithm with rollback, or trying an edge set and then
   restoring. No path compression: it would make undo expensive,
-  and union by size alone keeps depth below $log_2 n$.
+  and union by size alone keeps depth at most $log_2 n$.
 Source: kactl RollbackUF (CC0).
 Status: stress-tested against brute force
 """

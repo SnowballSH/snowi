@@ -40,7 +40,7 @@ int main() {
   stress(1500, 50, 1000, 100);
   stress(800, 1'000'000'000, 1'000'000'000'000'000'000, 1'000'000'000);
   stress(300, (1LL << 62) - 1, (1LL << 62) - 1, 1);
-  { // minimum by negation (the Tweak)
+  { // minimum by negation
     LineContainer lc;
     for (auto [k, m] : {pair<ll, ll>{1, 0}, {-1, 0}, {0, 2}}) lc.add(-k, -m);
     rep(x, -5, 6) CHECK_EQ(-lc.query(x), min({(ll)x, (ll)-x, 2LL}));

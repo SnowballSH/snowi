@@ -17,7 +17,7 @@
  *   push once per `join`, pop back to size `t / 2` in `rollback`.
  * Example:
  *   // Offline dynamic connectivity: an edge alive during [l, r)
- *   // is stored in O(log q) nodes `at[v]` of a segment tree over
+ *   // is stored in O(log q) nodes at[v] of a segment tree over
  *   // query times; each leaf answers its query.
  *   void dfs(int v, int lo, int hi) {
  *     int t = d.time();
@@ -33,7 +33,7 @@
  *   unions: offline dynamic connectivity (segment tree over time),
  *   Mo's algorithm with rollback, or trying an edge set and then
  *   restoring. No path compression: it would make undo expensive,
- *   and union by size alone keeps depth below $log_2 n$.
+ *   and union by size alone keeps depth at most $log_2 n$.
  * Source: kactl RollbackUF (CC0).
  * Status: stress-tested against brute force
  */

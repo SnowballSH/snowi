@@ -50,7 +50,7 @@ check_eq(lc.query(7), INF)
 lc.add_segment(2, -3, 7, 8)
 check_eq(lc.query(7), 11)
 
-# Maximum by negation (the Tweak).
+# Maximum by negation.
 lc = lib.LiChao(list(range(-5, 6)))
 for k, m in [(1, 0), (-1, 0), (0, 2)]:
   lc.add_line(-k, -m)

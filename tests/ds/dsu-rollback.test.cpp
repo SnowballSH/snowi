@@ -46,5 +46,18 @@ int main() {
   CHECK_EQ(d.size(n - 1), n);
   d.rollback(0);
   rep(i, 0, n) CHECK_EQ(d.size(i), 1);
+  { // Union by size: depth <= log2 n. Joining the big set under the
+    // singleton (a flipped comparison) would build a path here.
+    RollbackDSU u(1 << 12);
+    rep(i, 1, 1 << 12) {
+      if (i % 2) u.join(i, 0);
+      else u.join(0, i);
+    }
+    rep(x, 0, 1 << 12) {
+      int depth = 0;
+      for (int y = x; u.e[y] >= 0; y = u.e[y]) depth++;
+      CHECK(depth <= 12);
+    }
+  }
   puts("OK ds/dsu-rollback");
 }

@@ -1,4 +1,4 @@
-from testlib import Timer, check_eq, iters, load, rnd
+from testlib import Timer, check, check_eq, iters, load, rnd
 
 lib = load("ds/dsu-rollback")
 
@@ -41,4 +41,17 @@ with Timer("2e5 joins + 2e5 finds + rollbacks"):
   roots = set(d.find(i) for i in range(n))
 check_eq(len(roots), n - merges)
 check_eq(sum(d.size(r) for r in roots), n)
+# Union by size: depth <= log2 n. A flipped comparison would turn
+# one of these two join orders into a path.
+d = lib.RollbackDSU(1 << 12)
+for i in range(1, 1 << 12):
+  if i % 2:
+    d.join(i, 0)
+  else:
+    d.join(0, i)
+for x in range(1 << 12):
+  depth = 0
+  while d.parent[x] != x:
+    x, depth = d.parent[x], depth + 1
+  check(depth <= 12, f"depth {depth}")
 print("OK ds/dsu-rollback")

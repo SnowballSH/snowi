@@ -1,6 +1,6 @@
 """
 Title: Segment tree
-Description: Bottom-up point assign and range fold over a monoid.
+Description: Bottom-up point assign, range query over a monoid.
   The largest `r` with `pred(query(l, r))` true is
   `max_right(l, pred)`, and the smallest such `l` is
   `min_left(r, pred)`.
@@ -40,7 +40,9 @@ Notes: Think of it when a problem has point updates and range
   `s <= x` is monotone only when all values are `>= 0`. The query
   keeps a left and a right accumulator, so order is preserved:
   swapping them is invisible for max or sum but wrong for maps.
-  Leaves past `n` hold `e`, so `e` must be a true identity.
+  Leaves past `n` hold `e`, so `e` must be a true identity. Use an
+  int `INF` such as `1 << 62`, not `math.inf`: a float among the
+  ints made a max tree 1.6 times slower.
 Source: AtCoder Library segtree (CC0); kactl (CC0).
 Status: stress-tested against brute force
 """
