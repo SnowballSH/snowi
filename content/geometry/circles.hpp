@@ -26,7 +26,7 @@
  *   auto [o, rad] = circumcircle(a, b, c);
  *   auto [center, radius] = mec(pts);
  *   double area = circle_poly(c, r, poly);
- * Tweak: For larger coordinates scale `eps` (the noise is about
+ * Tweak: For larger coordinates scale `eps` (to about
  *   $10^(-13)$ times the largest coordinate); `mec` has no `eps`.
  *   More precision: `P<long double>` with `long double` radii.
  * Example:

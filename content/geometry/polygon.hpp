@@ -32,7 +32,7 @@
  *     b += gcd(abs(d.x), abs(d.y));
  *   }
  *   ll inside = (abs(area2(poly)) - b + 2) / 2;
- * Notes: Pick's theorem: a polygon with lattice vertices has area
+ * Notes: Pick's theorem: a simple lattice polygon has area
  *   $A = I + B/2 - 1$, where $I$ counts the lattice points strictly
  *   inside and $B = sum gcd(|Delta x|, |Delta y|)$ over the edges
  *   counts those on the boundary. Input given clockwise flips the

@@ -32,10 +32,10 @@ Example:
 Notes: The answer only ever involves hull vertices when the
   objective is a maximum of a linear function (max of $a x + b y$
   over points), a farthest pair, a smallest enclosing shape or
-  "mixtures" (any weighted average of options). Points given as
-  subarray or window data become hull points after a rewrite: "add
-  $x$ to every element" turns each candidate into a line, and the
-  upper envelope of lines is a hull of points (slope, value).
+  "mixtures" (any weighted average of options). If every element
+  gets $x$ added, each candidate (a subarray, a window) is a line
+  in $x$ with its length as slope, and the upper envelope of these
+  lines is the upper hull of the points (slope, intercept).
   Decide whether collinear points belong to the hull and whether
   touching counts before coding. Points that arrive sorted by `x`,
   then `y`, without duplicates, can skip the sort (each chain is

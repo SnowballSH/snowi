@@ -24,7 +24,7 @@ Usage:
   o, rad = circumcircle(a, b, c)
   center, radius = mec(pts)
   area = circle_poly(c, r, poly)
-Tweak: For larger coordinates scale `eps` (the noise is about
+Tweak: For larger coordinates scale `eps` (to about
   $10^(-13)$ times the largest coordinate); `mec` has no `eps`.
 Example:
   >>> circle_line((0, 0), 5, (3, -10), (3, 10))

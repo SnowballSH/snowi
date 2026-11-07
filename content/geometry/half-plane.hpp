@@ -32,7 +32,9 @@
  *   results without interior, so to find a point on the closed
  *   side of every line (a single point may be the answer),
  *   first move each line outward by a little more than `eps`. A
- *   vertex on the box means the true intersection is unbounded.
+ *   vertex on the box means the true intersection is unbounded or
+ *   reaches past the box (nearly parallel lines through points up
+ *   to $10^4$ can meet beyond $10^12$).
  *   Doubles near the box at $10^9$ are only good to about
  *   $10^(-7)$: without the rounding term in `out`, a line
  *   through a box corner would split it into two vertices.

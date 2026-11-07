@@ -31,8 +31,8 @@ Notes: The sign of a cross product answers "left or right turn?",
   coordinates above about $10^7$ (distinct directions round to the
   same float); `angle_sort` sorts by `atan2`, then sorts each run of
   keys within $10^(-12)$ of each other with `angle_cmp`. That is
-  about 5 times faster than `cmp_to_key` alone, and no worse than it
-  when every key ties. To sort around a center `c`, sort
+  about 4 times faster than `cmp_to_key` alone, and only slightly
+  slower than it when every key ties. To sort around a center `c`, sort
   `(x - cx, y - cy, i)`. In hot loops inline the arithmetic on local
   variables instead of calling these.
 Source: kactl Point (CC0); half-plane angle order is folklore.

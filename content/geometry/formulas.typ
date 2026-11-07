@@ -6,7 +6,7 @@ $x = (w times v)\/(u times v)$ and $y = (u times w)\/(u times v)$
 passes through a point.
 
 === Polygons
-#full[#fact[Pick][A lattice polygon has area $A = I + B\/2 - 1$ with
+#full[#fact[Pick][A simple lattice polygon has area $A = I + B\/2 - 1$ with
   $I$ lattice points inside and
   $B = sum_i gcd(|Delta x_i|, |Delta y_i|)$ on the boundary. A
   lattice segment holds $gcd(|Delta x|, |Delta y|) + 1$ lattice
@@ -17,7 +17,9 @@ passes through a point.
   into diagonals.#full[ With $A, B, C, D$ from four sets, maximise
   $u times w$ over $u in C - A$, $w in D - B$ (Minkowski sums): for
   a vertex $u$ the best $w$ is extreme in direction $u^perp$, and
-  it turns monotonically with $u$.]]
+  it turns monotonically as $u$ turns about the origin: visit the
+  vertices of $C - A$ by angle, starting after the widest angular
+  gap (polygon order works only if $C - A$ contains the origin).]]
 #fact[Convex][A closed polygon is strictly convex iff every turn
   is a strict left turn and its edge directions go around once
   (a pentagram goes around twice). Three or more lengths are the
@@ -129,7 +131,7 @@ its farthest vertex), the smallest enclosing rectangle by area or
 perimeter (one side on an edge, four pointers), the largest
 triangle on the hull, the distance and the common tangents of two
 convex polygons, and for each vertex the range of vertices beyond
-a line through it.
+a line through it whose direction turns with the vertex.
 ]
 
 === Reflections
@@ -228,10 +230,11 @@ a line through it.
   homogeneous in $Delta$, so the same holds.
 - Rectilinear Steiner tree of terminals on the boundary of a
   rectangle: some optimal tree is the boundary minus its longest
-  gap between terminals, or one full line across plus boundary
-  pieces and stubs, or several parallel full lines, or an L from
-  one side to the adjacent one that cuts off a corner (Cohoon,
-  Richards, Salowe); each is a linear DP along the boundary.
+  gap between terminals, or boundary pieces plus one of: a full
+  line across with stubs (perpendicular segments from terminals to
+  it), several parallel full lines, or an L with stubs that runs
+  between adjacent sides and cuts off a corner (Cohoon, Richards,
+  Salowe); each is a linear DP along the boundary.
 - Pairs closer than $d$ in $k$ dimensions: hash points into
   half-open cells of side $s$. Points closer than $d$ lie in cells
   whose indices differ by at most $ceil(d\/s)$ per axis, and two
