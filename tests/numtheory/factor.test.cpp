@@ -86,6 +86,12 @@ int main() {
     CHECK(!is_prime(n));
     check_factor(n);
   }
+  // Strong pseudoprimes to all bases but one, in order of the missing
+  // base: dropping any base of A must fail here.
+  for (ll n :
+       {1921077350011LL, 1411807385341LL, 443538368977861LL, 4341937413061LL,
+        5517315475561LL, 3933464309633LL, 107528788110061LL})
+    CHECK(!is_prime(n));
   rep(it, 0, iters(20000)) {
     ll n = rnd(1, LLONG_MAX >> rnd(0, 62));
     CHECK_EQ(is_prime(n), oracle_prime(n));

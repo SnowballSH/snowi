@@ -68,6 +68,12 @@ pseudoprimes += [341550071728321, 3825123056546413051, 561, 41041]
 for n in pseudoprimes + [825265, 321197185, 5394826801]:
   check(not lib.is_prime(n))
   check_factor(n)
+# Strong pseudoprimes to all bases but one, in order of the missing
+# base: dropping any base must fail here.
+almost = [1921077350011, 1411807385341, 443538368977861, 4341937413061]
+almost += [5517315475561, 3933464309633, 107528788110061]
+for n in almost:
+  check(not lib.is_prime(n))
 for _ in range(iters(5000)):
   n = rnd(1, (1 << 64) >> rnd(0, 63))
   check_eq(lib.is_prime(n), oracle_prime(n))

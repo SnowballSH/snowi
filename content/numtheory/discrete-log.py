@@ -30,9 +30,9 @@ Notes: When $gcd(a, m) = 1$ all solutions are
   sums modulo $p - 1$: $x^k equiv b$ becomes the linear congruence
   $k y equiv log_g b$ for $x = g^y$. Modulo $2^k$ with large `k`
   skip BSGS. Even `a`: $a^x equiv 0$ once $x >= k$, so try
-  $x <= k$. Odd `a`: the order is a power of 2 and
-  $v_2 (a^(2^j) - 1)$ strictly grows with `j`, so fix the bits of `x` from
-  low to high (UCup S4-9 A "Cipher").
+  $x <= k$. Odd `a`: the order is a power of 2 and the power of 2
+  dividing $a^(2^j) - 1$ strictly grows with `j`, so fix the bits
+  of `x` from low to high (UCup S4-9 A "Cipher").
 Source: Shanks (1971); gcd reduction as on cp-algorithms; kactl
   ModLog (CC0).
 Status: stress-tested against iterating the powers
