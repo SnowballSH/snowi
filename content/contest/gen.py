@@ -8,7 +8,7 @@ Description: Seeded random inputs. Edge lists are 0-indexed,
   and `PARENT` trees are shallow (depth about 1100 and 40 at
   $n = 2 dot 10^5$): also test `PATH` and `CATERPILLAR`.
 Precondition: `tree`, `graph`: `n >= 1`. `array(n, lo, hi,
-  True)`: `hi - lo + 1 >= n`. `graph(n, m)`: `m <= n(n-1)/2`,
+  True)`: `hi - lo + 1 >= n`. `graph`, `dag`: `m <= n(n-1)/2`,
   and `m >= n - 1` if connected.
 Time: $O((n + m) log n)$.
 Usage:
@@ -31,12 +31,13 @@ Example:
   e = g.mix(e, n)  # e.g. a binary tree, then mix
   tests = g.rnd(1, 3)  # multi-test: print it, then the cases
 Notes: `UNIFORM` and `PARENT` trees (rooted at vertex 0) miss
-  deep-recursion crashes and the worst cases of HLD and
-  small-to-large merging: use `PATH` and `CATERPILLAR` also as
-  spanning trees of `graph`. `PARENT` hangs each vertex below a
-  random earlier one; `CATERPILLAR` is a path with leaves on it.
-  Small value ranges and alphabets force ties, hash collisions
-  and periodic strings.
+  deep-recursion crashes and the inputs where a wrong heavy child
+  (HLD) or merge direction (small to large) is slow: use `PATH`
+  and `CATERPILLAR`, also as spanning trees of `graph`; a binary
+  tree (Example) has the most light edges. `PARENT` hangs each
+  vertex below a random earlier one; `CATERPILLAR` is a path
+  with leaves on it. Small value ranges and alphabets force
+  ties, repeated keys and periodic strings.
   Keep `n` tiny (about 8) so the brute force is fast and a
   failing input is short to read. Multi-test input: print `T`,
   then each case from the same `g`, keeping the sum of sizes

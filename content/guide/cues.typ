@@ -139,7 +139,8 @@ _String facts_.
   [squares, cubes, repetitions], [runs: fewer than $n$ of them],
   [delete one letter, compare the results], [runs of equal letters],
   [is it a subsequence, embeddings], [greedy leftmost embedding],
-  [matching with wildcards], [FFT, one product per letter],
+  [matching with wildcards], [FFT: three products (Wildcards)],
+  [mismatches at every alignment], [FFT, one product per letter],
   [lengths $10^18$ from repeated prefixes], [Euclid-like shrinking],
 )
 

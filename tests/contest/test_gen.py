@@ -258,15 +258,15 @@ def test_graphs():
 def test_large():
   g = Gen(rnd(0, 10**18))
   n = 200_000
-  # Each block takes about a second; the bounds catch quadratic or
-  # 5x slower code.
+  # Idle: trees 0.8 s, graph and dag 1.9 s, the rest 0.4 s; the
+  # bounds catch quadratic code and allow for a loaded machine.
   with Timer("5 trees, n = 2e5") as t:
     trees = [g.tree(n, shape) for shape in SHAPES]
   check(t.seconds < 5, "trees are slow")
   check(all(is_tree(n, e) for e in trees))
   with Timer("graph and dag, n = 2e5, m = 4e5") as t:
     e, d = g.graph(n, 2 * n), g.dag(n, 2 * n)
-  check(t.seconds < 6, "graph or dag is slow")
+  check(t.seconds < 10, "graph or dag is slow")
   check(simple(n, e) and components(n, e) == 1 and acyclic(n, d))
   k = 700
   with Timer("complete graph, 244650 edges, and a tight array") as t:

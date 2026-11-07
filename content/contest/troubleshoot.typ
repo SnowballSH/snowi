@@ -62,7 +62,7 @@
 === C++ pitfalls
 - Overflow-free test: $a b > c$ iff `a > c / b` ($b > 0$,
   $c >= 0$).
-- `pow` and `(ll)sqrt(x)` are inexact above $2^53$: $x = 10^18 - 1$
+- `pow` and `(ll)sqrt(x)` are unsafe above $2^52$: $x = 10^18 - 1$
   gives $10^9$. Fix roots up and down with integer loops; compute
   powers with integers.
 ]
@@ -79,6 +79,8 @@
 sys.setrecursionlimit(1 << 30)
 threading.stack_size(1 << 28)
 threading.Thread(target=main).start()")
+#full[These lines replace the final `main()`. An exception in the
+  thread still exits with code 0, so the judge says WA, not RTE.]
 - `s += c` in a loop is quadratic: $10^6$ characters took over a
   minute. Append to a list and `"".join` it at the end.
 - Dicts and sets with tuple keys are about 3 times slower than

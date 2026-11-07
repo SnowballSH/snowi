@@ -8,7 +8,7 @@ candidate tools, and rewrite the problem until one fits.
   columns: (auto, auto, 1fr),
   [*$n$ up to*], [*time*], [*typical tools*],
   [10–12], [$n!$, $n! dot n$], [all orders, backtracking],
-  [20–25], [$2^n n$], [bitmask DP; to 40: meet in the middle],
+  [20–25], [$2^n$, $2^n n$], [bitmask DP; to 40: meet in the middle],
   [500], [$n^3$], [interval DP, Floyd-Warshall, Hungarian],
   [5000], [$n^2$], [all pairs, 2D DP],
   [$10^5$–$10^6$], [$n log n$, $n sqrt(n)$], [sort, trees, sweeps, Mo],
@@ -19,7 +19,7 @@ About $10^8$ simple operations per second in #box[C++], 3 to 10 times
 fewer in PyPy. Count the queries and the sum of $n$ over tests. Small
 values or a small $k$ are budgets too (index by value, $2^k$).
 
-=== Step 2: the lane
+=== Step 2: the kind of problem
 #fact[A. Count][Ways, probabilities, expectations mod $p$. Sum
   of contributions of single elements or pairs? Complement or
   inclusion-exclusion? A canonical order that builds each object
@@ -101,10 +101,10 @@ vertices, all $n^2$ pairs): keep it, cut its cost with step 4.
   or a binary search on reals; "any valid answer" means a
   construction.
 - Online queries (decoded with the last answer) rule out the
-  offline tools of lane D. Interactive: compare the query limit
+  offline tools of D. Interactive: compare the query limit
   with $log_2$ of the number of candidates (`misc/interactive`).
 
-=== More questions per lane
+=== More questions per kind
 - A: a sum over a structure (subsets, paths, trees) of a product:
   DP over that structure. Symmetric objects: Burnside. Labelled
   components: exp and log of generating functions (_Generating
@@ -126,7 +126,7 @@ vertices, all $n^2$ pairs): keep it, cut its cost with step 4.
   Grundy values. Cycles: retrograde analysis with draws.
   Randomness: expectations over the chance moves.
 
-=== Worked lanes (UCup S5 Extra Stage 1)
+=== Worked examples (UCup S5 Extra Stage 1)
 - "At least one 0 in $[l, r]$", min cut correct but too slow
   (B): complement to "all ones" and think in runs; DP over the
   runs with a range-add, range-max segment tree.

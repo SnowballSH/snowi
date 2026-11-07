@@ -4,6 +4,10 @@
  *   silently giving wrong answers.
  * Usage:
  *   int n; cin >> n; vi a(n); for (int& x : a) cin >> x;
+ * Notes: Input read until end of file (`while (cin >> x)`,
+ *   `getline`) aborts at the end: delete the `cin.exceptions`
+ *   line. After `sync_with_stdio(0)` never mix `printf` or
+ *   `scanf` with `cin` and `cout`.
  * Source: kactl (CC0).
  * Status: compiled and run by tests/contest/template.test.cpp
  */
