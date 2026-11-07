@@ -7,8 +7,8 @@ Description: Automaton of a set of patterns on their trie.
 Precondition: Non-empty patterns of letters `'a'` to `'z'`;
   duplicates are fine.
 Time: $O(26 L)$ to build, $L$ the total pattern length; $O(|t| + L)$
-  for `count(t)`. PyPy, 26 letters: about 0.3 s and 25 MB for $L =
-  |t| = 2 dot 10^5$, 2 s and 110 MB for $L = |t| = 10^6$.
+  for `count(t)`. PyPy, 26 letters: about 0.5 s and 95 MB for $L =
+  |t| = 2 dot 10^5$, 3 s and 255 MB for $L = |t| = 10^6$.
 Usage:
   ac = AhoCorasick(pats)  # list of str
   occ = ac.count(t)  # occ[i]: occurrences of pats[i]

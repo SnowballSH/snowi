@@ -68,7 +68,7 @@ int main() {
       CHECK_EQ(total, distinct_substrings(s));
     }
   }
-  // Any sequence: big values, separator -1 as in the Tweak.
+  // Any sequence: big values, with -1 as the separator.
   rep(it, 0, iters(500)) {
     vector<ll> a = rnd_vec((int)rnd(0, 20), 0, 1), b = rnd_vec(2, 0, 1);
     string sa, sb;

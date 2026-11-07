@@ -123,6 +123,46 @@ for rounds, maxn, V in ((2000, 12, 2), (2000, 25, 4), (300, 60, 50)):
     p = random_points(rnd(0, maxn), -V, V)
     check_eq(lib.dominance(p), brute(p))
 stress_weighted(1500, 20, 2)
+
+
+def strict_from_tweak(strict_b, strict_c):
+  """dominance with the Tweak's strict comparisons, final loop dropped."""
+  src = (CONTENT / "offline/cdq.py").read_text()
+  edits = [
+    (
+      "  for i in range(n - 2, -1, -1):  # copies count as the last\n"
+      "    if p[order[i]] == p[order[i + 1]]:\n"
+      "      cnt[order[i]] = cnt[order[i + 1]]\n",
+      "",
+    )
+  ]
+  if strict_b:
+    edits.append(("b[idx[k]] <= b[x]", "b[idx[k]] < b[x]"))
+  if strict_c:
+    edits.append(("query(c[x] + 1)", "query(c[x])"))
+  for old, new in edits:
+    check_eq(src.count(old), 1, old)
+    src = src.replace(old, new)
+  namespace = {"Fenwick": lib.Fenwick}
+  exec(compile(src, "cdq.py strict", "exec"), namespace)
+  return namespace["dominance"]
+
+
+for sb, sc in ((True, False), (False, True), (True, True)):
+  strict = strict_from_tweak(sb, sc)
+  for _ in range(iters(1000)):
+    p = random_points(rnd(0, 14), -2, 2)
+    want = [
+      sum(
+        j != i
+        and p[j][0] <= p[i][0]
+        and (p[j][1] < p[i][1] if sb else p[j][1] <= p[i][1])
+        and (p[j][2] < p[i][2] if sc else p[j][2] <= p[i][2])
+        for j in range(len(p))
+      )
+      for i in range(len(p))
+    ]
+    check_eq(strict(p), want, p)
 stress_time(1500, 30, 5)
 stress_time(200, 120, 1000)
 

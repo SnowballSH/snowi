@@ -17,8 +17,8 @@
  *   ll d = sam.distinct(); // distinct non-empty, O(n)
  * Tweak: Large alphabet or tight memory:
  *   `SuffixAutomaton<map<int, int>>`, passing any `int` to
- *   `extend`. Missing edges then read as 0 (`next[v][c]` inserts them): test edges by value, never
- *   with `count(c)`.
+ *   `extend`. Missing edges then read as 0 (`next[v][c]` inserts
+ *   them): test edges by value, never with `count(c)`.
  * Example:
  *   // Longest common substring of s and t: walk t, keeping the
  *   // longest suffix of the prefix read so far that occurs in s.
