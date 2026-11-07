@@ -106,8 +106,10 @@ for it in range(iters(200)):
       ]
       check_eq(t[S], max(a[T] for T in inside), op)
 
-f = [0] * 7 + [1]
-check_eq(lib.bit_conv(f, f, "&"), f)
+f, e, g = [0] * 7 + [1], [1] + [0] * 7, rnd_list(8, 1, MOD - 1)
+check_eq(lib.bit_conv(f, g, "&"), g)  # Notes: identity of AND
+check_eq(lib.bit_conv(e, g, "|"), g)  # and of OR
+check(lib.bit_conv(f, g, "|") != g)
 
 n = 1 << 20
 a = rnd_list(n, 0, MOD - 1)

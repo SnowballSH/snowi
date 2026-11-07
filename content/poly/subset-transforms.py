@@ -8,8 +8,8 @@ Description: On arrays indexed by masks, `bit_transform` with `"|"`
 Precondition: `a` and `b` have the same length $2^n$ (pad with
   zeros), entries in `[0, MOD)`; results are modulo `MOD`.
 Time: $O(n 2^n)$ for the transforms and `bit_conv`, 0.1 to 0.2 s
-  per transform at $n = 20$. $O(n^2 2^n)$ for `subset_conv`: 0.8 s
-  at $n = 18$, but 3.5 s and 450 MB at $n = 20$ (C++: 1 s).
+  per transform at $n = 20$. $O(n^2 2^n)$ for `subset_conv`: 1.7 s
+  at $n = 18$, but 7 s and 450 MB at $n = 20$ (C++: 1 s).
 Usage:
   bit_transform(a, "|")  # a[S] = sum of a[T], T in S
   c = bit_conv(a, b, "^")  # c[i ^ j] += a[i] b[j]
@@ -45,8 +45,8 @@ Notes: The loops leave values unreduced (at most $2^n$ times
   "split the set into disjoint parts" or covers by non-overlapping
   pieces (subset convolution); the same random XOR move repeated
   $k$ times (power in the Walsh-Hadamard domain). OR is subsets,
-  AND is supersets; check with $f = g = [S = "all"]$, whose AND
-  convolution is $f$.
+  AND is supersets; check that $[S = "all"]$ is the identity of
+  AND ($[S = 0]$ of OR).
 Source: kactl FastSubsetTransform (CC0); ranked zeta transform for
   subset convolution (folklore).
 Status: stress-tested against $O(4^n)$ definitions

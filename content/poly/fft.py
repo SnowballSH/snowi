@@ -6,9 +6,9 @@ Description: `fft_conv(a, b)` multiplies polynomials with real
   $omega = e^((2 pi i) / n)$, in bit-reversed order, and
   `ifft(re, im)` undoes it.
 Precondition: `len(re)` is a power of two. Results round exactly
-  while $norm(a) norm(b) < 5 dot 10^14$ (Euclidean norms), which
-  holds if $n dot max abs(a_i) dot max abs(b_j) < 5 dot 10^14$ for
-  the longer length $n$, e.g. $2^19$ values up to $3 dot 10^4$.
+  while $norm(a) norm(b) < 4 dot 10^14$ (Euclidean norms), which
+  holds if $n dot max abs(a_i) dot max abs(b_j) < 4 dot 10^14$ for
+  the longer length $n$, e.g. $2^18$ values up to $3 dot 10^4$.
   Small results do not help: with mixed signs the error still
   follows the inputs. Beyond, use `conv_mod`.
 Time: $O(n log n)$. A $2^18 times 2^18$ product takes about 0.2 s.
@@ -27,10 +27,12 @@ Notes: Real and imaginary parts live in separate float lists, which
   PyPy stores unboxed; a list of `complex` is several times slower.
   Forward is decimation in frequency and inverse in time, so neither
   needs a bit-reversal pass, and each level is one flat loop, which
-  PyPy runs faster than nested loops (twice for the inverse). Cues:
-  integer convolutions whose exact values exceed the NTT modulus
-  (counts of pair sums, wildcard string matching via
-  $sum (x - y)^2 x y$), real-valued signals.
+  PyPy runs faster than nested loops. The bound is empirical: the
+  worst case found (unbalanced magnitudes, a result just past a
+  power of two) rounds within 0.41 at $4 dot 10^14$ and fails near
+  $4.7 dot 10^14$. Cues: integer convolutions whose exact values
+  exceed the NTT modulus (counts of pair sums, wildcard string
+  matching via $sum (x - y)^2 x y$), real-valued signals.
 Source: Classic radix-2 Cooley-Tukey; layout as in kactl (CC0).
 Status: stress-tested against the schoolbook product
 """

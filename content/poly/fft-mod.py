@@ -8,8 +8,8 @@ Precondition: $2 <= m < 2^31$, entries in `[0, m)`. Exact for
 Time: $O(n log n)$. A $2^18 times 2^18$ product takes about 0.4 s.
 Usage:
   c = conv_mod(a, b, 10**9 + 7)
-Tweak: Three NTT primes with CRT (Polynomial techniques) are two
-  to three times slower in PyPy.
+Tweak: Three NTT primes with CRT (Polynomial techniques) are about
+  four times slower in PyPy.
 Uses: poly/fft
 Example:
   >>> conv_mod([10**9, 5], [10**9, 3], 10**9 + 7)
@@ -18,7 +18,8 @@ Example:
   >>> c[0], c[49], len(c)  # 10^9 = -7: each product is 49
   (49, 2450, 99)
 Notes: Values are first shifted into $(-m/2, m/2]$ and split into
-  balanced digits in $[-2^14, 2^14)$. Their products then cancel in
+  balanced digits: low in $[-2^14, 2^14)$, high in $[-2^15, 2^15]$
+  ($[-2^14, 2^14]$ for $m < 2^30$). Their products then cancel in
   the sums, which makes the floats hundreds of times more accurate on
   random inputs than unsigned halves; values near 0 or $m$ become
   small. The worst case is all values near $m/2$. The two packed

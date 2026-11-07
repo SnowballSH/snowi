@@ -78,13 +78,18 @@ int main() {
     fft(f), reverse(f.begin() + 1, f.end());
     rep(k, 0, n) CHECK(abs(f[k] / double(n) - a[k]) < 1e-9);
   }
-  // Precision bound from the header: 2^19 values up to 3e4.
-  check_constant(1 << 19, 1 << 19, 30'000, 30'000);
-  check_alternating(1 << 19, 1 << 19, 30'000, 30'000);
+  // Precision bound from the header: |a| |b| < 4e14, e.g. 2^18 values
+  // up to 3e4; 2^19 values up to 2.7e4 give 3.8e14.
+  check_constant(1 << 18, 1 << 18, 30'000, 30'000);
+  check_constant(1 << 19, 1 << 19, 27'000, 27'000);
+  check_alternating(1 << 19, 1 << 19, 27'000, 27'000);
+  // Unbalanced magnitudes, result just past 2^20 (transform 2^21):
+  // the worst case found; (308'506, 3'085) at 5e14 fails.
+  check_alternating(1 << 19, (1 << 19) + 8, 275'000, 2'750);
   check_constant(1, 1 << 19, 30'000, 30'000);
   check_constant(1, 1, 30'000, 30'000);
   check_constant(1 << 10, 1, 1'000'000'000, 0); // exact zeros
-  // Unbalanced inputs inside the bound |a| |b| < 5e14.
+  // Unbalanced inputs inside the bound |a| |b| < 4e14.
   check_constant(1 << 17, 1 << 17, 1'000'000'000, 1);
   check_constant(1 << 17, 1 << 17, 1, 1'000'000'000);
   check_constant(1 << 18, 1 << 10, 141'000, 141'000);

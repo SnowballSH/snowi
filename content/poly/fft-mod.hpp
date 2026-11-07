@@ -10,7 +10,8 @@
  * Usage:
  *   vl c = conv_mod(a, b, 1'000'000'007);
  * Notes: Values are first shifted into $(-m/2, m/2]$ and split into
- *   balanced digits in $[-2^14, 2^14)$. Their products then cancel in
+ *   balanced digits: low in $[-2^14, 2^14)$, high in $[-2^15, 2^15]$
+ *   ($[-2^14, 2^14]$ for $m < 2^30$). Their products then cancel in
  *   the sums, which makes the doubles hundreds of times more accurate
  *   on random inputs than unsigned halves; values near 0 or $m$
  *   become small. The worst case is all values near $m/2$. Up to 40

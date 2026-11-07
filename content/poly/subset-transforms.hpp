@@ -36,7 +36,7 @@
  *   non-overlapping pieces (subset convolution, $n <= 20$); the
  *   same random XOR move repeated $k$ times (power in the
  *   Walsh-Hadamard domain). OR is subsets, AND is supersets; check
- *   with $f = g = [S = "all"]$, whose AND convolution is $f$.
+ *   that $[S = "all"]$ is the identity of AND ($[S = 0]$ of OR).
  * Source: kactl FastSubsetTransform (CC0); ranked zeta transform for
  *   subset convolution (folklore).
  * Status: stress-tested against $O(4^n)$ definitions

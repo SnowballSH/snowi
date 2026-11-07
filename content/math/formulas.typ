@@ -64,7 +64,7 @@
 === Numerics
 #fact[Stable quadratic][$q = -(b + "sgn"(b) sqrt(b^2 - 4 a c))\/2$
   with $"sgn"(0) = 1$, roots $q\/a$ and $c\/q$. The textbook formula
-  loses all digits of the small root when $b^2 >> |4 a c|$.]
+  loses digits of the small root when $b^2 >> |4 a c|$.]
 #fact[Simpson][$integral_a^b f approx (b - a)\/6 dot (f(a) +
   4f(m) + f(b))$, $m = (a + b)\/2$, exact for cubics; error
   $O(h^4)$ with $n$ pieces of width $h$. Adaptive: split $[a, b]$

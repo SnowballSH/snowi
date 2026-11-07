@@ -2,6 +2,12 @@ from testlib import Timer, check_eq, iters, load, rnd, rnd_list
 
 lib = load("poly/ntt")
 MOD = lib.MOD
+for n in (1, 2):  # first calls: the root table is still empty
+  f = rnd_list(n, 0, MOD - 1)
+  g = f[:]
+  lib.ntt(g)
+  lib.intt(g)
+  check_eq(g, f, f"fresh table n={n}")
 
 
 def brute_conv(a, b):

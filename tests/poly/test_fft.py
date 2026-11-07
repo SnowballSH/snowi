@@ -68,17 +68,26 @@ for lg in range(8):
   lib.ifft(fr, fi)
   check(all(abs(u - v) < 1e-12 for u, v in zip(fr + fi, re + im)))
 
-# Precision bound from the header: 2^19 values up to 3e4.
+# Precision bound from the header: |a| |b| < 4e14, e.g. 2^18 values up
+# to 3e4; 2^19 values up to 2.7e4 give 3.8e14.
 with Timer("fft_conv 2^19 x 2^19, worst case"):
-  check_constant(1 << 19, 1 << 19, 30000, 30000)
-check_alternating(1 << 19, 1 << 19, 30000, 30000)
+  check_constant(1 << 19, 1 << 19, 27000, 27000)
+check_alternating(1 << 19, 1 << 19, 27000, 27000)
+check_constant(1 << 18, 1 << 18, 30000, 30000)
 check_constant(1, 1 << 10, 30000, 30000)
 check_constant(1, 1, 30000, 30000)
 check_constant(1 << 10, 1, 10**9, 0)  # exact zeros
-# Unbalanced inputs inside the bound |a| |b| < 5e14.
+# Unbalanced inputs inside the bound |a| |b| < 4e14.
 check_constant(1 << 17, 1 << 17, 10**9, 1)
 check_constant(1 << 18, 1 << 10, 141000, 141000)
 check_alternating(1 << 18, 1 << 10, 141000, 141000)
+# Near-constant values at the bound, result length past 2^20: every
+# entry against the exact product mod 998244353 (poly/ntt).
+ntt = load("poly/ntt")
+n, h = 600001, 25900
+a, b = rnd_list(n, h - h // 100, h), rnd_list(n, h - h // 100, h)
+got = [round(x) % ntt.MOD for x in lib.fft_conv(a, b)]
+check_eq(got, ntt.conv(a, b), "near-constant, |a||b| < 4e14")
 with Timer("fft_conv 2^18 x 2^18"):
   n = 1 << 18
   a, b = rnd_list(n, 0, 30000), rnd_list(n, 0, 30000)
