@@ -31,8 +31,8 @@
  *   strings. `on(l, r, f)` splits out `[l, r)`, lets `f` read or
  *   replace that subtree, and merges back; new operations are a
  *   few lines on top of it. Node fields hold only aggregates of
- *   the subtree, so a pushed lazy tag must already be applied to
- *   the node itself (here `flip` swaps children lazily, which
+ *   the subtree, so a lazy tag must already be applied to the
+ *   node that carries it (here `flip` swaps children lazily, which
  *   does not change `sum`). Erased nodes are not reused; the pool
  *   grows by one node per insert. The priorities are seeded from
  *   the clock, so the expected height is $O(log n)$ for every

@@ -10,9 +10,9 @@ Description: Multiset of integers in $[0, 2^B)$ stored as a trie of
 Precondition: $0 <= x, y < 2^B$; `add(y, -1)` needs `y` stored;
   `kth` needs `0 <= k < size()`; `count_less` takes any
   $k >= 0$.
-Time: $O(B)$ per operation, about 0.5 s for $2 dot 10^5$ inserts
-  with $B = 30$. Memory: 3 list slots (24 bytes) per node, up to
-  $n B$ nodes.
+Time: $O(B)$ per operation, about 0.7 s for $2 dot 10^5$ inserts
+  with $B = 30$. Memory: 3 list slots (24 bytes) per node, at most
+  $n (B + 2 - log_2 n)$ nodes.
 Usage:
   tr = BinaryTrie(30)  # B = 30 bits
   tr.add(y); tr.add(y, -1)  # insert, erase one copy

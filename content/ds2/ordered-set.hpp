@@ -15,7 +15,7 @@
  *   int y = *t.find_by_order(k); // k-th smallest
  *   Tree<pii> ms; int id = 0; // multiset of ints
  *   ms.insert({x, id++});
- *   ms.erase(ms.lower_bound({x, INT_MIN})); // x in ms
+ *   ms.erase(ms.lower_bound({x, INT_MIN})); // needs x in ms
  *   ms.order_of_key({x, INT_MIN}); // values < x
  * Tweak: Map with order statistics: `null_type` becomes the mapped
  *   type, then `t[key] = v` works. Never `less_equal` for a
@@ -30,7 +30,7 @@
  *   }
  *   // Key ranges of t and t2 must not overlap; O(log n):
  *   t.join(t2); // t2 becomes empty
- *   t.split(x, t2); // keys > x move to t2, O(|t2|)
+ *   t.split(x, t2); // t2 is cleared, gets keys > x; O(|t2|)
  * Notes: Think of it for "the k-th smallest of a changing set",
  *   "how many stored values are below x", the median of a sliding
  *   window, or Josephus-style "remove the k-th remaining". Speed

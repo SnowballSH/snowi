@@ -7,7 +7,7 @@ Description: Sorted multiset with indexing, in sorted buckets of
 Precondition: Elements are comparable with `<` (ints, tuples,
   strings). `s[k]` and `pop(k)` need $-n <= k < n$.
 Time: $O(sqrt(n))$ per operation; at $n = 2 dot 10^5$, about
-  $8 dot 10^5$ operations per second.
+  $4 dot 10^5$ to $8 dot 10^5$ operations per second.
 Usage:
   s = SortedList(a)  # or SortedList()
   s.add(x); s.discard(x)  # one copy; remove(x) raises if absent
@@ -24,7 +24,7 @@ Example:
   (2, 2, 3, False)
   >>> s[0], s[-1], s.pop(1), list(s)
   (3, 5, 3, [3, 4, 5])
-  >>> i = s.bisect_left(4)  # successor and predecessor of 4
+  >>> i = s.bisect_left(4)  # first value >= 4, last value < 4
   >>> s[i] if i < len(s) else None, s[i - 1] if i else None
   (4, 3)
 Notes: Think of it for C++ `set`/`multiset` jobs in Python: the
