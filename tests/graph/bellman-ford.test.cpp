@@ -58,6 +58,27 @@ static_assert(!is_constructible_v<BellmanFord, int,
 static_assert(
     is_constructible_v<BellmanFord, int, vector<tuple<int, int, ll>>, int>);
 
+// The Tweak: dist all 0, n plain rounds, then walk par back.
+vi neg_cycle(int n, const Edges& edges) {
+  vector<ll> dist(n);
+  vi par(n, -1);
+  int x = -1;
+  rep(i, 0, n) {
+    x = -1;
+    for (auto [a, b, w] : edges)
+      if (dist[a] + w < dist[b]) dist[b] = dist[a] + w, par[b] = a, x = b;
+  }
+  if (x < 0) return {};
+  rep(i, 0, n) x = par[x];
+  vi cyc = {x};
+  for (int y = par[x]; y != x; y = par[y]) {
+    CHECK(sz(cyc) < n);
+    cyc.push_back(y);
+  }
+  reverse(all(cyc));
+  return cyc;
+}
+
 int main() {
   rep(it, 0, iters(3000)) {
     int n = (int)rnd(1, 7), m = (int)rnd(0, 14);
@@ -70,6 +91,21 @@ int main() {
     BellmanFord bf(n, edges, s);
     CHECK(bf.dist == brute(n, edges, s));
     check_par(n, edges, s, bf);
+    // A cycle exists iff a super-source reaches a negative cycle.
+    Edges sup = edges;
+    rep(v, 0, n) sup.push_back({n, v, 0});
+    vector<ll> dsup = brute(n + 1, sup, n);
+    vi cyc = neg_cycle(n, edges);
+    CHECK_EQ(!cyc.empty(), count(all(dsup), LLONG_MIN) > 0);
+    ll tot = 0;
+    rep(i, 0, sz(cyc)) {
+      ll lw = LLONG_MAX;
+      for (auto [a, b, w] : edges)
+        if (a == cyc[i] && b == cyc[(i + 1) % sz(cyc)]) lw = min(lw, w);
+      CHECK(lw != LLONG_MAX);
+      tot += lw;
+    }
+    if (sz(cyc)) CHECK(tot < 0);
   }
   // A cycle listed backwards with total weight -1: reaching every
   // vertex takes n - 1 rounds, marking all of them n - 1 more.

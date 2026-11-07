@@ -27,13 +27,14 @@
  *   rep(c, 0, k + 1) best = min(best, dj.dist[id(t, c)]);
  * Notes: Think of it for "minimum total cost/time" with
  *   non-negative costs. Several starting points: pass them all as
- *   sources (multi-source), or "distance to the nearest special
- *   vertex" for all vertices at once. Distances to one target: run
+ *   sources (multi-source), which also gives "distance to the
+ *   nearest special vertex" for all vertices at once. Distances to
+ *   one target: run
  *   on the reversed graph. Extra state (fuel left, parity, coupons
  *   used, time modulo $k$): run on pairs (vertex, state) as in the
  *   Example. Weights 0 and 1 only: 0-1 BFS with a deque (push front
  *   on weight 0, back on weight 1) is $O(n + m)$. Edge `(u, v, w)`
- *   lies on some shortest `s`-`t` path iff
+ *   lies on some shortest `s`-`t` walk iff
  *   $d_s (u) + w + d_t (v) = d_s (t)$ (run from `s` and, reversed,
  *   from `t`). Count shortest paths by DP over the tight edges
  *   ($d(u) + w = d(v)$) in topological order: increasing `dist` is

@@ -9,8 +9,8 @@ vertex cover, minimum edge cover.
   connected. Undirected: a circuit iff every degree is even, a path
   iff exactly 0 or 2 degrees are odd (it joins the odd ones).
   Directed: a circuit iff $"in"(v) = "out"(v)$ everywhere, a path
-  iff besides that one vertex has $"out" = "in" + 1$ (the start) and
-  one $"in" = "out" + 1$ (the end).]]
+  iff that holds except that one vertex may have $"out" = "in" + 1$
+  (the start) and one $"in" = "out" + 1$ (the end).]]
 #fact[Trails][Connected, $k > 0$ odd vertices: the edges split into
   $k\/2$ trails and no fewer (`graph/euler-path` after pairing the
   odd vertices by dummy edges). A connected digraph needs
@@ -241,7 +241,7 @@ vertex cover, minimum edge cover.
   $p_i > p_j$): cliques are decreasing and independent sets
   increasing subsequences. It is bipartite iff no decreasing
   subsequence has length 3, and then the LIS is $n - nu$ (Kőnig);
-  if it is a tree, it is a caterpillar.
+  if it is a tree, it is a caterpillar (a path plus leaves).
 - Grid cut vertices (4-adjacency): walk around the 8 neighbours of
   a free cell $v$; cells outside the grid are blocked, and so is a
   free diagonal cell between two blocked ones. $v$ is a cut vertex

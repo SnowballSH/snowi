@@ -42,9 +42,10 @@ Notes: Think of it for "which vertices (or edges) must every route
   from `s` use", "removing which node disconnects `v` from the
   capital", or "for each vertex, how many become unreachable if it
   fails": the subtree sizes of the dominator tree. On an undirected
-  graph use articulation points (`graph/bcc`) instead. Edges:
-  subdivide edge `u -> v` with a new vertex `x` (`u -> x -> v`); the
-  edge is critical for `v` iff `x` dominates `v`.
+  graph use articulation points (`graph/bcc`) instead. Edges on
+  every path from `s` to `w`: subdivide each edge `u -> v` by a new
+  vertex `x` (`u -> x -> v`); the edge is on all of them iff `x`
+  dominates `w`.
 Source: Lengauer and Tarjan (1979), the simple $O(m log n)$ version
   with path compression.
 Status: stress-tested against removal-based brute force

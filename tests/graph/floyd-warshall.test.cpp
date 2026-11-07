@@ -110,5 +110,31 @@ int main() {
         }
       CHECK(tight || d[i][j] == NONE);
     }
+  // Weights at the bound n * max|w| < 2^62: restricted paths can be
+  // much longer than every distance, but no sum may overflow (UBSan).
+  {
+    int nb = 6;
+    ll big = ((1LL << 62) - 1) / nb;
+    Mat wb(nb, vector<ll>(nb, NONE));
+    for (auto [a, b] : vector<pii>{{3, 0}, {0, 1}, {1, 2}, {2, 0}, {1, 4}})
+      wb[a][b] = big;
+    rep(v, 0, 5) wb[v][5] = wb[5][v] = 0;
+    Mat db = wb;
+    floyd_warshall(db);
+    CHECK(db == brute(wb));
+  }
+  rep(it, 0, iters(500)) {
+    int nb = (int)rnd(2, 6);
+    ll big = ((1LL << 62) - 1) / nb;
+    Mat wb(nb, vector<ll>(nb, NONE));
+    rep(e, 0, (int)rnd(1, 12)) {
+      ll x = rnd(0, 1) ? rnd(big - 9, big) : rnd(-big, big);
+      ll& y = wb[rnd(0, nb - 1)][rnd(0, nb - 1)];
+      y = min(y, x);
+    }
+    Mat db = wb;
+    floyd_warshall(db);
+    CHECK(db == brute(wb));
+  }
   puts("OK graph/floyd-warshall");
 }
