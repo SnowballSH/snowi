@@ -218,6 +218,8 @@ with Timer("path of 1e5: build + 1e5 operations"):
   lc = lib.LinkCut(a, add, 0)
   for i in range(1, n):
     lc.link(i - 1, i)
+  for i in range(n):  # in order: quadratic if splay rotates wrongly
+    check_eq(lc.find_root(i), n - 1)
   root = n - 1
   for kind, u, v in ops:
     if kind == 0:

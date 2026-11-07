@@ -1,7 +1,7 @@
 """
 Title: Link-cut tree
 Description: A forest under edge insertions and deletions, with
-  path folds and point updates. Each tree has a root, and
+  path queries, point updates. Each tree has a root, and
   `make_root(v)` moves it to `v` (evert). `link(u, v)` adds the
   edge `u - v` with `u` as a child of `v`; the root of `v`'s tree
   stays the root. `cut(u)` removes the edge from `u` to its parent
@@ -69,9 +69,10 @@ Notes: Cues: edges added and removed online with path questions
   spanning forest that must evict the heaviest or oldest edge of
   the cycle a new edge closes, parent pointers that change (a
   rooted forest where a subtree is moved under a new parent:
-  `cut(u)`, then `link(u, p)`). For a fixed root, `link` only
-  roots (`u` after `cut(u)`) and never call `make_root`, `query`
-  or `cut(u, v)`; use `access(v)` and `agg[v]` for root paths.
+  `cut(u)`, then `link(u, p)`). For a fixed root, call
+  `link(u, p)` only on a root `u` (after `cut(u)`) and never call
+  `make_root`, `query` or `cut(u, v)`; use `access(v)` and
+  `agg[v]` for root paths.
   Moving a subtree changes the depths of all its vertices at once:
   put that change on the new edge (a node between `u` and `p`, or
   the value of `u` itself) instead of on the vertices. To find the
@@ -81,7 +82,7 @@ Notes: Cues: edges added and removed online with path questions
   Offline, with all edge changes known in advance and only
   connectivity or per-component questions,
   `offline/dynamic-connectivity` (DSU with rollback) is simpler;
-  it knows no paths, so path folds, `lca` or a moving root still
+  it knows no paths, so path queries, `lca` or a moving root still
   need this.
   Subtree folds need each node to also keep the fold of its
   virtual (path-parent) children.

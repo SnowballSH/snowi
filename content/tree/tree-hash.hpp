@@ -40,7 +40,7 @@
  *   every diameter. Random hashes instead of exact ids: $h(v) =
  *   product_c (x_k + h(c))$ mod a large prime $p$, with $k$ the
  *   height of `v` and a random $x_k$ per height; two different trees
- *   collide with probability about $n \/ p$ (Schwartz-Zippel). The
+ *   collide with probability at most $n \/ p$ (Schwartz-Zippel). The
  *   sum form $h(v) = 1 + sum_c f(h(c))$, with $f$ a random 64-bit
  *   mixer (splitmix64 of $h$ plus a random constant), is a `merge`
  *   (+), `lift` ($f$) and `fin` (+1), so `tree/rerooting` gives the

@@ -100,14 +100,15 @@ for i in range(n - 1, -1, -1):  # children before parents
   falls along a path: $F$ is convex on paths and never rises towards
   a median. If $W > 0$ the medians form a path. Moving each vertex
   to its nearest one in a subtree never increases a distance, nor
-  $F$ if the subtree holds a median. So
-  $F_1(a) + F_2(b) + c dot d(a, b)$, $c >= 0$, has its closest
+  $F$ if the subtree holds a median. So for two such sums $F_1$,
+  $F_2$, $F_1(a) + F_2(b) + c dot d(a, b)$, $c >= 0$, has its closest
   optimal pair on the path between any medians $m_1$, $m_2$. Walk
   $a$ from $m_1$ and $b$ from $m_2$ along it, each while its next
   step costs it at most $c$ per unit of length. If they stop apart
   that is the pair; if they meet or cross, $a = b$ at the minimum of
-  $F_1 + F_2$ on the stretch both walked. This works for any $G$,
-  $H$ convex on a path, from minimisers $a_0 <= b_0$.]
+  $F_1 + F_2$ on the stretch both walked. The walk also works for
+  any $G$, $H$ convex along a path in place of $F_1$, $F_2$, started
+  from minimisers $a_0 <= b_0$.]
 ]
 #fact[Binary-tree split][At most two children per vertex and
   $W >= 2$ marked vertices, none an ancestor of another (say leaves,
@@ -159,8 +160,8 @@ for i in range(n - 1, -1, -1):  # children before parents
   $x$ with `tin` in a range (one branch of $v$, or the rest): a
   segment tree per centroid over its piece sorted by `tin`,
   $O(log^2 n)$ per query or update.]
-#fact[Kruskal reconstruction tree][For "only edges of weight
-  $<= x$": add edges by increasing weight; the union of roots $a$
+#fact[Kruskal reconstruction tree][Using only edges of weight
+  $<= x$: add edges by increasing weight; the union of roots $a$
   and $b$ creates a node $z$, parent of both, with $"val"(z) = w$.
   From $v$ with threshold $x$ one reaches exactly the leaves under
   its highest ancestor with $"val" <= x$ (binary lifting), and
@@ -209,7 +210,7 @@ for w, u, v in sorted(es):
 #fact[Edge, not vertices][When a subtree is cut and relinked
   elsewhere and all its vertices change alike (depth shift,
   subtree add), store the change once on the new edge or the
-  subtree's root, and let root-path folds pick it up.]
+  subtree's root, and let root-path queries pick it up.]
 #fact[Growing trees][Leaves attached over time to parents
   named in the input: build the final tree once (Euler tour, LCA,
   HLD) and give vertices not created yet neutral values.]
@@ -220,7 +221,7 @@ for w, u, v in sorted(es):
 #fact[Leaf pairings][Pair up an even number of leaves and route
   each pair along its path. The possible edge loads $b_e$ are
   exactly those with $b_e = 1$ on leaf edges, $b_e$ of the parity
-  of the number of leaves on one side of $e$, and at every vertex
+  of the number of leaves on one side of $e$, and at every inner vertex
   the largest incident load at most the sum of the others.]
 #fact[Disjoint pieces][Two vertex-disjoint connected pieces are
   joined by a path with $j$ inner vertices and $j + 1$ edges. So
@@ -254,10 +255,11 @@ for w, u, v in sorted(es):
 - Per centroid $c$: to count paths of length at most $K$ no second
   sort is needed, since one stable pass over the piece's sorted
   list, appending each vertex to its part's list, leaves every part
-  sorted. With integer lengths the least weight on the path from
-  $r$ to $c$ at even distance from $x$ is one of two values kept
-  per $r$, the minima by the parity of $d(y, c)$: take the one
-  matching $d(c, x)$.
+  sorted. With integer lengths and $x$, $r$ in different parts,
+  the least weight of a vertex $y$ on the path from $r$ to $c$ at
+  even distance from $x$ is one of two minima kept per $r$, over
+  the $y$ with $d(y, c)$ even and odd: take the one with the
+  parity of $d(c, x)$.
 - $x mod a_i$ along a path changes $x$ only $O(log x)$ times (each
   change at least halves it): jump to the next $a_i <= x$ with a
   path-minimum descent (binary lifting, or a link-cut tree when
@@ -268,10 +270,11 @@ for w, u, v in sorted(es):
   Relabelling in BFS or DFS order and rebuilding `adj` vertex by
   vertex in that order made `tree/centroid` 2.5 to 5 times faster
   on paths and 1.4 to 2 times on random trees, $n$ from
-  $2 dot 10^5$ to $10^6$, with no gain on a star. Rebuilt from the
+  $2 dot 10^5$ to $10^6$. Rebuilt from the
   edge list, paths gain about 2 times, random trees at most 1.3.]#py[
-  `tree/centroid` relabels in BFS order inside, which gains 1.5 to
-  2 times on paths and little on random trees at $n = 2 dot 10^5$.]
+  `tree/centroid` relabels in BFS order inside, which gains about 2
+  times on paths, 1.5 on random trees and little on stars at
+  $n = 2 dot 10^5$.]
 
 === Pitfalls
 - The depth reaches $n$: work in BFS or DFS order, never by

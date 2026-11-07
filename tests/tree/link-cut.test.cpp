@@ -206,6 +206,8 @@ int main() {
     vector<ll> a = rnd_vec(n, -1e9, 1e9);
     LinkCut lc(a);
     rep(i, 1, n) lc.link(i - 1, i);
+    // In order along the path: quadratic if splay rotates wrongly.
+    rep(i, 0, n) CHECK_EQ(lc.find_root(i), n - 1);
     vector<ll> fw(n + 1); // Fenwick over a
     auto add = [&](int i, ll x) {
       for (i++; i <= n; i += i & -i) fw[i] += x;

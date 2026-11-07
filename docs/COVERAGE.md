@@ -145,5 +145,3 @@ Known gaps:
   Hamiltonian path claims in the colouring bullet are exhaustive up to 36
   cells, and larger boards rest on a proof.
 - The relabelling speed-ups were measured on one loaded box.
-- The comment in `tree/centroid.py` says relabelling is 2x faster, which holds
-  on paths only. It prints in the ICPC packet, so it was left alone.

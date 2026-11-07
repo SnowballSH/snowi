@@ -91,7 +91,7 @@ Status: stress-tested against brute force
 class Centroid:
   def __init__(self, adj):
     n = len(adj)
-    # Relabel in BFS order from 0: memory locality, 2x faster.
+    # Relabel in BFS order from 0: locality, up to 2x faster.
     order, new = [0], [0] + [-1] * (n - 1)
     for u in order:
       for v in adj[u]:
