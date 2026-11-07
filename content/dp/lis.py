@@ -24,19 +24,20 @@ Example:
   3
 Notes: `tail[k]` is the smallest last value of an increasing
   subsequence of length `k + 1` seen so far; it stays sorted.
-  Cues: fewest deletions to make an array sorted is
-  `n - LIS`; fewest changes to make it strictly increasing with
-  any integers is `n` minus the longest non-decreasing
-  subsequence of `a[i] - i` (if values must stay `>= 1`, first
-  drop every `i` with `a[i] <= i`). Dilworth: the fewest
-  non-increasing subsequences covering `a` equals the LIS length.
+  Cues: fewest deletions to make an array strictly increasing
+  is `n - LIS` (non-decreasing: the Tweak); fewest changes to
+  make it strictly increasing with any integers is `n` minus the
+  longest non-decreasing subsequence of `a[i] - i` (if values
+  must stay `>= 1`, first drop every `i` with `a[i] <= i`).
+  Dilworth: the fewest non-increasing subsequences covering `a`
+  equals the LIS length.
   Pairs ordered in two coordinates: sort by one, LIS on the
   other, with the tie order chosen as in the Example. `i` lies in
   some LIS iff $"end"[i] + "start"[i] - 1 = L$ (`start` from the
   reversed, negated list); in every LIS iff also no other such
   `j` has the same `end[j]`. Counting LIS: a Fenwick tree over
   values storing (length, count). Tuples work as values, but
-  ints are several times faster in PyPy.
+  ints are about 1.7 times faster in PyPy.
 Source: kactl LIS (CC0).
 Status: stress-tested against an $O(n^2)$ DP
 """

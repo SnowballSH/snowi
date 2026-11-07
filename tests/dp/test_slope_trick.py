@@ -175,4 +175,19 @@ with Timer("2e5 mixed operations"):
       mix.add_abs(v)
 if mix.top_l() != -INF:
   check_eq(mix.eval(mix.top_l()), mix.min_f)
+for _ in range(iters(300)):  # Tweak: start pinned at x0
+  a, x0, d = rnd_list(rnd(1, 3), -4, 6), rnd(-3, 3), rnd(0, 2)
+  st = lib.SlopeTrick()
+  for _ in range(50):
+    st.add_abs(x0)
+  for x in a:
+    st.slide(-d, d)
+    st.add_abs(x)
+  want = min(
+    sum(abs(x - y) for x, y in zip(a, b))
+    for b in product(range(-12, 13), repeat=len(a))
+    if abs(b[0] - x0) <= d
+    and all(abs(b[i] - b[i - 1]) <= d for i in range(1, len(a)))
+  )
+  check_eq(st.min_f, want, (a, x0, d))
 print("OK dp/slope-trick")

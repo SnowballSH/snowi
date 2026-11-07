@@ -42,7 +42,7 @@
  *   Where $F$ is straight, many counts tie at one `lam`; a solver
  *   that breaks ties inconsistently (one comparison on values
  *   alone) makes the search overshoot to a `lam` where `k` is not
- *   optimal (see Tweak). Concavity sources: min-cost flow (`k`
+ *   optimal (see Tweak). Convexity sources: min-cost flow (`k`
  *   units), matroids (spanning tree with `k` white edges),
  *   partitions with a quadrangle-inequality cost (`dp/dc-opt`),
  *   exchange arguments.

@@ -22,8 +22,8 @@
  * Example:
  *   // Optimal binary search tree on keys 0..n-1 searched f[i]
  *   // times; cost = sum of f[i] * depth (root depth 1). Root k
- *   // splits [l, k) and [k + 1, r): index boundaries 0..n and
- *   // let dp[l][r] cover keys l..r-2, so dp[l][l + 1] is empty.
+ *   // splits keys [l, k) and [k + 1, r); to fit the form, let
+ *   // dp[l][r] cover keys l..r-2 (dp[l][l + 1] is empty).
  *   auto dp = knuth(n + 1, [&](int l, int r) {
  *     return pre[r - 1] - pre[l]; // pre: prefix sums of f
  *   });
@@ -36,8 +36,9 @@
  *   random inputs. If any two piles may merge (not only
  *   neighbours), it is Huffman instead: a greedy with a heap.
  *   Merging `K > 2` piles at once breaks the form; use an
- *   $O(n^3 / K)$ DP over `(l, r)` and the pile count modulo
- *   `K - 1`. The same `opt` bounds speed up layer DPs
+ *   $O(n^3 / K)$ DP over `(l, r)` alone: `[l, r)` ends as
+ *   $(r - l - 1) mod (K - 1) + 1$ piles, and a split's left part
+ *   as one. The same `opt` bounds speed up layer DPs
  *   (`dp/dc-opt`).
  * Source: D. Knuth (1971), F. Yao (1980).
  * Status: stress-tested against the $O(n^3)$ DP

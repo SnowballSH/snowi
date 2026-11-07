@@ -5,7 +5,7 @@ Description: `ask(x, y)` prints `? x y`, flushes and reads one
   reply of `-1` or EOF exits with status 0 (WA, not TLE or RE).
 Precondition: Replies are integers separated by any whitespace.
   Read the judge only with `reply()` or `input()`, never with
-  `sys.stdin.buffer` (as the template does): that waits forever.
+  `sys.stdin.buffer` (the template's way): that waits forever.
 Time: 25 to 40 µs of wall time per query: $10^5$ queries take 3
   to 4 s.
 Usage:
@@ -46,7 +46,8 @@ Notes: Count first: $N$ hidden possibilities and $k$ possible
   Adaptive judges may change the hidden object as long as the
   replies stay consistent: answer only when one candidate is
   left, and do not rely on average-case (random) query counts.
-  Set replies, transcripts: see the constructive note.
+  Set-valued replies and adaptive judges (transcripts): see the
+  constructive note.
   Sorting with a comparator that asks the judge:
   `sorted(a, key=cmp_to_key(cmp))` (from `functools`) uses about
   $n log_2 n$ comparisons. Local testing: an interactor reads

@@ -20,8 +20,8 @@ Usage:
 Tweak: Weight $c dot |x - a|$: call `c` times, or store
   `(point, count)` pairs and split a pair when only part of it
   moves. Start pinned at $x_0$ ($f = 0$ there, $infinity$
-  elsewhere): push `K` copies of $x_0$ into both heaps, `K`
-  above any slope added later. Domain $x >= 0$: add `K` times
+  elsewhere): call `add_abs(x0)` `K` times, `K` above any slope
+  added later. Domain $x >= 0$: add `K` times
   `add_a_minus_x(0)`, or show the optimum never leaves it.
 Example:
   >>> st = SlopeTrick()  # fewest +-1 steps: non-decreasing

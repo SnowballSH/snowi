@@ -237,7 +237,7 @@ that depend on whether a neighbour is larger.
   $"suf"[r]$ is the largest $j$ with $f_(A_r) (j) <= "suf"[r + 1]$.
   Examples: embedding the rest in $s$ ($j$: letters of $s$ used);
   two queues, loser out, where $B$ must win: $j$ is the players of
-  $B$ gone and $T = m - 1$, as both queues empty is a draw. The same
-  rules run from the right can fail once a duel may remove either
-  player or both: invert the step instead.
+  $B$ gone and $T = m - 1$, as both queues empty is a draw. Computing
+  $"suf"$ by running the game backwards can fail once a duel may
+  remove either player or both; use the largest-$j$ rule above.
 ]

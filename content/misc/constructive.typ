@@ -26,8 +26,9 @@ small inputs, $n = 1, 2, 3$ included.
 - Three values, where equal inputs give that value and different
   ones give the third: on $0, 1, 2$ this is $-(x + y) mod 3$, a
   linear map (on $1, 2, 3$ the third value is $x xor y$). Chains
-  of it compute signed sums; applied to all neighbours of
-  $a_0, dots, a_(n - 1)$ until one value is left, it gives
+  of it compute signed sums; applied to every adjacent pair of
+  $a_0, dots, a_(n - 1)$, row after row until one value is left,
+  it gives
   $(-1)^(n - 1) sum_i binom(n - 1, i) a_i mod 3$ (Lucas).
 ]
 - Permutation parity: a swap flips it, a 3-cycle keeps it,
@@ -103,9 +104,9 @@ small inputs, $n = 1, 2, 3$ included.
   the start, the colours of a Hamiltonian path fix it, unless
   $c(x, y) = c(N + 1 - x, M + 1 - y)$ everywhere: then every such
   path looks like its rotation by 180 degrees. For $N M > 1$ this
-  happens iff $(N mod 4, M mod 4)$ is $(0, 3)$ or $(2, 1)$. Use
-  $x + y + 1$ on those boards only; on all boards it just moves the
-  trap to $(1, 0)$ and $(3, 2)$.
+  happens iff $(N mod 4, M mod 4)$ is $(0, 3)$ or $(2, 1)$. On those
+  boards only, use $x + y + 1$ in place of $x + y$; using it on
+  every board just moves the trap to $(1, 0)$ and $(3, 2)$.
 - Bipartite graphs: every closed walk has even length, and
   $"dist"(u, v)$ is even iff $u$ and $v$ have the same colour. An
   odd cycle is the only obstruction to a 2-colouring. So when all
@@ -184,7 +185,7 @@ small inputs, $n = 1, 2, 3$ included.
   the old one.
 #fact[Exactly $X$ domino tilings][Double-and-add on two rails, rows
   0 and 2 of 4. One cell on the bottom rail, then a block per bit,
-  then one cell on the top rail:
+  then one cell on the top rail (`#` is a cell, `.` is not):
   ```
   b = 0   b = 1
   ####    ######
@@ -230,7 +231,7 @@ small inputs, $n = 1, 2, 3$ included.
   vanishes. Over $FF_q$, give $q + 1$ people pairwise
   non-proportional forms from one 2-dimensional space of forms,
   each nonzero on its owner's colour and zero on colours the owner
-  cannot see. One of them vanishes on every configuration
+  cannot see. On every configuration one of them vanishes
   (Subspaces in _Linear algebra facts_), so someone guesses right.
   If everyone sees all other hats and may
   first announce a bit: use $2^(n - 1)$ colours as $n$-bit codes
@@ -347,7 +348,8 @@ vector<vector<bool>> tournament(vi s) {
   blocks in increasing order. Always $"LIS" dot "LDS" >= n$ and
   $"LIS" + "LDS" <= n + 1$.]
 #full[
-- Appending an element raises at most one of LIS and LDS. Every
+- Appending to a nonempty sequence raises at most one of LIS and
+  LDS. Every
   prefix can be given its own LIS and LDS: grow a Young diagram
   one corner cell at a time and give cell (column $c$, row $r$)
   the rank of the key $(c, -r)$ among all cells; each prefix then
@@ -479,5 +481,6 @@ transitive, and cross-multiply instead of dividing.
   last, with the element that did not fit, sums to more than $M$,
   so every feasible cutting starts an arc at one of its elements
   after the first. Try those of the shortest such segment as
-  starts: $O(n)$ steps of the `nxt` pointers in total.
+  starts: with `nxt[i]` the start of the greedy arc after one
+  starting at `i`, $O(n)$ jumps in total.
 ]

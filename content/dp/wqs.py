@@ -14,17 +14,15 @@ Usage:
   best = wqs(k, -C, C, solve)  # |slopes| <= C
 Tweak: Ties toward more items: search the largest `lam` with
   count `>= k`. At most `k` items: `lo = 0`. Smallest count in the
-  solver: minimise $v dot 2^20 + c$ as one int ($|v| < 2^42$),
-  much faster than tuples.
+  solver: `(v, c)` tuples; with states in lists, one int
+  $v dot 2^20 + c$ ($|v| < 2^42$).
 Example:
   >>> def solve(lam, a=(5, 1, 1, 5, 2)):  # max sum, non-adjacent
-  ...   B = 1 << 20  # (value, count) packed: value * B + count
-  ...   skip, take = 0, 1 << 62
+  ...   skip, take = (0, 0), (1 << 62, 0)  # (value, count)
   ...   for x in a:
-  ...     t = skip + (lam - x) * B + 1
+  ...     t = (skip[0] + lam - x, skip[1] + 1)
   ...     skip, take = min(skip, take), t
-  ...   best = min(skip, take)
-  ...   return best >> 20, best & (B - 1)
+  ...   return min(skip, take)
   >>> [-wqs(k, -14, 14, solve) for k in range(4)]
   [0, 5, 10, 8]
 Notes: Why the tie rule: with ties toward fewer items, the
@@ -36,11 +34,12 @@ Notes: Why the tie rule: with ties toward fewer items, the
   Where $F$ is straight, many counts tie at one `lam`; a solver
   that breaks ties inconsistently (one comparison on values
   alone) makes the search overshoot to a `lam` where `k` is not
-  optimal; the packing of Tweak (used in the Example) avoids it.
+  optimal; comparing `(v, c)` (Tweak, Example) avoids it.
   Slopes can be as large as $F$ itself (in the Example,
   `a = 0, M, 0, ..., M, 0` with `k` near its maximum), so packed
   values may pass $2^63$: still correct, but big ints make
-  `solve` about 5 times slower. Concavity sources: min-cost flow
+  `solve` about 6 times slower, while `(v, c)` tuples stay machine
+  ints. Convexity sources: min-cost flow
   (`k` units), matroids (spanning tree with `k` white edges),
   partitions with a quadrangle-inequality cost (`dp/dc-opt`),
   exchange arguments.

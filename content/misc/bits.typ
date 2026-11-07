@@ -22,15 +22,15 @@ x.bit_length()         # bits needed, 0 for 0
 1 << (x - 1).bit_length()  # smallest power of 2 >= x >= 1",
 )
 #cpp[The builtins are undefined for 0 (except popcount), and the
-  `<bit>` functions take only unsigned types (`ull` is
-  `unsigned long long`). `1 << 40` overflows `int`: write
-  `1LL << k`.]
+  `<bit>` functions take only unsigned types
+  (`typedef unsigned long long ull;`, not in the template).
+  `1 << 40` overflows `int`: write `1LL << k`.]
 ]
-#full[#py[`bin(x).count("1")` counts set bits (`int.bit_count` is
-  3.10+, missing in PyPy 3.9). Ints of $2^63$ and more are big ints,
-  about 10 times slower: keep masks within 62 bits. Negative ints
-  act as infinite two's complement: `-1 >> k == -1`,
-  `~x == -x - 1`.]]
+#full[#py[`x.bit_count()` counts set bits: a 3.10 method that PyPy
+  7.3.15 has too, 10 times faster than `bin(x).count("1")`. Ints
+  of $2^63$ and more are big ints, about 10 times slower: keep
+  masks within 62 bits. Negative ints act as infinite two's
+  complement: `-1 >> k == -1`, `~x == -x - 1`.]]
 
 === Loops over sets
 #full[#lang-code(

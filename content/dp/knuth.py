@@ -9,7 +9,7 @@ Precondition: `w` satisfies the quadrangle inequality (DP
   techniques) and is monotone, $w(b, c) <= w(a, d)$ for
   $a <= b <= c <= d$. Sums of values over the
   interval, with values $>= 0$, satisfy both.
-Time: $O(n^2)$ time and memory; $n = 2000$ takes about a second
+Time: $O(n^2)$ time and memory; $n = 2000$ takes about 0.4 s
   in PyPy.
 Usage:
   # merge adjacent piles; a merge costs the sum of both
@@ -37,8 +37,9 @@ Notes: Signals: merging neighbours where a merge costs the
   random inputs. If any two piles may merge (not only
   neighbours), it is Huffman instead: a greedy with a heap.
   Merging `K > 2` piles at once breaks the form; use an
-  $O(n^3 / K)$ DP over `(l, r)` and the pile count modulo
-  `K - 1`. The same `opt` bounds speed up layer DPs
+  $O(n^3 / K)$ DP over `(l, r)` alone: `[l, r)` ends as
+  $(r - l - 1) mod (K - 1) + 1$ piles, and a split's left part
+  as one. The same `opt` bounds speed up layer DPs
   (`dp/dc-opt`).
 Source: D. Knuth (1971), F. Yao (1980).
 Status: stress-tested against the $O(n^3)$ DP

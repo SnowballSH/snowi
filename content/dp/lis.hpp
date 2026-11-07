@@ -24,12 +24,13 @@
  *   int best = sz(lis(h));
  * Notes: `tail[k]` is the smallest last value of an increasing
  *   subsequence of length `k + 1` seen so far; it stays sorted.
- *   Cues: fewest deletions to make an array sorted is
- *   `n - LIS`; fewest changes to make it strictly increasing with
- *   any integers is `n` minus the longest non-decreasing
- *   subsequence of `a[i] - i` (if values must stay `>= 1`, first
- *   drop every `i` with `a[i] <= i`). Dilworth: the fewest
- *   non-increasing subsequences covering `a` equals the LIS
+ *   Cues: fewest deletions to make an array strictly increasing
+ *   is `n - LIS` (non-decreasing: the Tweak); fewest changes to
+ *   make it strictly increasing with any integers is `n` minus
+ *   the longest non-decreasing subsequence of `a[i] - i` (if
+ *   values must stay `>= 1`, first drop every `i` with
+ *   `a[i] <= i`). Dilworth: the fewest non-increasing
+ *   subsequences covering `a` equals the LIS
  *   length. Pairs ordered in two coordinates: sort by one, LIS on
  *   the other, with the tie order chosen as in the Example. `i`
  *   lies in some LIS iff $"end"[i] + "start"[i] - 1 = L$ (`start`

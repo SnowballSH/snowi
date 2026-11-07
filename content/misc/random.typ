@@ -43,8 +43,8 @@ $10^5$).
 #fact[All or nothing]["Every value has all of its occurrences
   inside the range, or none": give each occurrence but the last a
   random label and the last the XOR of the others. A range is
-  good iff its XOR is 0, i.e. `pre[l] == pre[r]` (w.h.p.). On a
-  tree, path $u$-$v$ has XOR $f(u) xor f(v)$ for root prefixes
+  good iff its XOR is 0: `pre[l] == pre[r]` (w.h.p.). Tree path
+  $u$-$v$: $f(u) xor f(v) xor h_w$, $w$ the LCA, for root prefixes
   $f$.]
 #lang-code(
   cpp: "vector<uint64_t> h(n), acc(V); // a[i] in [0, V)
@@ -63,7 +63,7 @@ for i, v in enumerate(a):
   h[i] = random.getrandbits(62) if left[v] else acc[v]
   acc[v] ^= h[i]",
 )
-#fact[Counts divisible by $k$][Choose a random half of the values
+#fact[Counts divisible by $k$][Choose a random subset of values
   and count the range's elements in it. If every count is
   divisible by $k$, so is this number; otherwise it is not with
   probability at least $1 \/ 2$. Repeat 30 times, with one prefix
@@ -103,10 +103,10 @@ hash#cpp[ (`ds2/hash-map`)]#py[: store `x ^ R` for one random
   order unless an earlier run covered it; run $u$ covers
   $s(u) in.rev u$. If $w in s(u)$ implies $s(w) subset.eq s(u)$
   and any two sets are nested or disjoint, an element lying in $t$
-  sets is visited by $H_t <= 1 + ln t$ runs in expectation.
+  sets is visited by $H_t <= 1 + ln t$ runs in expectation.#full[
   Example, a DAG: $s(u)$ is $u$ plus, repeatedly, each vertex with
   all its in-neighbours (at least one) in $s(u)$; the largest
-  $s(u)$ in expected $O((n + m) log n)$.
+  $s(u)$ in expected $O((n + m) log n)$.]
 - Colour coding: to find $k$ objects that must all differ (a path
   through $k$ distinct vertices), colour everything with $k$
   random colours and search only for solutions with distinct
