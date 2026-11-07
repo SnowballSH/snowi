@@ -10,15 +10,15 @@ printed packets are generated from the sources with Typst.
 
 | File | Contents |
 |---|---|
-| `snowi-icpc-cpp.pdf` | ICPC team reference document, C++ (24 of 25 pages) |
-| `snowi-icpc-py.pdf` | ICPC team reference document, PyPy (24 of 25 pages) |
-| `snowi-full-cpp.pdf` | Everything: all snippets, examples, notes, guides (C++, 51 pages) |
+| `snowi-icpc-cpp.pdf` | ICPC team reference document, C++ (25 of 25 pages) |
+| `snowi-icpc-py.pdf` | ICPC team reference document, PyPy (25 of 25 pages) |
+| `snowi-full-cpp.pdf` | Everything: all snippets, examples, notes, guides (C++, 52 pages) |
 | `snowi-full-py.pdf` | Everything (PyPy, 55 pages) |
 
 The ICPC packets follow the North America / World Finals rules: letter
 paper, single-sided, at most 25 pages, university and team name upper
 left, page number upper right. **Set your university and team name in
-`config/packets.toml`** (the default is a placeholder). The build fails if
+`config/packets.toml`**. The build fails if
 an ICPC packet goes over the page limit.
 
 The commands printed in the Contest setup note (compiler, `-std`,

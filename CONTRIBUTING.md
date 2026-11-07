@@ -48,14 +48,14 @@ module docstring. The fields are the same in both languages:
 ```cpp
 /**
  * Title: Segment tree
- * Description: Point assign and range fold over a monoid. Also finds
+ * Description: Point assign, range query over a monoid. Also finds
  *   the largest `r` with `pred(query(l, r))` true.
- * Precondition: `op` is associative and `id` is its identity.
+ * Precondition: `op` is associative and `e` is its identity.
  * Time: $O(log n)$ per operation.
  * Usage:
  *   SegTree st(n);
  *   st.set(i, 5); st.query(l, r); // [l, r)
- * Tweak: For range sum use `T = ll`, `id = 0`, `op = a + b`.
+ * Tweak: For range sum use `T = ll`, `e = 0`, `op = a + b`.
  * Example:
  *   ...longer example, printed only in the full packet...
  * Notes: Pitfalls and problem cues, printed only in the full packet.
@@ -68,7 +68,7 @@ module docstring. The fields are the same in both languages:
 ```python
 """
 Title: Segment tree
-Description: Point assign and range fold over a monoid.
+Description: Point assign, range query over a monoid.
 Time: $O(log n)$ per operation.
 Usage:
   st = SegTree([0] * n, max, -INF)
@@ -138,7 +138,8 @@ sanity check.
   provides the template prelude, `rnd(lo, hi)`, `rnd_vec`, `CHECK(cond)`
   and `CHECK_EQ(a, b)`. Print one summary line, return 0 on success.
   Tests compile with `-std=gnu++20 -O1 -g -Wall -Wextra -Wshadow
-  -fsanitize=address,undefined -D_GLIBCXX_ASSERTIONS` (warnings fail the
+  -Wno-unused-function -fsanitize=address,undefined
+  -fno-sanitize-recover=all -D_GLIBCXX_ASSERTIONS` (warnings fail the
   build) and must finish in about 10 seconds.
 - Python: `from testlib import load, rnd, check, check_eq`;
   `lib = load("ds/segtree")` executes the snippet (and its `Uses:`) into
