@@ -47,9 +47,9 @@ Notes: When consistent, $A x = b$ has $"MOD"^(m - r)$ solutions:
   mod $p$ but not over the rationals. Cues: "count assignments
   satisfying linear conditions mod p" ($p^(m - r)$), "determinant
   / number of spanning trees mod p" (matrix-tree), random-weight
-  rank tests (Schwartz-Zippel). A composite modulus has no
-  inverses: for a determinant, clear each column with Euclid-style
-  row subtractions in $O(n^3 log "MOD")$.
+  rank tests (Schwartz-Zippel). With a composite modulus, pivots
+  may have no inverse: for a determinant, clear each column with
+  Euclid-style row subtractions in $O(n^3 log "MOD")$.
 Source: Standard Gauss-Jordan; kactl MatrixInverse-mod (CC0).
 Status: stress-tested against permutation determinants and minor
   ranks

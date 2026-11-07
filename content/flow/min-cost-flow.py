@@ -44,9 +44,9 @@ Notes: Model: capacities say how often something can be used,
   $F = 1000$ paths over $2.4 dot 10^4$ arcs take about 0.4 s in
   C++ (1 to 2 s in PyPy), growing like $F m log m$. Dijkstra
   stops once `t` is settled; unsettled vertices gain only $d_t$
-  in potential, which keeps reduced costs $>= 0$. On a path or tree the transport cost
-  has a closed form: every edge carries $|$imbalance of one
-  side$|$.
+  in potential, which keeps reduced costs $>= 0$. On a path or
+  tree the transport cost has a closed form: every edge carries
+  $|$imbalance of one side$|$.
 Source: Classic successive shortest paths with Johnson potentials;
   kactl MinCostMaxFlow (CC0); early stop at `t` as in the AtCoder
   Library (CC0).

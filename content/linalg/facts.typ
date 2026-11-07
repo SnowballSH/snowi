@@ -5,7 +5,7 @@ Over a field ($FF_p$, $FF_2$, $RR$) every question below is
 Gaussian elimination: `linalg/gauss-mod`, `linalg/gauss-real`,
 `linalg/xor-basis`. Work in the field the problem lives in: a
 matrix can have full rank over $QQ$ but not mod $p$, and a 0/1
-matrix has different ranks over $FF_2$ and over $RR$.
+matrix can have different ranks over $FF_2$ and over $RR$.
 ]
 
 === Matrices and subspaces
@@ -81,8 +81,8 @@ matrix has different ranks over $FF_2$ and over $RR$.
   the numbers. ]$n$ numbers of rank $r$ give $2^r$ distinct subset
   XORs; each of them, 0 included, is the XOR of exactly
   $2^(n - r)$ subsets. Non-empty subsets with XOR 0:
-  $2^(n - r) - 1$. A fixed element lies in none or in exactly half
-  of the zero-XOR subsets.
+  $2^(n - r) - 1$. A fixed element lies in none or in exactly
+  $2^(n - r - 1)$ of them.
 #full[
 - Which elements lie in some zero-XOR subset: store with each
   basis vector the mask of independent inserted elements it is

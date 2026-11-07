@@ -9,9 +9,9 @@
  *   Each `cap + rev_cap` and the total capacity out of `s` stay
  *   below $2^63$.
  * Time: $O(n^2 m)$, far faster in practice. Unit capacities:
- *   $O(m min(sqrt(m), n^(2/3)))$, and $O(m sqrt(n))$ if every
- *   vertex but $s$, $t$ has a single edge in or a single edge
- *   out (matching, split vertices).
+ *   $O(m sqrt(m))$, and $O(m sqrt(n))$ if every vertex but $s$,
+ *   $t$ has a single edge in or a single edge out (matching,
+ *   split vertices).
  * Usage:
  *   Dinic d(n);
  *   int id = d.add_edge(u, v, cap); // directed u -> v
@@ -35,7 +35,9 @@
  *   saturate edges anywhere. An undirected edge is one call with
  *   `rev_cap = c`, not two calls. An "infinite" capacity such as
  *   $10^18$ must not overflow when a few are added. The recursion
- *   is as deep as the distance from `s` to `t`. Fast on matching
+ *   is as deep as the distance from `s` to `t`. Unit capacities
+ *   without parallel edges also give $O(m n^(2/3))$; parallel unit
+ *   edges can force $n - 2$ phases. Fast on matching
  *   and layered networks; on big grids with varied capacities it
  *   can take hundreds of phases. Think of max flow for "can every
  *   demand be met", "pair things up, each usable $k$ times",

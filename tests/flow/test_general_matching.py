@@ -106,6 +106,10 @@ check_eq(solve(3, [(0, 1), (1, 2), (2, 0)]), 1)
 # Two triangles joined by an edge: the blossom must be entered.
 two = [(0, 1), (1, 2), (2, 0), (2, 3), (3, 4), (4, 5), (5, 3)]
 check_eq(solve(6, two), 3)
+# Both sides of a blossom must be shrunk: shrinking only the scanned
+# vertex's side finds 2 pairs with these exact adjacency lists.
+g = [[5, 3], [2, 5], [1, 4, 3], [2, 5, 0], [2], [1, 0, 3]]
+check_eq(general_matching(g)[0], 3)
 
 for _ in range(iters(2500)):
   n = rnd(0, 11)

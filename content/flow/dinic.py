@@ -7,9 +7,9 @@ Description: Maximum flow from `s` to `t`. Afterwards `flow(id)`
   residual graph.
 Precondition: Vertices 0-indexed, `s != t`, capacities `>= 0`.
 Time: $O(n^2 m)$, far faster in practice. Unit capacities:
-  $O(m min(sqrt(m), n^(2/3)))$, and $O(m sqrt(n))$ if every
-  vertex but $s$, $t$ has a single edge in or a single edge out
-  (matching, split vertices).
+  $O(m sqrt(m))$, and $O(m sqrt(n))$ if every vertex but $s$, $t$
+  has a single edge in or a single edge out (matching, split
+  vertices).
 Usage:
   d = Dinic(n)
   i = d.add_edge(u, v, cap)  # directed u -> v
@@ -41,7 +41,9 @@ Notes: Read a minimum cut as the edges from source-side to
   as `1 << 60` below $2^63$ in sums: bigger ints are correct but
   slow. The search is iterative and, like the C++ recursion,
   splits flow over many paths at once, so long paths and long
-  shared prefixes (time chains) are fine. In PyPy a random
+  shared prefixes (time chains) are fine. Unit capacities without
+  parallel edges also give $O(m n^(2/3))$; parallel unit edges can
+  force $n - 2$ phases. In PyPy a random
   matching network with $10^5$ edges takes about a second; on
   big grids with varied capacities Dinic can take hundreds of
   phases. Think of max flow for "can every demand be met", "pair

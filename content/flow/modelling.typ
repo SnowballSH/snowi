@@ -17,22 +17,23 @@
   right: top border to bottom border). Otherwise it is a shortest
   dual cycle separating $s$ from $t$.
 #full[#fact[Disjoint paths][With unit capacities the max flow
-  counts edge-disjoint $s$-$t$ paths (Menger, _Graph theory
-  facts_). For vertex-disjoint paths also split every vertex except
-  $s$ and $t$ with capacity 1 (or run from $s_"out"$ to
-  $t_"in"$).]
+  counts edge-disjoint $s$-$t$ paths (Menger). For
+  vertex-disjoint paths also split every vertex except $s$ and
+  $t$ with capacity 1 (or run from $s_"out"$ to $t_"in"$).]
 #fact[All minimum cuts][After any maximum flow, the minimum $s$-$t$
   cuts are exactly the sets holding $s$, not $t$, with no residual
   arc leaving them: the closed sets of the residual SCC DAG
   (Picard-Queyranne). To count or list the global minimum cuts of an
   undirected graph that stays connected without its weight-0 edges:
-  for $i = 2, dots, n$ merge ${1, dots, i - 1}$ into the source (a
-  leftover vertex would be a fake SCC) and flow to $i$, dropping $i$
-  once the flow exceeds the best value. Each cut shows up at one
-  $i$, the first vertex outside the side holding 1. If the flow is
-  the global minimum, the other SCCs $P$ lie between those of $s$,
-  $t$ with width $<= 2$: $1 + |P| +$ (incomparable pairs) closed
-  sets, by bitset transitive closure. At most $binom(n, 2)$ such
+  for $i = 2, dots, n$ contract ${1, dots, i - 1}$ into the source
+  (delete the merged vertices: an isolated one left behind would
+  be an extra SCC) and flow to $i$; skip $i$ if the flow exceeds
+  the global minimum $lambda$. Each cut shows up at one $i$, the
+  first vertex outside the side holding 1. If the flow is
+  $lambda$, the other SCCs $P$ all lie between those of $s$ and
+  $t$ and no three are pairwise unreachable, so $i$ gives
+  $1 + |P| +$ (unreachable pairs) cuts; find the pairs by bitset
+  transitive closure. At most $binom(n, 2)$ such
   cuts exist, as on a cycle, and a cactus represents them
   (Dinitz-Karzanov-Lomonosov).]]
 

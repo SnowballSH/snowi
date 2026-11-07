@@ -18,8 +18,8 @@
  *   `ZERO = LLONG_MIN / 4` and `max`; an entry $<= "ZERO"\/2$
  *   then means no walk.
  * Example:
- *   // Linear recurrence f_n = f_(n-1) + 2 f_(n-3) as a state
- *   // vector (f_n, f_(n-1), f_(n-2)) times a companion matrix:
+ *   // Linear recurrence f_n = f_(n-1) + 2 f_(n-3): a companion
+ *   // matrix times the state column (f_n, f_(n-1), f_(n-2)):
  *   Matrix m(3);
  *   m.a[0] = {1, 0, 2};
  *   m.a[1][0] = m.a[2][1] = 1;

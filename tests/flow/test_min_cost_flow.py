@@ -1,7 +1,7 @@
 import random
 from itertools import product
 
-from testlib import Timer, check, check_eq, iters, load, rnd
+from testlib import CONTENT, Timer, check, check_eq, iters, load, rnd
 
 lib = load("flow/min-cost-flow")
 MinCostFlow = lib.MinCostFlow
@@ -112,6 +112,44 @@ def build(n, arcs):
   mcf = MinCostFlow(n)
   return mcf, [mcf.add_edge(*a) for a in arcs]
 
+
+def brute_any(n, arcs, s, t):
+  """Least cost over every integer s-t flow of any value."""
+  best = 0
+  for f in product(*[range(a[2] + 1) for a in arcs]):
+    net, c = [0] * n, 0
+    for (u, v, _, w), x in zip(arcs, f):
+      net[u] -= x
+      net[v] += x
+      c += x * w
+    inner = all(net[v] == 0 for v in range(n) if v not in (s, t))
+    if net[t] >= 0 and inner:
+      best = min(best, c)
+  return best
+
+
+def cheapest_any_size():
+  """MinCostFlow with the Tweak applied literally."""
+  code = (CONTENT / "flow/min-cost-flow.py").read_text().split('"""', 2)[2]
+  old = "        pot[v] += d[v] if d[v] < dt else dt\n"
+  check_eq(code.count(old), 1)
+  new = old + "      if pot[t] - pot[s] >= 0:\n        break\n"
+  ns = {}
+  exec(code.replace(old, new), ns)
+  return ns["MinCostFlow"]
+
+
+Cheapest = cheapest_any_size()
+for _ in range(iters(700)):  # Tweak: cheapest flow of any size
+  n, m = rnd(2, 4), rnd(0, 6)
+  arcs = random_arcs(n, m, 2, 4)
+  s = rnd(0, n - 1)
+  t = rnd(0, n - 2)
+  t += t >= s
+  mcf = Cheapest(n)
+  for a in arcs:
+    mcf.add_edge(*a)
+  check_eq(mcf.max_flow(s, t)[1], brute_any(n, arcs, s, t))
 
 INF = float("inf")
 for _ in range(iters(700)):
